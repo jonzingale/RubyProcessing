@@ -20,12 +20,12 @@ RELATED_ENTRIES = 'div[@id="related-entries"]//a/@href'.freeze
 PREAMBLE_SEL = './/div[@id="aueditable"]/div[@id="preamble"]'.freeze
 # MAIN_TEXTS_SEL = './/div[@id="main-text"]/h3/following-sibling::p'.freeze
 MAIN_TEXTS_SEL = './/div[@id="main-text"]'.freeze
-BAD_TEXT = [''].freeze
+BAD_REGEXES = [/\(\d+\.\d+\)/,/\(*( *\w+ \d+\w*,*\)*)+/].freeze
 
 def text_cleaner(texts)# ::[string]->string
 	texts.inject('') do |msg,str|
 		escapeless = str.delete('\\"')
-		bad_regex = BAD_TEXT+escapeless.scan(/\[\d+\]/)
+		bad_regex = BAD_REGEXES+escapeless.scan(/\[\d+\]/)
 		clean = bad_regex.inject(escapeless){|str,t|str.gsub(t,"") }
 		unless (dates = DATES_REGEX.match(clean)).nil?
 			clean = clean.gsub(/\(\d+-\d+\)/,"from #{dates[1]} to #{dates[2]}")
@@ -73,7 +73,7 @@ end ; puts t_page
 		main_texts = current_page.search(MAIN_TEXTS_SEL).map(&:inner_text)
 		msg = text_cleaner(main_texts)
 		%x(say -v Alex "#{msg}")
-		@c = ''
+		@c = 'n'
 
 	elsif @c == 'n'
 		links = current_page.search(RELATED_ENTRIES)
