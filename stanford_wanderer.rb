@@ -27,9 +27,10 @@ def text_cleaner(texts)# ::[string]->string
 		escapeless = str.delete('\\"')
 		bad_regex = BAD_TEXT+escapeless.scan(/\[\d+\]/)
 		clean = bad_regex.inject(escapeless){|str,t|str.gsub(t,"") }
-		dates = DATES_REGEX.match(clean)
-		nice_dates = clean.gsub(/\(\d+-\d+\)/,"from #{dates[1]} to #{dates[2]}")
-		msg << str
+		unless (dates = DATES_REGEX.match(clean)).nil?
+			clean = clean.gsub(/\(\d+-\d+\)/,"from #{dates[1]} to #{dates[2]}")
+		end
+		msg << clean
 	end
 end
 
