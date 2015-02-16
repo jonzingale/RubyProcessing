@@ -18,7 +18,6 @@ RESULT_URL = './/div[@class="result_url"]/a'.freeze
 START_STRING = "\n\nEnter a topic to investigate.".freeze
 RELATED_ENTRIES = 'div[@id="related-entries"]//a/@href'.freeze
 PREAMBLE_SEL = './/div[@id="aueditable"]/div[@id="preamble"]'.freeze
-# MAIN_TEXTS_SEL = './/div[@id="main-text"]/h3/following-sibling::p'.freeze
 MAIN_TEXTS_SEL = './/div[@id="main-text"]'.freeze
 BAD_REGEXES = [/\(\d+\.\d+\)/,/\(*( *\w+ \d+\w*,*\)*)+/].freeze
 
