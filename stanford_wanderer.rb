@@ -7,15 +7,19 @@ require 'byebug'
 require 'date'
 require 'uri'
 
+INTEREST_MSG = "Spacebar, continues.\nThe letter N," \
+								"proceeds to a related topic.\nThe " \
+								"letter Q quits the program.".freeze
 
-INTEREST_MSG = "Spacebar, continues.\nThe letter N, progresses to a related topic.".freeze
-
+DATES_REGEX = /\((\d+)-(\d+)\)/.freeze
 SEARCH_URL = 'search/searcher.py'.freeze
 BASE_URL = 'http://plato.stanford.edu/'.freeze
 RESULT_URL = './/div[@class="result_url"]/a'.freeze
+START_STRING = "\n\nEnter a topic to investigate.".freeze
 RELATED_ENTRIES = 'div[@id="related-entries"]//a/@href'.freeze
 PREAMBLE_SEL = './/div[@id="aueditable"]/div[@id="preamble"]'.freeze
-MAIN_TEXTS_SEL = './/div[@id="main-text"]/h3/following-sibling::p'.freeze
+# MAIN_TEXTS_SEL = './/div[@id="main-text"]/h3/following-sibling::p'.freeze
+MAIN_TEXTS_SEL = './/div[@id="main-text"]'.freeze
 BAD_TEXT = [''].freeze
 
 def text_cleaner(texts)# ::[string]->string
@@ -23,25 +27,26 @@ def text_cleaner(texts)# ::[string]->string
 		escapeless = str.delete('\\"')
 		bad_regex = BAD_TEXT+escapeless.scan(/\[\d+\]/)
 		clean = bad_regex.inject(escapeless){|str,t|str.gsub(t,"") }
+		dates = DATES_REGEX.match(clean)
+		nice_dates = clean.gsub(/\(\d+-\d+\)/,"from #{dates[1]} to #{dates[2]}")
 		msg << str
 	end
 end
 
-def reads_preamble(page)# :: Page -> IO()
-	preamble = page.at(PREAMBLE_SEL).inner_text
+def reads_preamble(page)# ::Page -> IO()
+	preamble = text_cleaner([page.at(PREAMBLE_SEL).inner_text])
 	%x(say -v Alex "#{preamble}")
-	puts INTEREST_MSG
+	system 'clear' ; puts INTEREST_MSG
 	sleep(1) ; %x(say -v Alex "#{INTEREST_MSG}")
 end
 
-def getch# :: IO() -> Char
+def getch# ::IO() -> Char
   %x[stty -echo raw]
   @c = $stdin.getc
   %x[stty echo -raw]
 end
 
-puts "\n\nenter a start string" ; name = gets.chomp
-
+puts START_STRING ; name = gets.chomp
 agent = Mechanize.new
 page = agent.get(BASE_URL)
 form = page.form_with(action: SEARCH_URL)
@@ -50,16 +55,16 @@ page = agent.submit(form)
 
 current_page = agent.get(page.at(RESULT_URL).inner_text)
 
-# gets to cleanly readable page.
+# gets a good start page.
 while !(t_page = current_page.at(RESULT_URL)).nil?
 	current_page = agent.get(t_page.inner_text)
-end
+end ; puts t_page
 
 @c = '' ; while @c!='q'
 	if @c == ''
-		system 'cls'
+		system 'clear'
 		reads_preamble(current_page)
-		while %w(\  n).map{|t| @c != t}.all?
+		while %w(\  n q).map{|t| @c != t}.all?
 			getch
 		end
 
