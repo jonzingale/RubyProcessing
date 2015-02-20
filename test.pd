@@ -1,0 +1,16 @@
+#N canvas 85 31 1195 767 10;
+#N canvas 174 22 450 300 n2 0;
+#X obj 48 41 osc~;
+#N canvas 489 154 450 300 n3 0;
+#X obj 16 32 osc~;
+#X restore 48 70 pd n3;
+#X restore 46 -5 pd n2;
+#N canvas 397 380 670 430 n1 0;
+#X obj 24 28 osc~;
+#X restore 43 -37 pd n1;
+
+[N,N,X,N,X,R,R,N,X,R]
+
+
+# ["N canvas 174 22 450 300 n2 0", "X obj 48 41 osc~", "N canvas 489 154 450 300 n3 0", "X obj 16 32 osc~", "X restore 48 70 pd n3", "X restore 46 -5 pd n2", "N canvas 397 380 670 430 n1 0", "X obj 24 28 osc~", "X restore 43 -37 pd n1;"]
+#####
