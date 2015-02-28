@@ -27,12 +27,32 @@ def diff(w)#::(Coord,Coord)->(Coord,Coord)-> Real
 	Math.sqrt(x+y)
 end
 
+########### 
+def walker_z(t,p=width/2,q=height/2) # Follows mouse
+	kick = [0,0,0,90] ; snare = (1..3).map{|i|rand(255)}+[rand(60)+10]
+ 	[snare,kick,snare,snare,snare].map do |b|
+ 		s1,s2,s3,w = b ; stroke(s1,s2,s3,w) ; strokeWeight(w)
+
+		signs = rootsUnity(17).map{|n|i,j=n; [1*i,1*j]}
+		p , q = (@wz1.nil? ? [p,q] : [@wz1,@wz2])
+		pair2 = [mouseX,mouseY]
+
+		pairs = signs.map{|s| i,j=s;[[p+i,q+j],pair2] }
+		min_p = pairs.min_by{|p|diff(p)}[0]
+		max_p = pairs.max_by{|p|diff(p)}[0]
+		low = pairs.map{|p|diff(p)}.min
+
+		p,q = (low <= 10 ? max_p : low >= 30 ? min_p : max_p)
+ 		point(@wz1=p,@wz2=q)
+ 	end
+end
+
+###########
 def walker_y(t,p=width/2,q=height/2) # Follower
 	kick = [0,0,0,90] ; snare = (1..3).map{|i|rand(255)}+[rand(60)+10]
  	[snare,kick,snare,snare,snare].map do |b|
  		s1,s2,s3,w = b ; stroke(s1,s2,s3,w) ; strokeWeight(w)
 
-		# signs =  [[1,1],[-1,-1],[-1,1],[1,-1]]
 		signs = rootsUnity(10).map{|n|i,j=n; [2*i,2*j]}
 		p , q = (@wy1.nil? ? [p,q] : [@wy1,@wy2])
 		pair2 = (@wx1.nil? ? [6,0] : [@wx1,@wx2])
@@ -75,6 +95,8 @@ def draw
 
 	# dots chasing one another.
 	walker_y(@t) ; walker_x(@t)
+	# dot chasing mouse
+	walker_z(@t)
 	###
 
 ###bezier land
