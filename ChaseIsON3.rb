@@ -62,29 +62,20 @@ def walker_x(t,p=width/4,q=height/2) # Leader
 		low = pairs.map{|p|diff(p)}.min
 
 		# to keep this guy ahead
-		k = (low <= 10 ? 7 : low > 300 ? 3 : 4)
+		k = (low <= 100 ? 7 : low > 300 ? 3 : 4)
  		point(@wx1=(p-(k*rand-0.5))%width,@wx2=(q-(k*rand-0.5))%height)
  	end
 end
 
 def draw
-	# fill(color(rand(255),g,b))
 	x,y = [width/2,height/2] # center point
 	g,b = [@t*2,@t*2.1] #greens blues
 	@t = (@t+=1) % width # modular_index
 	cos,sin = trigs(@t)
 
-# strokeWeight(0.2)
-# fill(color(rand(255),g,b))
-# bezier(0,40,200,400,width,height);
-# nofill();
-
-
-
-
-# two dots get near, attract and then repel
-walker_y(@t) ; walker_x(@t)
-###
+	# dots chasing one another.
+	walker_y(@t) ; walker_x(@t)
+	###
 
 ###bezier land
 	r = rand(30) + @t
@@ -101,20 +92,23 @@ walker_y(@t) ; walker_x(@t)
 
 
 		strokeWeight(2.2)
-		a,b,c,d,e,f,g,h = b_points.map{|i|400*i}
+		a,b,c,d,e,f,g,h = b_points.map{|i|width-400*i}
 		bezier(a,b,e,f,c,d,g,h)
 
 		# line coods
+		a,b,c,d,e,f,g,h = b_points.map{|i|1*i}
 		r,t = [a,c].map{|i| height - i*rand(300)}
 		q,s = [b,d].map{|i| i*rand(800)}
-		line(q,r,s,t)
+		line(width-q,height-r,width-s,height-t)
+
 		roots = rootsUnity(5).map{|n|i,j=n; [100*i,100*j]}
 		l,m =roots.shuffle.take(2)
 		line(l[0]+700,l[1]+700,m[0]+700,m[1]+700)
 
 
 
-	# good3 = [a, 500, 250,b,250, 0,e,500]
+	# strokeWeight(0.2) # quiet reds
+	# good3 = [height-a, width, width-250,height-b,250, 0,e,width]
 	# b_points = good3.map{|d|d+y}
 	# a,b,c,d,e,f,g,h = b_points.shuffle
 	# bezier(a,b,c,d,e,f,g,h);
