@@ -5,8 +5,8 @@ def setup
 	text_font create_font("SanSerif",60);
 	background(10)
 	# width, height
-	size(1920,1080) #JackRabbit
-	# size(1600,1000) #HOME
+	# size(1920,1080) #JackRabbit
+	size(1500,900) #HOME
   frame_rate 20
   fill 2.8, 2.6
   smooth
@@ -47,9 +47,18 @@ def draw
 	x,y = [width/2,height/2] # center point
 	g,b = [@t*2,@t*2.1] #greens blues
 	@t = (@t+=1) % width # modular_index
-
-	# fill(color(rand(255),g,b))
 	cos,sin = trigs(@t)
+
+
+tit = rand(40)
+fill(255,90,0,30)
+ellipse(200,200,tit*10,tit*10)
+
+# tit = rand(40)
+strokeWeight(rand(200).to_f / 10.0)
+stroke(0,0,0,rand(255))
+ellipse(200,200,tit*10,tit*10)
+
 
 ###bezier land
 	r = rand(30) + @t
@@ -57,24 +66,51 @@ def draw
 	b = rand(255*@sin)
 	fill(r,g,b) ; strokeWeight(0.3) ; stroke((r*g*b)%255)
 
-	roots = rootsUnity(4).map{|p|about_center(p,200,200,0,-300)}.shuffle.flatten
-	# use pop and shift?
+	roots = rootsUnity(4).map{|p|about_center(p,300,300,0,-200)}.shuffle.flatten
+	#use pop and shift?
 
 	x_bs,y_bs = unzip(args2pairs(roots))
-	bezier(*roots)
+	#bezier(*roots)
 
-	#points on bezier
-	fill(255); steps = 10.0;
+	#cheetoz
+	#fill(200); steps = 39.0;
+	#(0..10).map do |i|
+	#  t = i.to_f / steps
+	#  xs = x_bs+[t]
+	#  ys = y_bs+[t]
+	#  a = bezierPoint(*xs);
+	#  b = bezierPoint(*ys);
+
+	#  ellipse(a*@cos, b*@cos, 90, 30);
+
+	# spidery-web
+	fill(649); steps = 39.0;
 	(0..10).map do |i|
-	  t = i.to_f / steps
-	  xs = x_bs+[t]
-	  ys = y_bs+[t]
-	  a = bezierPoint(*xs);
-	  b = bezierPoint(*ys);
-
-	  ellipse(a, b, 5, 5);
+	 t = i.to_f / steps
+	 xs = x_bs+[t]
+	 ys = y_bs+[t]
+	 a = bezierPoint(*xs);
+	 b = bezierPoint(*ys);
+	 stroke(rand(255)*@sin,rand(255)*@cos,120,rand(10)+230)
+	 strokeWeight(rand(3))
+	 ellipse(x+a*@sin, b*@cos, 90, 30);	  
 	end
 
+lit = rand(100)
+boots = [x,0,rand(width),rand(height),rand(width),rand(height),x,height]
+noFill; stroke(rand(5)+lit,rand(30)+lit,rand(255),220)
+bezier(*boots)
+	#targets
+	# fill(649); steps = 39.0;
+	# (0..10).map do |i|
+	#   t = i.to_f / steps
+	#   xs = x_bs+[t]
+	#   ys = y_bs+[t]
+	#   a = bezierPoint(*xs);
+	#   b = bezierPoint(*ys);
+
+	#   # ellipse(a*@cos*16, b*@cos, 90, 30);	  
+	# end
 end
 
 
