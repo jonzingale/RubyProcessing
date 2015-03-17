@@ -5,9 +5,9 @@ def setup
 	text_font create_font("SanSerif",60);
 	background(10)
 	# width, height
-	size(1920,1080) #JackRabbit
-	# size(1600,1000) #HOME
-  frame_rate 20
+	# size(1920,1080) #JackRabbit
+	size(1500,900) #HOME
+  frame_rate 120
   fill 2.8, 2.6
   smooth
   @t=1 ; @i = 0
@@ -57,24 +57,46 @@ def draw
 	b = rand(255*@sin)
 	fill(r,g,b) ; strokeWeight(0.3) ; stroke((r*g*b)%255)
 
-	roots = rootsUnity(4).map{|p|about_center(p,200,200,0,-300)}.shuffle.flatten
-	# use pop and shift?
+	roots = rootsUnity(4).map{|p|about_center(p,300,300,0,-200)}.shuffle.flatten
+	#use pop and shift?
 
 	x_bs,y_bs = unzip(args2pairs(roots))
-	bezier(*roots)
+	#bezier(*roots)
 
-	#points on bezier
-	fill(255); steps = 10.0;
+	#cheetoz
+	#fill(200); steps = 39.0;
+	#(0..10).map do |i|
+	#  t = i.to_f / steps
+	#  xs = x_bs+[t]
+	#  ys = y_bs+[t]
+	#  a = bezierPoint(*xs);
+	#  b = bezierPoint(*ys);
+
+	#  ellipse(a*@cos, b*@cos, 90, 30);
+
+	# spidery-web
+	fill(649); steps = 39.0;
 	(0..10).map do |i|
-	  t = i.to_f / steps
-	  xs = x_bs+[t]
-	  ys = y_bs+[t]
-	  a = bezierPoint(*xs);
-	  b = bezierPoint(*ys);
-
-	  ellipse(a, b, 5, 5);
+	 t = i.to_f / steps
+	 xs = x_bs+[t]
+	 ys = y_bs+[t]
+	 a = bezierPoint(*xs);
+	 b = bezierPoint(*ys);
+	 stroke(rand(40)+60,rand(135)+120,120)
+	 ellipse(x+a*@sin, b*@cos, 90, 30);	  
 	end
 
+	#targets
+	# fill(649); steps = 39.0;
+	# (0..10).map do |i|
+	#   t = i.to_f / steps
+	#   xs = x_bs+[t]
+	#   ys = y_bs+[t]
+	#   a = bezierPoint(*xs);
+	#   b = bezierPoint(*ys);
+
+	#   # ellipse(a*@cos*16, b*@cos, 90, 30);	  
+	# end
 end
 
 

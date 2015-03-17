@@ -18,7 +18,7 @@ def trigs(theta)#:: Theta -> R2
 end
 
 def rootsUnity(numbre)#::Int -> [trivalStar]
-	(0..numbre-1).map{|i|[Math.cos(i*2*PI/numbre),Math.sin(i*2*PI/numbre)]}
+	(0...numbre).map{|i|[Math.cos(i*2*PI/numbre),Math.sin(i*2*PI/numbre)]}
 end
 
 def diff(w)#::(Coord,Coord)->(Coord,Coord)-> Real
