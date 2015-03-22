@@ -5,8 +5,8 @@ def setup
 	text_font create_font("SanSerif",60);
 	background(10)
 	# width, height
-	# size(1920,1080) #JackRabbit
-	size(1500,900) #HOME
+	size(1920,1080) #JackRabbit
+	# size(1500,900) #HOME
   frame_rate 5
   fill 2.8, 2.6
   smooth

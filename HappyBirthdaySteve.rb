@@ -5,7 +5,7 @@ def setup
 	background(51)
 	size(1200,1000);
   # color_mode RGB, 1.0
-  frame_rate 1000
+  frame_rate 10
   # fill 0.8, 0.6
   fill 2.8, 2.6
   smooth
