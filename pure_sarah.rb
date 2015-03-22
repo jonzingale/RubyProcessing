@@ -1,4 +1,5 @@
-# Spirals cause Jake asked for them.
+
+
 R = 100.freeze
 
 def setup
@@ -7,7 +8,7 @@ def setup
 	# width, height
 	# size(1920,1080) #JackRabbit
 	size(1500,900) #HOME
-  frame_rate 20
+  frame_rate 2
   fill 2.8, 2.6
   smooth
   @t=1 ; @i = 0
@@ -96,9 +97,14 @@ ellipse(200,200,tit*10,tit*10)
 	 ellipse(x+a*@sin, b*@cos, 90, 30);	  
 	end
 
-lit = rand(100)
+lit = rand(1000)
 boots = [x,0,rand(width),rand(height),rand(width),rand(height),x,height]
-noFill; stroke(rand(5)+lit,rand(30)+lit,rand(255),220)
+
+	r = rand(60) + @t
+	g = rand(45*@cos)
+	b = rand(20*@sin)
+	fill(r,g,b)
+	stroke(rand(5)+lit,rand(30)+lit,rand(255),220)
 bezier(*boots)
 	#targets
 	# fill(649); steps = 39.0;
