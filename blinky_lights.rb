@@ -1,22 +1,14 @@
-# todo
-# get the board size stuff together.
-# keep @i as small as it needs to be.
-# dream.
 		def setup
-			background(0)
-			# width, height
-			# size(1920,1080) #JackRabbit
-			# size(1500,900) # Home
+			# width,height
 			size(800,800)
-			@wide,@high = [150,150]
-			@board = rand_board ; @i = 0
-			no_fill ; strokeWeight(1)
+			@bs = 150 # boardsize (150 for size 800)
+			@board = rand_board ; @i = 0 ; background(0)
 			frame_rate 2 # what ratio is there for frame_rate, board_size and e_size?
 		end
 
 		def pretty_print(board)
+			e_size = 5 # size of augmentation
 			board.each_with_index do |row,c_dex|
-				e_size = 5 # size of augmentation
 				row.each_with_index do |c,r_dex| # original game
 					params = [r_dex,c_dex].map{|i|i*e_size+20} + [e_size]*2
 					rgb = (1..3).map{|i| c*(rand 255)}
@@ -25,36 +17,27 @@
 			end
 		end
 		
-		def rand_board ; (0...@wide).map{|i| (0...@high).map{|j| rand(2)} } ; end
+		def rand_board ; (0...@bs).map{|i| (0...@bs).map{|j| rand(2)} } ; end
 		def cell_at(row,col,board) ; board[row][col] ; end
 		
 		def neighborhood(row,col,board) # better way to rid of [0,0] ? 
 			nears = (-1..1).inject([]){|is,i| is + (-1..1).map{|j| [i,j]} }
 			nears = nears.select{|i| i!=[0,0]}
-			nears.map{|ns| n,m = ns ; cell_at((row+n) % @wide,(col+m) % @high,board) }
+			nears.map{|ns| n,m = ns ; cell_at((row+n) % @bs,(col+m) % @bs,board) }
 		end
 			
 		def blink(state,neigh)
 			sum = neigh.inject :+
-			# sum = neigh.inject(0){|sum,i| sum+i}
 			sum == 3 ? 1 : (sum==2&&state==1) ? 1 : 0 
 		end	
 		
-		def coord_it(board)
-			beers = (0...@wide).inject([]){|is,i| is << (0...@high).map{|j| [i,j]} }
-			board.zip(beers).inject([]) do |bs,crazy|
-				states,coords = crazy
-				bs + states.zip(coords).map{|them| s,cd = them ; cd.unshift(s)}
-			end
-		end
-		
 		def blink_once(board)
-			b,bs = [:take,:drop].map{|f| board.send(f,@wide)}
+			b,bs = [:take,:drop].map{|f| board.send(f,@bs)}
 			board.empty? ? [] : blink_once(bs).unshift(b)
 		end
 
 		def go_team(board)
-			beers = (0...@wide).inject([]){|is,i| is + (0...@high).map{|j| [i,j]} }
+			beers = (0...@bs).inject([]){|is,i| is + (0...@bs).map{|j| [i,j]} }
 			b_row=beers.map do |xy|
 				b_params = xy << board
 				blink(cell_at(*b_params),neighborhood(*b_params))
@@ -62,8 +45,7 @@
 		end
 
 		def draw
-			# perhaps clear the screen and only print good ones is faster?
-			@i = (@i+1) % @width
+			@i = (@i+1) % @bs
 			pretty_print(@board)
 			@board = go_team(@board)
 		end
