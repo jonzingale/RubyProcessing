@@ -20,7 +20,7 @@
 					x,y = [r_dex,c_dex].map{|i|i*e_size+100}
 
 					#mosaic
-					middle_vals = [x,y,x,y].map{|i| i+rand(e_size)}
+					middle_vals = [x,y,x,y].map{|coord| s = e_size*3 ; coord+(s/2-rand(s)) }
 					curb = [x,y]+middle_vals+[x,y]
 					fill(c*rand(255),c*rand(255),c*rand(255))
 					bezier(*curb)
