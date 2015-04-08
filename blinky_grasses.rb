@@ -1,9 +1,12 @@
+		NEARS = (-1..1).inject([]){|is,i| is+(-1..1).map{|j|[i,j]} }.select{|i| i!=[0,0]}
+
 		def setup
 			background(0)
 			# width, height
 			# size(1920,1080) #JackRabbit
 			size(1000,1000) # Home
 			@wide,@high = [45,45]
+			rand_board = (0...@wide).map{(0...@high).map{rand(2)}}
 			@board = rand_board ; @i = 0
 			no_fill ; strokeWeight(1)
 			frame_rate 6
@@ -28,31 +31,16 @@
 				end
 			end
 		end
-		
-		def rand_board
-			(0...@wide).map{|i| (0...@high).map{|j| rand(2)} }
-		end
-		
+
 		def cell_at(row,col,board) ; board[row][col] ; end
-		
-		def neighborhood(row,col,board)
-			nears = (-1..1).inject([]){|is,i| is + (-1..1).map{|j| [i,j]} }
-			nears = nears.select{|i| i!=[0,0]}
-			nears.map{|ns| n,m = ns ; cell_at((row+n) % @wide,(col+m) % @high,board) }
+		def neighborhood(row,col,board) # better way to rid of [0,0] ? 
+			NEARS.map{|ns| n,m = ns; cell_at((row+n) % @wide,(col+m) % @high,board) }
 		end
-			
+
 		def blink(state,neigh)
-			sum=neigh.inject(0){|sum,i| sum+i}
+			sum = neigh.inject :+
 			sum == 3 ? 1 : (sum==2&&state==1) ? 1 : 0 
 		end	
-		
-		def coord_it(board)
-			beers = (0...@wide).inject([]){|is,i| is << (0...@high).map{|j| [i,j]} }
-			board.zip(beers).inject([]) do |bs,crazy|
-				states,coords = crazy
-				bs + states.zip(coords).map{|them| s,cd = them ; cd.unshift(s)}
-			end
-		end
 		
 		def blink_once(board)
 			b = board.take(@wide)
