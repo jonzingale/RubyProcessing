@@ -16,17 +16,17 @@
 			board.each_with_index do |row,c_dex|
 				e_size = 20 # size of augmentation
 				row.each_with_index do |c,r_dex|
-					stroke(c*rand(255),c*255,c*rand(255))
+					stroke(c*rand(255),c*rand(255),c*rand(255))
 					x,y = [r_dex,c_dex].map{|i|i*e_size+100}
 
 					# #original game
-					fill(c*rand(255),c*rand(255),c*rand(255))
-					ellipse(x,y,e_size/3,e_size/3)
+					# fill(c*rand(255),c*rand(255),c*rand(255))
+					# ellipse(x,y,e_size/3,e_size/3)
 
-					#grasses
-					middle_vals = [x,y,x,y].map{|i| s = e_size*2 ; i-rand(s) }
+					#mosaic
+					middle_vals = [x,y,x,y].map{|i| s = e_size*1 ; i-rand(s) }
 					curb = [x,y]+middle_vals+[x,y]
-					fill(c*rand(255),c*255,c*rand(255))
+					fill(c*rand(255),c*rand(255),c*rand(255))
 					bezier(*curb)
 				end
 			end
@@ -41,7 +41,7 @@
 			sum = neigh.inject :+
 			sum == 3 ? 1 : (sum==2&&state==1) ? 1 : 0 
 		end	
-
+		
 		def blink_once(board)
 			b,bs = [board.take(@wide),board.drop(@wide)]
 			board.empty? ? [] : blink_once(bs).unshift(b)
