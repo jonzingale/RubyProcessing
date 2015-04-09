@@ -6,7 +6,7 @@
 		size(*square) ; @bs = [height,width].min
 		@i, @t = [0] * 2 ; background(0)
 		@colors = (0..3).map{|i|rand(255)}
-		frame_rate 200 ; colorMode(HSB,360,100,100)
+		frame_rate 20 ; colorMode(HSB,360,100,100)
 		no_fill() ; lights() ; no_stroke
 	end
 
