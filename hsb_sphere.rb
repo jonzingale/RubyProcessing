@@ -1,12 +1,13 @@
 	def setup
 		text_font create_font("SanSerif",10);
-		square = [800] * 2  + [P3D]
+		# size(1920,1080) #JackRabbit
+		square = [1080] * 2  + [P3D] # 800
 		@w,@h = [square[0]/2] * 2
 		size(*square) ; @bs = [height,width].min
-		@i = 0 ; background(0)
+		@i, @t = [0] * 2 ; background(0)
 		@colors = (0..3).map{|i|rand(255)}
-		frame_rate 10 ; colorMode(HSB,360,100,100)
-		no_fill() ; lights()
+		frame_rate 200 ; colorMode(HSB,360,100,100)
+		no_fill() ; lights() ; no_stroke
 	end
 
 	def text_block(string='')
@@ -17,20 +18,11 @@
 	end
 
 	def draw
-		@i = (@i+1) % 360
+		omega = 360 * 5 ; r = 360
+		@i = (@i+1) % omega #; @t += 1 if @i == 120
+		x,y = %w(sin cos).map{|s| Math.send(s, 2*PI*@i/360) }
+		# fill(@i%360,100,100) ; ellipse(r*x+@w,r*y+@h,10,10)
 
-		# translate(width/2, height/2)
-			#clear
-			fill(0,0,0) ; no_stroke
-			rect(@w,@h,width,height)
-
-			colors = [@i%360,100,100]
-
-	
-			rotateY(@i%360)
-			fill(*colors)
-			ellipse(@w,@h,200,200)
-			# rotateX(Math.sin(mouseY/300.0 - 0.5))
-			# rotateY(2.0*PI*(@i % 120)/120.0)
-
+		fill(@i%360,100,100-(@i/(3.6*5))) ; ellipse((r-@i/5.0)*x+@w,(r-@i/5.0)*y+@h,30,30)
+		# set((r-@i/2.0)*x+@w,(r-@i/2.0)*y+@h,color(@i%360,100,100))
 	end

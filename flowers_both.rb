@@ -21,6 +21,22 @@
 					x,y = [r_dex,c_dex].map{|i|i*e_size+100}
 
 					#mosaic
+					middle_vals = [x,y,x,y].map{|coord| s = e_size*3 ; coord+(s/2-rand(s)) }
+					curb = [x,y]+middle_vals+[x,y]
+					fill(c*rand(255),c*rand(255),c*rand(255))
+					bezier(*curb)
+				end
+			end
+		end
+
+		def pretty_print1(board)
+			board.each_with_index do |row,c_dex|
+				e_size = 300 # augmentation size
+				row.each_with_index do |c,r_dex|
+					stroke(c*rand(255),c*rand(255),c*rand(255))
+					x,y = [r_dex,c_dex].map{|i|i*e_size+100}
+
+					#mosaic
 					middle_vals = [x,y,x,y].map{|i| i+rand(e_size)}
 					curb = [x,y]+middle_vals+[x,y]
 					fill(c*rand(255),c*rand(255),c*rand(255))
@@ -28,6 +44,7 @@
 				end
 			end
 		end
+
 
 		def cell_at(row,col,board) ; board[row][col] ; end
 		def neighborhood(row,col,board) # better way to rid of [0,0] ? 
@@ -56,5 +73,6 @@
 		def draw
 			@i += 1
 			pretty_print(@board)
+			pretty_print1(@board)
 			@board = go_team(@board)
 		end

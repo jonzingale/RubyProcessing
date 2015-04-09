@@ -4,7 +4,8 @@
 			background(0)
 			# width, height
 			# size(1920,1080) #JackRabbit
-			size(1000,1000) # Home
+			# size(1000,1000) # Home
+			size(2000,2000) # TEST
 			@wide,@high = [45,45]
 			rand_board = (0...@wide).map{(0...@high).map{rand(2)}}
 			@board = rand_board ; @i = 0
