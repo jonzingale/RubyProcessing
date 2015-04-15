@@ -9,6 +9,10 @@
 		no_fill()
 	end
 
+	def rand_matrix(k=5,dim=2)
+		(0...dim).inject([]){|cols,i| cols << (0...dim).map{rand(k)} }
+	end
+
 	def text_block(string='')
 		fill(0,0,0) ; no_stroke
 		rect(@w-40,@h-40,@w+40,@h+40)
