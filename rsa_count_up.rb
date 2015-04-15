@@ -21,7 +21,7 @@
 
 	def rsa_group(int)
 		non_factors = (1...int).select{|i|i.gcd(int)==1}
-		non_factors.inject([]){|is,i| is << (non_factors).map{|j| i*j%int} }
+		non_factors.inject([]){|is,i| is << (non_factors).map{|j| i*j%int} }#.sort
 	end
 
 	def color_it(table)
