@@ -49,12 +49,12 @@
 		triple = rgb_converter(*pair)
 		e_ball = rand(100) # <- a fun idea
 
-		unless rgb_converter(*pair) == @m
-			@low_pair = rootsUnity(17).min_by do |s|
-				unital_color = pair.zip(s).map{|p,r|p+r*e_ball}
-				diff([rgb_converter(*unital_color), @m])
-			end.zip(pair).map{|rp|rp.inject :+}
-		end
+
+		@low_pair = (rootsUnity(17)+[[0,0]]).min_by do |s|
+			unital_color = pair.zip(s).map{|p,r|p+r*e_ball}
+			diff([rgb_converter(*unital_color), @m])
+		end.zip(pair).map{|rp|rp.inject :+}
+
 		fill(0,0,0) ; ellipse(*@low_pair,10,10)
 		# better neighborhoods and guesses
 		# sum along rays?
