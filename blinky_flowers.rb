@@ -1,5 +1,4 @@
-		NEARS = (-1..1).inject([]){|is,i| is+(-1..1).map{|j|[i,j]} }.select{|i| i!=[0,0]}
-
+		NEARS = [-1,0,1].product([-1,0,1]).select{|i| i!=[0,0]}
 		def setup
 			background(0)
 			# width, height
