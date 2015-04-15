@@ -12,8 +12,8 @@
 		@img.loadPixels()
 		background(20) ; frame_rate 30
 		# width, height
-		# size(1920,1080) #JackRabbit
-		size(1400,1000) #HOME
+		size(1920,1080) #JackRabbit
+		# size(1400,1000) #HOME
 		@w,@h = [width,height].map{|i|i/2.0}
   	@walker = [@w+200,@h-200] ; @m = [235,18,85]
 	end
@@ -34,7 +34,7 @@
 		[r,g,b]
 	end
 
-	def	mouseDragged#Clicked#
+	def	mouseMoved#Dragged#Clicked
 		@m = rgb_converter(mouseX,mouseY)
 	end
 
