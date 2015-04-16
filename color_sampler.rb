@@ -3,12 +3,15 @@
 # find best_possible RGB
 # color matchers
 # energy curves (equipotential)
+# Winston points out that Euclidean metric
+#    might not be what I want as it matches
+#    luminosity most likely.
 
 	def setup
 		text_font create_font("SanSerif",15) ; no_stroke
 		@img = loadImage("/Users/Jon/Desktop/CIE_1931.png")
 		@jmg = loadImage("/Users/Jon/Desktop/scans/imgo_daniel.jpeg")
-		# @jmg = loadImage("/Users/Jon/Desktop/scans/kolmogorov.jpg");
+		# @img = loadImage("/Users/Jon/Desktop/scans/apollonius.jpg");
 		@img.loadPixels()
 		background(20) ; frame_rate 30
 		# width, height
@@ -48,6 +51,7 @@
 		# spider_plant like sporing?
 		# diff of the diff?
 		# remember the last n and if jostling make e_ball smaller.
+		# modifiers: slash_n_burn(replaces with distant color);cultivator(smooths landscape)
 ###########
 	def walker_y(p=@walker) # pair tends toward @m, 
 		# center of mass, not very robust, bug when all nears are the same.
@@ -64,7 +68,7 @@
 		aTTw = neighborhood.zip(rgb_weights).inject([]) do |s,abw| 
 			s << abw[0].map{|i|i*abw[1]}
 		end.transpose.map{|i|i.inject :+}
-		norm = aTTw.map{|i|-i*5/weight_total}
+		norm = aTTw.map{|i|-i*10/weight_total}
 		@high_pair = norm.zip(pair2).map{|rp|rp.inject :+}
 
 		fill(255,255,255) ; text('y',*@high_pair) #; ellipse(*@high_pair,10,10)
