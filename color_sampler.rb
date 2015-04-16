@@ -6,17 +6,18 @@
 # Winston points out that Euclidean metric
 #    might not be what I want as it matches
 #    luminosity most likely.
+# If not closes enough, give up and walk
 
 	def setup
-		text_font create_font("SanSerif",15) ; no_stroke
-		@img = loadImage("/Users/Jon/Desktop/CIE_1931.png")
+		text_font create_font("SanSerif",25) ; no_stroke
+		# @img = loadImage("/Users/Jon/Desktop/CIE_1931.png")
 		@jmg = loadImage("/Users/Jon/Desktop/scans/imgo_daniel.jpeg")
-		# @img = loadImage("/Users/Jon/Desktop/scans/apollonius.jpg");
+		@img = loadImage("/Users/Jon/Desktop/scans/apollonius.jpg");
 		@img.loadPixels()
 		background(20) ; frame_rate 30
 		# width, height
-		# size(1920,1080) #JackRabbit
-		size(1400,1000) #HOME
+		size(1920,1080) #JackRabbit
+		# size(1400,1000) #HOME
 		@w,@h = [width,height].map{|i|i/2.0}
   	@walker = [@w+200,@h-200] ; @m = [235,18,85]
 	end
@@ -90,7 +91,8 @@
 	def draw
 		image(@jmg,10,10) # kolmogorov
 		pushMatrix # CIE_1931
-			scale(0.3) ; image(@img, 1.7*width, 10);
+			# scale(0.3) ; image(@img, 1.7*width, 10) #CIE
+			scale(0.6) ; image(@img, width-450, 10) #APOLLONIUS
 		popMatrix	
 
 		# color ellipse
