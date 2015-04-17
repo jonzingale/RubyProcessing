@@ -6,7 +6,7 @@
 # Winston points out that Euclidean metric
 #    might not be what I want as it matches
 #    luminosity most likely.
-# If not closes enough, give up and walk
+# If not close enough, give up and walk
 
 	def setup
 		text_font create_font("SanSerif",25) ; no_stroke
@@ -53,8 +53,9 @@
 		# diff of the diff?
 		# remember the last n and if jostling make e_ball smaller.
 		# modifiers: slash_n_burn(replaces with distant color);cultivator(smooths landscape)
+		# collaborative crawlers: scratch my back . .
 ###########
-	def walker_y(p=@walker) # pair tends toward @m, 
+	def walker_y(p=@walker) # center of mass 
 		# center of mass, not very robust, bug when all nears are the same.
 		pair2 = @high_pair.nil? ? @walker : @high_pair
 		triple = rgb_converter(*pair2) ; e_ball = rand(100) # <- a fun idea
@@ -72,20 +73,20 @@
 		norm = aTTw.map{|i|-i*10/weight_total}
 		@high_pair = norm.zip(pair2).map{|rp|rp.inject :+}
 
-		fill(255,255,255) ; text('y',*@high_pair) #; ellipse(*@high_pair,10,10)
+		fill(255,255,255) ; text('y',*@high_pair)
 	end
 
-	def walker_z(p=@walker) # pair tends toward @m, best so far
+	def walker_z(p=@walker) # least difference
 		pair = @low_pair.nil? ? @walker : @low_pair
 		triple = rgb_converter(*pair)
-		e_ball = rand(100) # <- a fun idea
+		e_ball = rand(100) # <- novel idea
 
 		@low_pair = (rootsUnity(17)+[[0,0]]).min_by do |s|
 			unital_color = pair.zip(s).map{|p,r|p+r*e_ball}
 			diff([rgb_converter(*unital_color), @m])
 		end.zip(pair).map{|rp|rp.inject :+}
 
-		fill(0,0,0) ; text('z',*@low_pair)# ; ellipse(*@low_pair,10,10)
+		fill(0,0,0) ; text('z',*@low_pair)
 	end
 ##########
 	def draw
