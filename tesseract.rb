@@ -11,7 +11,7 @@ def trigs(theta) ; %w(cos sin).map{|s| eval("Math.#{s} #{theta}")} ; end
 def rootsUnity(numbre) ;(0...numbre).map{|i|trigs(i*2*PI/numbre)} ; end
 
 def movement(vs)
-	vs.zip(@rand).map{|a,b| [a[0]+b[0],a[1]+b[1]]}
+	vs#.zip(@rand).map{|a,b| [a[0]+b[0],a[1]+b[1]]}
 end
 
 def vert(d)
