@@ -54,8 +54,9 @@
 		# spider_plant like sporing?
 		# diff of the diff?
 		# remember the last n and if jostling make e_ball smaller.
-		# modifiers: slash_n_burn(replaces with distant color);cultivator(smooths landscape)
+		# modifiers: slash_n_burn(replaces with distant color);cultivator(smooths landscape);sorter
 		# collaborative crawlers: scratch my back . .
+		# grasshopper
 ###########
 	def walker_y(p=@walker) # center of mass 
 		# center of mass, not very robust, bug when all nears are the same.
