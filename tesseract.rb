@@ -4,7 +4,7 @@ def setup
 	background(20) ; frame_rate 1
 	@w,@h = [width,height].map{|i|i/2.0}
 	@rand_c = (0..2).map{rand(255)}
-	text_font create_font("SanSerif",25) ; @i = 0
+	text_font create_font("SanSerif",105) ; @i = 0
 end
 
 def trigs(theta) ; %w(cos sin).map{|s| eval("Math.#{s} #{theta}")} ; end

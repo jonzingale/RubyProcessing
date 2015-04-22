@@ -2,62 +2,44 @@
 #test ruby
 # require 'ruby-2.0.0-p247'
 require 'byebug'
+require 'matrix'
 	WIDTH = 100 ; HEIGHT = 100
+  ID = Matrix.columns([[1,0,0],[0,1,0],[0,0,1]])
+	VECT = Vector.elements([1,2,3])
+	BECT = Vector.elements([4,5,6])
+	@w,@h = [WIDTH,HEIGHT].map{|i|i/2.0}
+	@rand_c = (0..2).map{rand(255)} ; @i = 0
+	PI = 3.1415926
 
-	def fib(t=0,n=[1,1]) # :: length -> [fibs]
-	  f,i,b = n ;
-	  n.length > t ? n : fib(t, (n.unshift(f + i)))
-	end
+def trigs(theta) ; %w(cos sin).map{|s| eval("Math.#{s} #{theta}")} ; end
+def rootsUnity(numbre) ; (0...numbre).map{|i|trigs(i*2*PI/numbre)} ; end
 
-	def ffib(n)
-	  phi = (1+(Math.sqrt 5))/2
-	  fib_f = (phi**n - (-phi)**-n)/(Math.sqrt 5)
-	  fib_f.floor
-	end
+def vects(d)
+	Matrix.rows((0...2**d).map{|i|("%03d"%i.to_s(2)).split('').map(&:to_i)}) * 300
+end
 
-	def fact(n) (1..n).inject(1) {|r,i| r*i } end
-	#1.upto(26) {|i| p [i, Math.gamma(i), fact(i-1)] }
-
-	# P0 k k k k P1 k k k k P2
-	def poisson(lambda,pts,k) # density, points, grain
-		k = k * pts
-		Math.exp(-lambda) * (0...k).inject(0) do |s,k|
-			s + ((lambda ** k) / fact(k))
-		end
-	end
-
-	def neighborhood(cell,board)
-		c1,c2 = cell.keys[0]
-		pairs = [-1,0,1].inject([]){|ns,i| ns+[-1,0,1].map{|j|[i,j]}}
-
-		pairs.map do |cs|
-			a,b = cs # maybe Board should be a hash?
-			[a+c1%WIDTH,b+c2%HEIGHT]
-
-
-		end
-byebug
-
-	end
+def rotation_tranny
+	sin ,cos = trigs(@i*2*PI)
+	# sc = trigs(@i*2*PI)
+	Matrix.columns([[- sin,cos,0],[cos,sin,0],[0,0,1]])
+end
 
 	def process
-
-
-		clear_board = (0...WIDTH).map do |i| 
-			(0...HEIGHT).inject([]) do |hs,j|
-				hs << {[i,j] => 0 }
-			end
-		end
+		@i+=0.01
 	
-		cell = {[1,2] => 0}
-		neighborhood(cell,clear_board)
+		shed = (rotation_tranny * VECT * 100).to_a.map(&:floor).take(2)
+		translate = shed.zip([@w,@h]).map{|a,b|a+b}
 
-		byebug ; 4
-	end
+		cube = vects(3).transpose
+		turn = rotation_tranny * cube
+	
+		idea = turn.transpose.to_a.map{|i|i.take(2).map(&:floor)}
+		translate = idea.map{|t|t.zip([@w,@h]).map{|a,b|a+b}}
+
+	byebug
+		end
 
 
 process
-# 64 bytes from 192.168.1.19: icmp_seq=18 ttl=64 time=0.075 ms
-# 64 bytes from 192.168.1.1: icmp_seq=18 ttl=64 time=2.852 ms
-# 64 bytes from 192.168.1.21: icmp_seq=18 ttl=64 time=353.994 ms
-# 64 bytes from 192.168.1.23: icmp_seq=18 ttl=64 time=354.501 ms
+
+byebug ; 4
