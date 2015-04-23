@@ -10,9 +10,9 @@ def trigs(theta) ; %w(cos sin).map{|s| eval("Math.#{s} #{theta}")} ; end
 def setup
 	size(1450,870) #HOME
 	# size(1920,1080) #JackRabbit
-	background(20) ; frame_rate 30
-	@w,@h = [width,height].map{|i|i/2.0-100}
-	@i =[0] ; @rand_c = (0..2).map{rand(255)} 
+	background(20) ; frame_rate 10
+	@w,@h = [width,height].map{|i|i/2.0}
+	@i = 0 ; @rand_c = (0..2).map{rand(255)} 
 end
 
 def tranny
