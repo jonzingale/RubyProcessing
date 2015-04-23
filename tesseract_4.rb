@@ -6,10 +6,15 @@ ID = Matrix.rows([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]).freeze
 HEXAGONAL = Matrix.rows([[1,0,-1,1],[0.5,1,0.5,1],[0,0,0,1],[0,0,0,1]]).freeze
 PULLED = Matrix.rows([[1,0,0,1],[0,1,0,1],[0,0,0,0],[0,0,0,1]]).freeze
 
+BASES = (0...4).map{|i|2**i}.freeze # 1,2,4,8
+ALL_POINTS = (0...2**4).inject([],:<<).freeze
+TRIANGLES = ALL_POINTS.inject([]){ |a,i| a+=(0...i).map{ |j| [i,j] } }.freeze
+EDGES = TRIANGLES.map{|a,b|[a,b] if BASES.include?(a^b)}.compact.freeze
+
 def setup
 	size(1450,870) #HOME
 	# size(1920,1080) #JackRabbit
-	background(20) ; frame_rate 20
+	background(20) ; frame_rate 100
 	@w,@h = [width,height].map{|i|i/2.0-100}
 	@i, @j, @k = [0]*3 ; @rand_c = (0..2).map{rand(255)} 
 	text_font create_font("SanSerif",30) ; @key = nil
@@ -24,15 +29,10 @@ def tranny
 	rots_y = Matrix.columns([[cos2,0,sin2,0],[0,1,0,0],[-sin2,0,cos2,0],[0,0,0,1]])
 	rots_z = Matrix.columns([[cos3,0,0,sin3],[0,1,0,0],[0,0,1,0],[-sin3,0,0,cos3]])
 
-	qwerty = [82,84] # R , T
-	trans = [HEXAGONAL,PULLED]
-	tran = qwerty.zip(trans).detect{|q,t| q == @key }
-	tran.nil? ? ID : tran[1]*rots_z*rots_y*rots_x
-end
-
-def keyPressed
-	@key = key_code
-	tranny
+	# qwerty = [82,84] # R , T
+	# trans = [HEXAGONAL,PULLED]
+	# tran = qwerty.zip(trans).detect{|q,t| q == @key }
+	HEXAGONAL*rots_z*rots_y*rots_x
 end
 
 def draw
@@ -40,29 +40,16 @@ def draw
 	no_stroke ; fill(0) ; rect(0,0,width,height)
 	[:fill,:stroke].each{|f|send(f,*@rand_c)}
 
-	# 1,2,4,8
-	bases = (0...4).map{|i|2**i}
-	all_points = (0...2**4).inject([],:<<)
-	triangles = all_points.inject([]){ |a,i| a+=(0..i).map{ |j| [i,j] } }
-	edges = triangles.map{|a,b|[a,b] if bases.include?(a^b)}.compact
-
-	e_coords = edges.map do |a|
+	e_coords = EDGES.map do |a|
 		a.map{|x|("%04d" % x.to_s(2)).split('').map(&:to_i)}
 	end
 
 	turn_edges = e_coords.map do |s|
-		s.map do |v|
-			m_A = @key.nil? ? ID : tranny
-			(m_A * Vector.elements(v) * 150).to_a
-		end
+		s.map{|v| (tranny * Vector.elements(v) * 150).to_a}
 	end
 
 	edges2d = turn_edges.transpose.map{|i|i.map{|j|j.take(2).map(&:floor)}}
-
-	translate = edges2d.transpose.map do |edge|
-		edge.zip([@w,@h]).map{ |e,x| [e[0]+@w,e[1]+@h] }
-	end
-
+	translate = edges2d.transpose.map{|edge|edge.map{|e| [e[0]+@w,e[1]+@h] }}
 	translate.each{|edge|a,b = edge ; line(*a,*b)}
 end
 
