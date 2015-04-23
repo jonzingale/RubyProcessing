@@ -19,6 +19,7 @@ def vects(d)
 end
 
 	def process
+
 while @i > -1
 	# @i+=0.01 ; @j+=0.02 ; @k+=0.04
 	@i+=0.01 ; @j+=0.5 ; @k+=0.5
@@ -26,19 +27,35 @@ while @i > -1
 	sin2,cos2 = trigs(@j*2*PI)
 	sin3,cos3 = trigs(@k*2*PI) 
 
-	# translate?
-	rots_3 = Matrix.columns([[sin1 * cos2,0,0],[0,sin1 * sin2,0],[0,0,cos1]])
-	rots_4 = Matrix.columns([[cos1*sin3,0,0,0],
-													 [0,sin1*sin3,0,0],
-													 [0,0,cos2*cos3,0],
-													 [0,0,0,sin2*cos3]])
+	rots_x = Matrix.columns([[cos1,sin1,0,0],[-sin1,cos1,0,0],
+													 [0,0,1,0]      ,[0,0,0,1]])
 
 
-	hyper_cube = vects(4).transpose
-	turn = rots_4 * hyper_cube
+	# 1,2,4,8
+	bases = (0...4).map{|i|2**i}
+###
 
-	idea = turn.transpose.to_a.map{|i|i.take(2).map(&:floor)}
-	translate = idea.map{|t|t.zip([@w,@h]).map{|a,b|a+b}}
+		all_points = (0...2**4).inject([],:<<)
+		triangles = all_points.inject([]){ |a,i| a+=(0..i).map{ |j| [i,j] } }
+		edges = triangles.map{|a,b|[a,b] if bases.include?(a^b)}.compact
+
+		e_coords = edges.map do |a|
+			a.map{|x|("%04d" % x.to_s(2)).split('').map(&:to_i)}
+		end
+
+		turn_edges = e_coords.map do |s|
+			s.map{|v| (rots_x * Vector.elements(v) * 300).to_a}
+		end
+
+		clean_edges = turn_edges.transpose.map{|i|i.map{|j|j.take(2).map(&:floor)}}
+
+	translate = clean_edges.transpose.map do |edge|
+		edge.zip([@w,@h]).map{ |e,x| [e[0]+@w,e[1]+@h] }
+	end
+
+	# translate.each{|edge|line(*edge)}
+
+
 sleep(1)
 	puts "#{translate}"
 end
