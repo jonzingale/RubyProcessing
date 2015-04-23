@@ -1,5 +1,5 @@
 require 'matrix'
-
+# this version has trails!
 BASES = (0...4).map{|i|2**i}.freeze # 1,2,4,8
 ALL_POINTS = (0...2**4).inject([],:<<).freeze
 HEXAGON = Matrix.rows([[1,0,-1,1],[0.5,1,0.5,1],[0,0,0,1],[0,0,0,1]]).freeze
@@ -18,18 +18,35 @@ def tranny
 end
 
 def setup
+	@loaded = loadImage("/Users/Jon/Desktop/test.png")
+
 	size(1920,1080) ; background(20) ; frame_rate 20
 	@w,@h = [width,height].map{|i|i/3.0} ; 	@i,@rand_c = [0,(0..2).map{rand(255)}]
+
 	triangles = ALL_POINTS.inject([]){ |a,i| a+=(0...i).map{ |j| [i,j] } }.freeze
 	edges = triangles.map{|a,b|[a,b] if BASES.include?(a^b)}.compact.freeze
 	@coords = edges.map{|a|a.map{|x|("%04d" % x.to_s(2)).split('').map(&:to_i)}}
 end
 
+def images
+	if @i < 0
+		save('/Users/Jon/Desktop/test.png')
+		@loaded = loadImage("/Users/Jon/Desktop/test.png")
+	else ; image(@loaded,0,0) ; end
+end
+
 def draw
-	@i+=0.003
-	no_stroke ; fill(0) ; rect(0,0,width,height)
+	images ; @i+=0.003
+	# no_stroke ; fill(0) ; rect(0,0,width,height)
+	strokeWeight(1)
 	[:fill,:stroke].each{|f|send(f,*@rand_c)}
-	turn_edges = @coords.map{|s|s.map{|v| (tranny*Vector.elements(v)*200).to_a}}
+	turn_edges = @coords.map{|s|s.map{|v| (tranny*Vector.elements(v)* 200).to_a}}
 	translate = turn_edges.map{|edge|edge.map{|d,e| [d+@w,e+@h]} }
+	translate.each{|edge|a,b = edge ; line(*a,*b)}
+# before
+	@loaded = get(0,0,width,height)
+# after
+	rand_c = (0..2).map{rand(255)}
+	[:fill,:stroke].each{|f|send(f,*rand_c)} ; strokeWeight(3)
 	translate.each{|edge|a,b = edge ; line(*a,*b)}
 end
