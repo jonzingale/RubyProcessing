@@ -33,7 +33,7 @@ def tranny
 	# yz_rot = Matrix.rows([[1,0,0,0],[ 0,cos,sin,0],[0,-sin,cos,0],[0,0,0,1]])
 
 	# how do i get the translate to work?
-	REDUCTION * (UNTRANSLATE + (yw_rot * xz_rot * xy_rot) + TRANSLATE)
+	REDUCTION * yw_rot * xz_rot * xy_rot * HEXAGON
 end
 
 def draw
