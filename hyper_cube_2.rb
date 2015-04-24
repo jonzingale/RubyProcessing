@@ -10,9 +10,6 @@ def tranny
 	xy_rot = Matrix.rows([[cos,sin,0,0],[-sin,cos,0,0],[0,0,1,0],[0,0,0,1]])
 	xz_rot = Matrix.rows([[cos,0,-sin,0],[0,1,0,0],[sin,0,cos,0],[0,0,0,1]])
 	zw_rot = Matrix.rows([[1,0,0,0],[0,1,0,0],[0,0,cos,-sin],[0,0,sin,cos]])
-	# xw_rot = Matrix.rows([[cos,0,0,sin],[0,1,0,0],[0,0,1,0],[-sin,0,0,cos]])
-	# yw_rot = Matrix.rows([[1,0,0,0],[0,cos,0,-sin],[0,0,1,0],[0,sin,0,cos]])
-	# yz_rot = Matrix.rows([[1,0,0,0],[ 0,cos,sin,0],[0,-sin,cos,0],[0,0,0,1]])
 	REDUCED_HEX * zw_rot * xz_rot * xy_rot
 end
 
@@ -26,7 +23,7 @@ def setup
 end
 
 def images
-	if @i < 0
+	if @i == 0
 		save('/Users/Jon/Desktop/test.png')
 		@loaded = loadImage("/Users/Jon/Desktop/test.png")
 	else ; image(@loaded,0,0) ; end
