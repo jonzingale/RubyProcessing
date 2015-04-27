@@ -15,21 +15,17 @@ end
 def all_vs(p=2) ; (0...p**2).map{|x|Vector.elements(n_ary(p,x))} ; end
 def trannies(n=2) ; tranny_classes(n,unit_trans(n)) ; end
 
-def vector_classes(k,m=ID,vs)
-	vs.map do |v|
-		it,*iterates = (1...vs.count).map{|i|((m**i)*v).map{|i|i%k} }
-		iterates.take_while{|v|v!=it}.unshift(it)
-	end
+def vector_classes(k,m=ID,vs) ; vs.map do |v|
+	it,*iterates = (1...vs.count).map{|i|((m**i)*v).map{|i|i%k} }
+	iterates.take_while{|v|v!=it}.unshift(it) ; end
 end
 
 def unit_trans(p=2)
 	all_vs(p).product(all_vs(p)).map{|vs|Matrix.rows(vs)}.select{|m|(m.det)%p==1}
 end
 
-def tranny_classes(k,ts)
-	ts.map do |t|
-		(1...ts.count).map{|i|(t**i).map{|i|i%k} }.take_while{|t|t!=ID}.unshift(ID)
-	end
+def tranny_classes(k,ts) ; ts.map do |t|
+	(1...ts.count).map{|i|(t**i).map{|i|i%k} }.take_while{|t|t!=ID}.unshift(ID) ; end
 end
 
 def draw
