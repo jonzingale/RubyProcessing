@@ -14,11 +14,20 @@ require 'matrix'
 	@rand_c = (0..2).map{rand(255)}
 	PI = 3.1415926
 
-def n_ary(n=2,x=0) ; ("%02d" % x.to_s(n)).split('').map(&:to_i) ; end
+
+def n_ary(n=2,x=0,ary=[])
+	x==0 ? [0,0].drop(ary.count)+ary : n_ary(n,x/n,ary.unshift(x%n))
+end
+
+#######Vectors
 def all_vs(p=2) ; (0...p**2).map{|x|Vector.elements(n_ary(p,x))} ; end
 
-# multiplying over a matrix and modding
-# all_vs(5).map{|v| (it*v).map{|i|i%5}}
+def vector_classes(k,m=ID,vs)
+	vs.map do |v|
+		it,*iterates = (1...vs.count).map{|i|((m**i)*v).map{|i|i%k} }
+		iterates.take_while{|v|v!=it}.unshift(it)
+	end
+end
 
 #######Transformations: partition trannies into classes.
 def trannies(n=2) ; tranny_classes(n,unit_trans(n)) ; end
@@ -36,11 +45,8 @@ end
 
 def process
 	while @i > -1 ; @i+=0.01
-		ts = trannies(3)
 		it = Matrix[[1, 3], [0, 1]]
-
-
-		prints(ts)
+		v_classes = vector_classes(5,it,all_vs)
 byebug
   end
 end
