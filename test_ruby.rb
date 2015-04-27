@@ -14,37 +14,38 @@ require 'matrix'
 	@rand_c = (0..2).map{rand(255)}
 	PI = 3.1415926
 
-	# there are how many trannies?
-	def n_ary(n=2,x=0) ; ("%02d" % x.to_s(n)).split('').map(&:to_i) ; end
-	def all_vs(p=2) ; (0...p**2).map{|x|Vector.elements(n_ary(p,x))} ; end
+def n_ary(n=2,x=0) ; ("%02d" % x.to_s(n)).split('').map(&:to_i) ; end
+def all_vs(p=2) ; (0...p**2).map{|x|Vector.elements(n_ary(p,x))} ; end
 
-	def unit_trans(p=2)
-		all_vs(p).product(all_vs(p)).map{|vs|Matrix.rows(vs)}.select{|m|(m.det)%p==1}
-	end
+# multiplying over a matrix and modding
+# all_vs(5).map{|v| (it*v).map{|i|i%5}}
 
-	# partition trannies into classes.
-	def tranny_classes(t_ary=[],ary=[])
-		t_len = t_ary.count ; t,*ts = t_ary
-		if ts.empty? ; ary <<[t] ; else
-			iterates = (0...t_len).map{|i|(t**i).map{|i| i % 5} }.uniq
-			a,b = t_ary.partition{|m|iterates.include?(m)}
-			tranny_classes(b,ary<<a)
-		end
+#######Transformations: partition trannies into classes.
+def trannies(n=2) ; tranny_classes(n,unit_trans(n)) ; end
+def unit_trans(p=2)
+	all_vs(p).product(all_vs(p)).map{|vs|Matrix.rows(vs)}.select{|m|(m.det)%p==1}
+end
+
+def tranny_classes(k,ts)
+	ts.map do |t|
+		(1...ts.count).map{|i|(t**i).map{|i|i%k} }.take_while{|t|t!=ID}.unshift(ID)
 	end
+end
+#######
 
 
 def process
 	while @i > -1 ; @i+=0.01
-		it = tranny_classes(unit_trans(5))
+		ts = trannies(3)
+		it = Matrix[[1, 3], [0, 1]]
 
-		# prints classes
-		it.sort_by{|t|t.count}.reverse.map{|i|puts "#{i}"}.count
+
+		prints(ts)
 byebug
-
-
-
   end
 end
+
+def prints(ary=[]) ;ary.map{|a|puts "#{a.sort_by{|i|i.count}.reverse }"}.compact end
 
 
 process
