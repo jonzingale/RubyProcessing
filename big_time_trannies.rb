@@ -5,6 +5,7 @@ def setup
 	@i, @rand_c =[0,(0..2).map{rand(255)}]
 	@w,@h = [width,height].map{|i|i/10.0}
 	@mid_v = Vector.elements([@w,@h])
+	@prime = 7 ; @units = unit_trans(@prime)
 	[:fill,:stroke].each{|f|send(f,*@rand_c)}
 end
 
@@ -26,12 +27,10 @@ def tranny_classes(k,ts)
 end
 #######
 
-
 def draw
-	clear
-	tranny = unit_trans(5)[rand(unit_trans.count)]
-	sources = all_vs(5) ; targets = sources.map{|v| (tranny*v).map{|i|i%5}}
-	edges = sources.zip(targets).map{|a,b|(a.to_a+b.to_a).map{|i|i*200}}
+	clear ; tranny = @units[rand(unit_trans.count)]
+	sources = all_vs(@prime) ; targets = sources.map{|v| (tranny*v).map{|i|i% @prime}}
+	edges = sources.zip(targets).map{|a,b|(a.to_a+b.to_a).map{|i|i*100}}
 
 	edges.each{|edge|line(*edge)}
 end
