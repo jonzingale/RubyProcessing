@@ -1,10 +1,17 @@
 # colors vector paths about a two dimensional vector space,
 # for randomly given det 1 matrices over a finite field @prime.
 # todo: On a donut or at least center the thing.
+#       @prime > 12
+#       what relation between @w factor and edges factor?
+
+# 			text("#{tranny,num_classes}",@w,100)
+#       spread colors, how many classes?
+
 require 'matrix'
 def setup
-  background(20) ; frame_rate 0.5 ; size(1400,1000) #HOME
-  @prime = 7 ; @units = unit_trans(@prime).shuffle
+	text_font create_font("SanSerif",40)
+  background(20) ; frame_rate 0.3 ; size(1400,1000) #HOME
+  @prime = 12 ; @units = unit_trans(@prime).shuffle
 	@w,@h = [width,height].map{|i|i/10.0}
 end
 
@@ -31,12 +38,12 @@ end
 def draw
 	clear ; translate(@w,@h)
 	tranny = @units.shift ; @units<<tranny
-
+	text("#{tranny.to_a[0]}\n#{tranny.to_a[1]}",width-500,100)
 	# take classes of vectors and color'em
 	vector_classes(@prime,tranny,all_vs(@prime)).map do |v_class|
 		colors = (0..2).map{rand(255)} ; stroke(*colors)
 		srcs = v_class ; trgs = srcs.map{|v| (tranny*v).map{|i|i% @prime}}
-		edges = srcs.zip(trgs).map{|a,b|(a.to_a+b.to_a).map{|i|i*100}}
+		edges = srcs.zip(trgs).map{|a,b|(a.to_a+b.to_a).map{|i|i*75}}
 		edges.each{|edge|line(*edge)}
 	end
 end
