@@ -1,9 +1,13 @@
-#!/usr/bin/env ruby
-#test ruby
-# require 'ruby-2.0.0-p247'
-require 'byebug'
-WIDTH = 100 ; HEIGHT = 100
-simplices = (0..6).map{|s| eval("SIMPLEX_#{s} = (0..#{s}).to_a")}.freeze
+# Homology visualizer
+SIMPLICES = (0..6).map{|s| eval("SIMPLEX_#{s} = (0..#{s}).to_a")}.freeze
+
+def setup
+	text_font create_font("SanSerif",40)
+  background(20) ; frame_rate 0.5 ; size(1400,1000) #HOME
+
+	@w,@h = [width,height].map{|i|i/5.0}
+	stroke_width(3)
+end
 
 def abs(i) ; ((i**2)**0.5).to_i ; end
 def is_compact?(simplex) ; del(del(simplex)).flatten.inject(0,:+) == 0 ; end
@@ -34,11 +38,7 @@ def n_add_p(simplex,line,p)
 	end + edges + edges.map{|i|i.map{|j|-j}}
 end
 
-def process
+def draw
+	clear ; translate(@w,@h)
 	n_add_p(SIMPLEX_3, SIMPLEX_3.take(2), 99)
-	# add_p(SIMPLEX_2, SIMPLEX_2.take(2), 99)
 end
-
-process
-
-byebug ; 4

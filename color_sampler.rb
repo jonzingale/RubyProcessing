@@ -17,7 +17,7 @@
 		# @img = loadImage("/Users/Jon/Desktop/scans/apollonius.jpg");
 
 		# width, height
-		size(1400,1000) #HOME
+		size(1400,1080) #HOME
 		# size(1920,1080) #JackRabbit
 		background(20) ; frame_rate 30
 		@w,@h = [width,height].map{|i|i/2.0}
