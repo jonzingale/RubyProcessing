@@ -12,6 +12,12 @@ end
 def abs(i) ; ((i**2)**0.5).to_i ; end
 def is_compact?(simplex) ; del(del(simplex)).flatten.inject(0,:+) == 0 ; end
 
+# 2-simplex
+def split_simplex(simplex,line,p)
+	faces = del(line.zip(simplex-line<<p).flatten)
+	[faces[0],faces[2]]
+end
+
 def del(simplex)
 	simplex[0].is_a?(Array) ? simplex.inject([]){|xs,s| xs + del(s) } :
 	simplex.map.with_index{|s,i| simplex.reject{|x| x == s}.map{|j| j*(-1)**i } }
@@ -28,14 +34,7 @@ end
 
 # generalize to n-dimensions
 def n_add_p(simplex,line,p)
-	@sex = del(simplex) ; (@sex = del(@sex)) until @sex[0].count == 2
-	points = @sex.map{|s|s - line}.select{|i|i.count==1 && i[0] >= 0}.uniq.flatten
-	edges = points.map{|i|[i,p]}
 
-	it = @sex.inject([]) do |xs,s|
-		cond = s.map{|j| abs(j) } == line
-		cond ? xs + [[s[0], p],[p, s[1]]] : xs << s
-	end + edges + edges.map{|i|i.map{|j|-j}}
 end
 
 def draw
