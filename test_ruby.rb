@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 #test ruby
 # require 'ruby-2.0.0-p247'
-
-
 require 'matrix'
 require 'byebug'
 WIDTH = 100 ; HEIGHT = 100
