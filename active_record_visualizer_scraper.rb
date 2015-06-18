@@ -18,6 +18,9 @@ ASSOCS_REGEX = /^ +belongs_to|^ +has_one|^ +has_many|^ +has_and_belongs_to_many/
 ASSOC_HASH = {belongs_to: [], has_one: [], has_many: [], has_many_through: [],
 							has_one_through: [], has_and_belongs_to_many: []}
 
+@bash = {belongs_to: [], has_one: [], has_many: [], has_many_through: [],
+				 has_one_through: [], has_and_belongs_to_many: []}
+
 ASSOCS = ['belongs_to', 'has_one', 'has_many', 'has_many :through',
 					'has_one :through','has_and_belongs_to_many'].freeze
 
@@ -53,8 +56,6 @@ def get_active_record(file_name)# gets all association strings and sorts em'
 end
 
 def process
-	@bash = {belongs_to: [], has_one: [], has_many: [], has_many_through: [],
-					 has_one_through: [], has_and_belongs_to_many: []}
 	get_arrows
 	hash_to_txt
 end
