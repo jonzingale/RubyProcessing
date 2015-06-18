@@ -18,6 +18,9 @@ ASSOCS_REGEX = /^ +belongs_to|^ +has_one|^ +has_many|^ +has_and_belongs_to_many/
 ASSOC_HASH = {belongs_to: [], has_one: [], has_many: [], has_many_through: [],
 							has_one_through: [], has_and_belongs_to_many: []}
 
+@bash = {belongs_to: [], has_one: [], has_many: [], has_many_through: [],
+				 has_one_through: [], has_and_belongs_to_many: []}
+
 ASSOCS = ['belongs_to', 'has_one', 'has_many', 'has_many :through',
 					'has_one :through','has_and_belongs_to_many'].freeze
 
@@ -25,6 +28,7 @@ ASSOC_SEL = ASSOC_HASH.keys.zip(ASSOCS).freeze
 THROUGH_SEL = [[:has_many, :has_many_through],
 							 [:has_one, :has_one_through]].freeze
 
+def process ; get_arrows ; hash_to_txt ; end
 def get_arrows ; MODELS.each{|model| get_active_record("#{model}.rb")} ; end
 def hash_to_txt ; File.open(FILE, 'w') { |f| f << @bash } ; end
 
@@ -50,13 +54,6 @@ def get_active_record(file_name)# gets all association strings and sorts em'
 			end
 		end
 	end
-end
-
-def process
-	@bash = {belongs_to: [], has_one: [], has_many: [], has_many_through: [],
-					 has_one_through: [], has_and_belongs_to_many: []}
-	get_arrows
-	hash_to_txt
 end
 
 process
