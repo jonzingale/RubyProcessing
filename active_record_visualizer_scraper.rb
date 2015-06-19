@@ -26,7 +26,8 @@ def counter ; @bash.empty? ? nil : (puts "\n\n#{@bash.keys.map{|k|@bash[k].count
 def get_arrows ; MODELS.each{|model| get_active_record("#{model}")} ; end
 def to_txt(graph) ; File.open(FILE, 'w') { |f| f << graph } ; end
 
-def get_active_record(file_name)# gets all assoc_str and sorts em'
+# gets all assoc_str and sorts em'
+def get_active_record(file_name)
 	file = File.open(MODELS_PATH+"/#{file_name}.rb")
 
 	file.each do |line| # :: File -> {Key => [String, Table]}
