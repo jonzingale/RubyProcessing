@@ -29,7 +29,9 @@
 	# in_coming blue, out_going red, both purple
 	def size_v(data)
 		counts = data[:counts].values
-		counts.map{|i|[(Math.log(i+1) * 10)** 1.4] * 2}
+		# counts.map{|i|[(Math.log(i+1) * 10)** 1.4] * 2}
+		counts.map{|i|[(Math.log(i+1) * 7)** 0.94] * 2} # no overlap
+		counts.map{|i|[(Math.log(i+1) * 7)** 1.0] * 2} # still pretty good.
 	end
 
 	def get_coords(coords_colors)
@@ -45,7 +47,8 @@
 			@xy = get_coords(@cc).transpose[0][index]
 
 			fill(200+@cc.transpose[1][index],50,93)
-			text(data[:vert],*@xy) ; blue, red, purple = size_v(data)
+			text(data[:vert],*@xy) ; 
+			blue, red, purple = size_v(data)
 
 			# print_deg(*@xy,data)
 			fill(180,100,100,90) ; ellipse(*@xy,*blue) # blue
