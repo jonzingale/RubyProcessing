@@ -25,6 +25,22 @@ def cross_product(vs,ws)# cross_product needs ruby 2.1 or greater.
 	end
 end
 
+def fact(n,r) ; ((n-r+1)..n).to_a.inject(1,:*) ; end
+
+def birthdays(t)
+	(1..t).map do |n|
+		person = (1..n).min_by{ |k| ((0.5-(fact(n,k)/(n**k.to_f)))**2)**0.5 }
+		[n, person, ((n**0.5)*6/5).to_i, n/person.to_f]
+	end
+end	
+
+def prty(it)
+	unless it.empty?
+		[it.take(3)].map{|t| puts "#{t}"}
+		prty(it.drop(3)) 
+	end
+end
+
 def oriented?(face,pt)
 	a, b, c, p = (face << pt).map{|a| Vector.elements(a)}
 	cross_product(b-a,c-a).inner_product(p-a) < 0
@@ -41,12 +57,12 @@ def split_triangle(e1,e2)
 end
 
 def process
+	birthdays(9)
+	# it = split_triangle([0,1],[1,3])
+	# cross = cross_product(Vector[1,0,0],Vector[0,1,0])
 
-	it = split_triangle([0,1],[1,3])
-	cross = cross_product(Vector[1,0,0],Vector[0,1,0])
-
-	face = [[1,4,6],[7,2,5],[6,1,5]] ; point = [12,5,2]
-	oriented?(face, point)
+	# face = [[1,4,6],[7,2,5],[6,1,5]] ; point = [12,5,2]
+	# oriented?(face, point)
 byebug
 end
 

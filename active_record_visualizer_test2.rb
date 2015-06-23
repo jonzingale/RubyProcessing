@@ -20,8 +20,10 @@ def process
 
 	each_totals = ARROWS.map{|g|g[:counts].values}.transpose.map{|c|c.inject(0,:+)}
 
-	# ARROWS.map{|g|g[:counts].values}.transpose.map{|c|c.inject(0,:+)/124.0}
-	avg_degrees = [1.6290322580645162, 1.0564516129032258, 0.03225806451612903]
+	avg_degrees = ARROWS.map{|g|g[:counts].values}.transpose.map{|c|c.inject(0,:+)/124.0}
+	# avg_degrees = [1.6290322580645162, 1.0564516129032258, 0.03225806451612903]
+
+	avg_degrees.map{|i|[(Math.log(i+1) * 10)** 1.4] * 2}
 
 	avg_degrees.map{|i|[Math.log(i+1) * 10] * 2}
 	avg_size = [9.666158157616708, 7.209819795533894, 0.3174869831458027]
