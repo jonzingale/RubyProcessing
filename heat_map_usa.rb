@@ -11,6 +11,7 @@ require 'mechanize'
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 
+	# The coordinates need to be respaced.
 	BASE_URL = 'http://forecast.weather.gov/MapClick.php?'.freeze
 	CITY_DATA = [['santa fe','87505',[355,415]],
 							 ['bullhead city','86429',[183,416]],
