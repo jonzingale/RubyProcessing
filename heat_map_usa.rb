@@ -7,8 +7,10 @@ require 'nokogiri'
 require 'open-uri'
 require 'mechanize'
 
-	USA_MAP = "/Users/Jon/Desktop/usa_map.jpg".freeze
-	USA_MAP_TEMP = '/Users/Jon/Desktop/usa_map_tmp.jpg'.freeze
+	PI = 3.1415926.freeze
+	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
+	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
+
 	BASE_URL = 'http://forecast.weather.gov/MapClick.php?'.freeze
 	CITY_DATA = [['santa fe','87505',[355,415]],
 							 ['bullhead city','86429',[183,416]],
@@ -35,7 +37,7 @@ require 'mechanize'
 
 	def setup
 		text_font create_font("SanSerif",20);
-		square = [1000, 700, P3D] ; size(*square)
+		square = [1600, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		frame_rate 20 ; colorMode(HSB,360,100,100)
 		no_stroke
@@ -47,10 +49,11 @@ require 'mechanize'
 		(0..150).each{|i| fill(scale(i),100,100)
 											ellipse(i*9,height,20,20) }
 
-		# can we rotate the pic back?
-		# rotateX(3.1415/3.0)
+		# scaling is a bitch, don't touch
+		rs = 0.70 ; rotateX(PI/5.0)
 		@loaded = loadImage(USA_MAP)
-		image(@loaded,0,0)
+		@loaded.resize(1152*rs,718*rs)
+		image(@loaded,350,180)
 
 		scrape_temps
 	end
@@ -60,7 +63,7 @@ require 'mechanize'
 		translate = scale - 82 % 360
 	end	
 
-	def counter ; @i = (@i + 1) % 10 ; end
+	def counter ; @i = (@i + 1) % 120 ; end
 
 	def images
 		if @i == 0
@@ -84,7 +87,7 @@ require 'mechanize'
 			fill(hue,100,100,70) ; rect(*coords,10,10)
 
 			# dont let the number get blurry.
-			fill(0) ; text("#{temp}",*coords)
+			# fill(0) ; text("#{temp}",*coords)
 		end
 
 		images
