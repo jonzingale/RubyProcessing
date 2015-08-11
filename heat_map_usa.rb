@@ -8,19 +8,23 @@ require 'open-uri'
 require 'mechanize'
 
 	PI = 3.1415926.freeze
+	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 
 	# The coordinates need to be respaced.
 	BASE_URL = 'http://forecast.weather.gov/MapClick.php?'.freeze
-	CITY_DATA = [['santa fe','87505',[355,415]],
-							 ['bullhead city','86429',[183,416]],
-							 ['cleveland','44107',[772,230]],
-							 ['monroe','98272',[108,108]],
-							 ['quakertown','18951',[877,214]]
+	CITY_DATA = [['santa fe','87505', [410, 380]],
+							 ['bullhead city','86429', [236, 383]],
+							 ['cleveland','44107', [1013, 244]],
+							 ['monroe','98272', [337, 127]],
+							 ['quakertown','18951', [1110, 230]],
+							 ['new orleans','70112',[873,571]],
+							 ['austin','78705',[634,564]],
+							 ['bad lands','57750',[581,221]],
+							 ['albuquerque','87101',[382,394]],
+							 ['san francisco','94101',[155,278]]
 							]
-
-	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 
 	def scrape_temps
 		agent = Mechanize.new ; @data = []
@@ -40,11 +44,11 @@ require 'mechanize'
 		text_font create_font("SanSerif",20);
 		square = [1600, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
-		frame_rate 20 ; colorMode(HSB,360,100,100)
+		frame_rate 1 ; colorMode(HSB,360,100,100)
 		no_stroke
 
 		@my, @mx = [0,0]
-		@i, @t = [0] * 2
+		@i, @t = [0 , 1]
 
 		# border color scale
 		(0..150).each{|i| fill(scale(i),100,100)
@@ -84,8 +88,9 @@ require 'mechanize'
 			hue = scale(temp)
 
 			# add some random walk sway.
-			x, y = coords ; coords = [x, y - @t * 2]
-			fill(hue,100,100,70) ; rect(*coords,10,10)
+			# make a shadow?
+			x, y = coords ; coords = [x , y-@t*7]
+			fill(hue,100,100,70) ; rect(*coords,7,7)
 
 			# dont let the number get blurry.
 			# fill(0) ; text("#{temp}",*coords)
@@ -93,3 +98,16 @@ require 'mechanize'
 
 		images
 	end
+
+
+#### Testing and IO
+	def mouseMoved
+		coords = [mouseX,mouseY]
+		fill(0) ; rect(50,50,200,100)
+		fill(123,90,90,100)
+		text("#{coords}",100,100)
+	end
+# ####
+
+
+
