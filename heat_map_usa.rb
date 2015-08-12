@@ -23,7 +23,13 @@ require 'mechanize'
 							 ['austin','78705',[634,564]],
 							 ['bad lands','57750',[581,221]],
 							 ['albuquerque','87101',[382,394]],
-							 ['san francisco','94101',[155,278]]
+							 ['san francisco','94101',[155,278]],
+							 ['bismarck','58501',[676,190]],
+							 ['helena','59601',[475,219]],
+							 ['everglades','34139',[1250,704]],
+							 ['annapolis','21401',[1137,299]],
+							 ['detroit','48201',[970,240]],
+							 ['phoenix','85001',[267,428]]
 							]
 
 	def scrape_temps
@@ -68,7 +74,7 @@ require 'mechanize'
 		translate = scale - 82 % 360
 	end	
 
-	def counter ; @i = (@i + 1) % 120 ; end
+	def counter ; @i = (@i + 1) % 2400 ; end
 
 	def images
 		if @i == 0
@@ -101,12 +107,12 @@ require 'mechanize'
 
 
 #### Testing and IO
-	def mouseMoved
-		coords = [mouseX,mouseY]
-		fill(0) ; rect(50,50,200,100)
-		fill(123,90,90,100)
-		text("#{coords}",100,100)
-	end
+	# def mouseMoved
+	# 	coords = [mouseX,mouseY]
+	# 	fill(0) ; rect(50,50,200,100)
+	# 	fill(123,90,90,100)
+	# 	text("#{coords}",100,100)
+	# end
 # ####
 
 
