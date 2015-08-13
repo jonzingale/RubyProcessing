@@ -3,6 +3,7 @@
 # as the day begins and 'cool down' as the sun sets.
 
 # scrape every hour or so?
+# include scrape rate in pic.
 require 'nokogiri'
 require 'open-uri'
 require 'mechanize'
@@ -11,6 +12,7 @@ require 'mechanize'
 	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
+	SECONDS = 1200.freeze
 
 	# The coordinates need to be respaced.
 	BASE_URL = 'http://forecast.weather.gov/MapClick.php?'.freeze
@@ -32,6 +34,8 @@ require 'mechanize'
 							 ['phoenix','85001',[267,428]]
 							]
 
+	def counter ; @i = (@i + 1) % SECONDS ; end
+
 	def scrape_temps
 		agent = Mechanize.new ; @data = []
 		page = agent.get('http://www.weather.gov')
@@ -47,7 +51,8 @@ require 'mechanize'
 	end
 
 	def setup
-		text_font create_font("SanSerif",20);
+		text_font create_font("SanSerif",17)
+
 		square = [1600, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		frame_rate 1 ; colorMode(HSB,360,100,100)
@@ -73,8 +78,6 @@ require 'mechanize'
 		scale = 360 * ((136-temp)/136.to_f)
 		translate = scale - 82 % 360
 	end	
-
-	def counter ; @i = (@i + 1) % 2400 ; end
 
 	def images
 		if @i == 0
@@ -102,9 +105,11 @@ require 'mechanize'
 			# fill(0) ; text("#{temp}",*coords)
 		end
 
+		message = "granularity: every #{SECONDS/60.0} minutes"
+		fill(0,0,100) ; text(message, 75, 660)
+
 		images
 	end
-
 
 #### Testing and IO
 	# def mouseMoved
