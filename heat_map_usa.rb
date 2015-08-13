@@ -53,7 +53,7 @@ require 'mechanize'
 	def setup
 		text_font create_font("SanSerif",17)
 
-		square = [1600, 800, P3D] ; size(*square)
+		square = [1450, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		frame_rate 1 ; colorMode(HSB,360,100,100)
 		no_stroke
