@@ -12,26 +12,26 @@ require 'mechanize'
 	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
-	SECONDS = 1200.freeze
+	SECONDS = 800.freeze
 
 	# The coordinates need to be respaced.
 	BASE_URL = 'http://forecast.weather.gov/MapClick.php?'.freeze
-	CITY_DATA = [['santa fe','87505', [410, 380]],
-							 ['bullhead city','86429', [236, 383]],
-							 ['cleveland','44107', [1013, 244]],
-							 ['monroe','98272', [337, 127]],
-							 ['quakertown','18951', [1110, 230]],
-							 ['new orleans','70112',[873,571]],
-							 ['austin','78705',[634,564]],
-							 ['bad lands','57750',[581,221]],
-							 ['albuquerque','87101',[382,394]],
-							 ['san francisco','94101',[155,278]],
-							 ['bismarck','58501',[676,190]],
-							 ['helena','59601',[475,219]],
-							 ['everglades','34139',[1250,704]],
-							 ['annapolis','21401',[1137,299]],
-							 ['detroit','48201',[970,240]],
-							 ['phoenix','85001',[267,428]]
+	CITY_DATA = [['santa fe','87505', [441, 372]],
+							 ['bullhead city','86429', [302, 374]],
+							 ['cleveland','44107', [1041, 251]],
+							 ['monroe','98272', [355, 130]],
+							 ['quakertown','18951', [1147, 230]],
+							 ['new orleans','70112',[956,571]],
+							 ['austin','78705',[700,554]],
+							 ['bad lands','57750',[617,224]],
+							 ['albuquerque','87101',[420,407]],
+							 ['san francisco','94101',[197,279]],
+							 ['bismarck','58501',[706,190]],
+							 ['helena','59601',[509,223]],
+							 ['everglades','34139',[1347,707]],
+							 ['annapolis','21401',[1182,301]],
+							 ['detroit','48201',[1000,253]],
+							 ['phoenix','85001',[327,420]]
 							]
 
 	def counter ; @i = (@i + 1) % SECONDS ; end
@@ -105,20 +105,20 @@ require 'mechanize'
 			# fill(0) ; text("#{temp}",*coords)
 		end
 
-		message = "granularity: every #{SECONDS/60.0} minutes"
+		message = "granularity: every #{(SECONDS/60.0).round(1)} minutes"
 		fill(0,0,100) ; text(message, 75, 660)
 
 		images
 	end
 
-#### Testing and IO
+### Testing and IO
 	# def mouseMoved
 	# 	coords = [mouseX,mouseY]
 	# 	fill(0) ; rect(50,50,200,100)
 	# 	fill(123,90,90,100)
 	# 	text("#{coords}",100,100)
 	# end
-# ####
+####
 
 
 
