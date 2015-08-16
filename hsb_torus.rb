@@ -48,8 +48,9 @@ require 'matrix'
 		sin_p, cos_p = sin_cos (360 - (rand 360))/360.0 
 		sin_t, cos_t = sin_cos (360 - (rand 360))/360.0 
 
-		x = (2 + cos_p) * cos_p
-		y = (2 + cos_p) * sin_p
+		r = (mouseX - @w)/(@w.to_f)
+		x = (r + cos_p) * cos_p
+		y = (r + cos_p) * sin_p
 		z = sin_p + 0
 
 		Matrix.columns([[x,y,z]])
@@ -67,8 +68,7 @@ require 'matrix'
 	end
 
 	def draw
-		clear
-
+		clear		
 		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*2*PI}")}
 		tranny = [[1,0,0],[0,0.707,1],[0,sin,cos]]
 		rotation = Matrix.rows(tranny)
