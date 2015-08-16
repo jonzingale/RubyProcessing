@@ -3,8 +3,8 @@
 require 'matrix'
 	def setup
 		frame_rate 7
-		size(1080,1080)
-		@w,@h = [540] * 2
+		size(800,800)
+		@w,@h = [400] * 2
 		@i, @j, @t = [0] * 3
 
 		colorMode(HSB,360,100,100)
@@ -23,8 +23,8 @@ require 'matrix'
 						 100]
 
 		fill(*color)
-		ellipse(x+@w - 200,
-						z+@h - 200,
+		ellipse(x+@w,
+						z+@h,
 					  7, 7)
 	end
 
@@ -37,20 +37,22 @@ require 'matrix'
 						 100]
 
 		fill(*color)
-		ellipse(x+@w - 200,
-						z+@h - 200,
+		ellipse(x+@w,
+						z+@h,
 					  7, 7)
 	end
 
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 
+	RAD = 0.freeze
+	SCALE = (300 / (1 + RAD).to_f).freeze
+
 	def sprinkle_diag
 		sin_p, cos_p = sin_cos (360 - (rand 360))/360.0 
 		sin_t, cos_t = sin_cos (360 - (rand 360))/360.0 
 
-		r = (mouseX - @w)/(@w.to_f)
-		x = (r + cos_p) * cos_p
-		y = (r + cos_p) * sin_p
+		x = (RAD + cos_p) * cos_p
+		y = (RAD + cos_p) * sin_p
 		z = sin_p + 0
 
 		Matrix.columns([[x,y,z]])
@@ -60,8 +62,8 @@ require 'matrix'
 		sin_p, cos_p = sin_cos (360 - (rand 360))/360.0 
 		sin_t, cos_t = sin_cos (360 - (rand 360))/360.0 
 
-		x = (2 + cos_p) * cos_t
-		y = (2 + cos_p) * sin_t
+		x = (RAD + cos_p) * cos_t
+		y = (RAD + cos_p) * sin_t
 		z = sin_p + 0
 
 		Matrix.columns([[x,y,z]])
@@ -70,24 +72,17 @@ require 'matrix'
 	def draw
 		clear		
 		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*2*PI}")}
-		tranny = [[1,0,0],[0,0.707,1],[0,sin,cos]]
+		
+		tranny = [[1,0,0],[sin,cos,0],[0,sin,cos]]		
 		rotation = Matrix.rows(tranny)
 
 		@all_coords.each do |mtrx|
-			x_y_z = (rotation * 100 * mtrx).to_a.flatten
+			x_y_z = (rotation * SCALE * mtrx).to_a.flatten
 			set_color(*x_y_z,mtrx)
 		end
 
 		@all_diagonals.each do |mtrx|
-			x_y_z = (rotation * 100 * mtrx).to_a.flatten
+			x_y_z = (rotation * SCALE  * mtrx).to_a.flatten
 			set_diag_color(*x_y_z,mtrx)
 		end
 	end
-
-
-	# def text_block(string='')
-	# 	fill(0,0,0)
-	# 	rect(90,80,200,40)
-	# 	fill(200, 140, 100)
-	# 	text(string,100,100)
-	# end
