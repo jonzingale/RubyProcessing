@@ -11,8 +11,8 @@ require 'matrix'
 		text_font create_font("SanSerif",10)
 
 		background(0)
-		@all_coords = (0..3000).map{ sprinkle }
-		@all_diagonals = (0..500).map{ sprinkle_diag }
+		@all_coords = (0..4000).map{ sprinkle }
+		@all_diagonals = (0..300).map{ sprinkle_diag }
 	end
 
 	def set_diag_color(x,y,z,matrix)
@@ -44,7 +44,7 @@ require 'matrix'
 
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 
-	RAD = 0.freeze
+	RAD = 1.618.freeze
 	SCALE = (300 / (1 + RAD).to_f).freeze
 
 	def sprinkle_diag
@@ -70,9 +70,9 @@ require 'matrix'
 	end
 
 	def draw
-		clear		
+		clear
+
 		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*2*PI}")}
-		
 		tranny = [[1,0,0],[sin,cos,0],[0,sin,cos]]		
 		rotation = Matrix.rows(tranny)
 
