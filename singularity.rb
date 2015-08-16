@@ -4,17 +4,17 @@
 
 # use pixels: length to resolve, matrix transformations
 # Load3DImg ?
-
 require 'matrix'
+
 	def setup
 		frame_rate 7
-		size(800,800)
-		@w,@h = [400] * 2
+		size(600,600)
+		@w,@h = [300] * 2
 		@i, @j = [0] * 2
 
 		colorMode(HSB,360,100,100)
-		@all_coords = (0..10000).map{ sprinkle }
-		@all_diagonals = (0..700).map{ sprinkle_diag }
+		@all_coords = (0..8000).map{ sprinkle }
+		@all_diagonals = (0..900).map{ sprinkle_diag }
 
 	  text_font create_font("SanSerif",10)
 	end
@@ -22,8 +22,8 @@ require 'matrix'
 	# color setting:
 	def set_color(x,y,z,matrix)
 		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
-		color = [(c * 1200) + 200, ((a+10) * 20), 100]
-		# color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
+		# color = [(c * 1200) + 200, ((a+10) * 20), 100]
+		color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
 		set(x+@w, z+@h, color(*color))
 	end
 
@@ -55,13 +55,13 @@ require 'matrix'
 	end
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 2 ; SCALE = (300 / (1 + RAD).to_f).freeze
+	RAD = 1 ; SCALE = (800 / (1 + RAD).to_f).freeze
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 
 	def draw
 		clear
 
-		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*PI}")}
+		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.004)*PI}")}
 		tranny = [[1,0,0],[sin,cos,0],[0,sin,cos]]		
 		rotation = Matrix.rows(tranny)
 
@@ -75,3 +75,7 @@ require 'matrix'
 			set_diag_color(*x_y_z,mtrx)
 		end
 	end
+
+
+
+

@@ -1,8 +1,6 @@
 # sprinkle over torus
 # random walk the radius R
 require 'matrix'
-	# PI = 3.1415926.freeze
-
 	def setup
 		text_font create_font("SanSerif",10);
 		square = [1080] * 2  + [P3D] # 800
