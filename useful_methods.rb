@@ -17,6 +17,10 @@ require 'matrix'
 
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 
+	cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.004)*PI}")}
+	
+	def abs(i) ; ((i**2)**0.5).to_f ; end
+
 	def text_block(string='')
 		fill(0,0,0)
 		rect(90,80,200,40)

@@ -2,9 +2,6 @@
 # random walk the radius R
 # save as slow frames and edit out to make faster movies.
 
-# use pixels: length to resolve, matrix transformations
-# Load3DImg ?
-
 require 'matrix'
 	def setup
 		frame_rate 7
@@ -15,8 +12,6 @@ require 'matrix'
 		colorMode(HSB,360,100,100)
 		@all_coords = (0..10000).map{ sprinkle }
 		@all_diagonals = (0..700).map{ sprinkle_diag }
-
-	  text_font create_font("SanSerif",10)
 	end
 
 	# color setting:
