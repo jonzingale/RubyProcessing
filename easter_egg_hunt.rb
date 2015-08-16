@@ -1,6 +1,5 @@
 # sprinkle over torus
 # random walk the radius R
-# save as slow frames and edit out to make faster movies.
 
 require 'matrix'
 	def setup
