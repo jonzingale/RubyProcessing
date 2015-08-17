@@ -1,53 +1,26 @@
-# sprinkle over torus
-# random walk the radius R
+# Torus Curves
 # save as slow frames and edit out to make faster movies.
 
-# use pixels: length to resolve, matrix transformations
-# Load3DImg ?
+# make a new def for all_coords all_diagonals
+# and call it when mouse moves for mouse point
 
 require 'matrix'
-	def setup
-		frame_rate 7
-		size(800,800)
-		@w,@h = [400] * 2
-		@i, @j = [0] * 2
+	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 
-		colorMode(HSB,360,100,100)
-		@all_coords = (0..10000).map{ sprinkle }
-		@all_diagonals = (0..700).map{ sprinkle_diag }
+	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
+	RAD = 2 ; SCALE = (300 / (1 + RAD).to_f).freeze
 
-	  text_font create_font("SanSerif",10)
-	end
+	ROTATION_Z = Matrix.rows([[Math.cos(0.5*PI),Math.sin(0.5*PI),0],
+												   [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
+												   [0,0,1]]).freeze
 
-	# color setting:
-	def set_color(x,y,z,matrix)
-		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
-		color = [(c * 1200) + 200, ((a+10) * 20), 100]
-		# color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
-		# color = [220,70,100]
+	POLYNOMIAL = [0,0.33333,0,0].freeze # [0,1] is diagonal
+	CURVE_RESOLUTION = 3000.freeze
+	BODY_RESOLUTION = 7200.freeze
 
-		set(x+@w, z+@h, color(*color))
-	end
-
-	def set_diag_color(x,y,z,matrix)
-		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
-		set(x+@w, z+@h, color(0,0,100))
-	end
-	#
-	def sprinkle_diag
-		sin_p, cos_p = (sin_cos (360 - (rand 360))/360.0)
-		# sin_t, cos_t = (sin_cos (360 - (rand 360))/360.0)
-
-		x = (RAD + cos_p) * cos_p
-		y = (RAD + cos_p) * sin_p
-		z = sin_p
-
-		Matrix.columns([[x,y,z]])
-	end
-
-	def sprinkle
-		sin_p, cos_p = sin_cos (360 - (rand 360))/360.0 
-		sin_t, cos_t = sin_cos (360 - (rand 360))/360.0 
+	def to_torus(x,y)
+		sin_p, cos_p = sin_cos x
+		sin_t, cos_t = sin_cos y
 
 		x = (RAD + cos_p) * cos_t
 		y = (RAD + cos_p) * sin_t
@@ -56,20 +29,57 @@ require 'matrix'
 		Matrix.columns([[x,y,z]])
 	end
 
-	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 0 ; SCALE = (300 / (1 + RAD).to_f).freeze
-	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
+	def poly_points(integer)
+		(0..integer).map do |x|
+			x = x/(integer.to_f) * PI * 2
+			y = POLYNOMIAL.map.with_index{|p,i| p * (x ** i)}.inject(0,:+)
+
+			to_torus x, y
+		end
+	end
+
+	def body_points(integer)
+		(0...integer).map do |x,y|
+			x = x/(integer.to_f) * PI
+			y = rand * PI
+
+			to_torus x, y
+		end
+	end
+
+	def setup
+		frame_rate 7
+		size(800,800)
+		@w,@h = [400] * 2
+		@i = 0
+
+		colorMode(HSB,360,100,100)
+		@all_coords = body_points BODY_RESOLUTION
+		@all_diagonals = poly_points CURVE_RESOLUTION
+
+	  # text_font create_font("SanSerif",10)
+	end
+
+	# color setting:
+	def set_color(x,y,z,matrix)
+		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
+		color = [(c * 1200) + 200, ((a+10) * 20), 100]
+		# color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
+		set(x+@w, z+@h, color(*color))
+	end
+
+	def set_diag_color(x,y,z,matrix)
+		a = matrix.to_a.flatten.first
+		set(x+@w, z+@h, color( (a+2) * 100,100,100) )
+	end
+	#
 
 	def draw
 		clear
 
 		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*PI}")}
 		rotation_x = Matrix.rows([[1,0,0],[0,cos,sin],[0,sin,cos]])
-
-		cos, sin = %w(cos sin).map{|s| eval("Math.#{s} #{0.5*PI}")}
-		rotation_z = Matrix.rows([[cos,sin,0],[sin,cos,0],[0,0,1]])
-
-		rotation = rotation_x * rotation_z
+		rotation = rotation_x * ROTATION_Z
 
 		@all_coords.each do |mtrx|
 			x_y_z = (rotation * SCALE * mtrx).to_a.flatten
