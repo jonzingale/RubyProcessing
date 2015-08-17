@@ -106,13 +106,10 @@ require 'mechanize'
 
 
 		message = "#{(SECONDS/60.0).round(1)} minutes"
-		elapsed = "elapsed minutes: #{((@t - SECONDS/60.0) + SECONDS/60.0).round} "
 		fill(0,0,100) ; text(message,130, 673)
 		fill(30,100,100) ; rect(100,660,15,15)
 
 		images
-		fill(0,0,0) ; rect(240,635,70,17)
-		fill(0,0,100) ; text(elapsed, 100, 650)
 	end
 
 ### Testing and IO
