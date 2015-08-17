@@ -47,3 +47,14 @@ require 'matrix'
 	def all_pairs(height,width)
 		(0...height).inject([]){|a,h|a + (0...width).map{|w|[w,h]} }
 	end
+
+	def	mouseMoved#Dragged#Clicked
+		@m = rgb_converter(mouseX,mouseY)
+	end
+
+	def mouseMoved
+		coords = [mouseX,mouseY]
+		fill(0) ; rect(50,50,200,100)
+		fill(123,90,90,100)
+		text("#{coords}",100,100)
+	end

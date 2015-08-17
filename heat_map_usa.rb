@@ -1,9 +1,6 @@
 # The goal here is show a map of the united states
 # and to show, by scraping, how various cities 'warm up'
 # as the day begins and 'cool down' as the sun sets.
-
-# scrape every hour or so?
-# include scrape rate in pic.
 require 'nokogiri'
 require 'open-uri'
 require 'mechanize'
@@ -111,15 +108,5 @@ require 'mechanize'
 
 		images
 	end
-
-### Testing and IO
-	# def mouseMoved
-	# 	coords = [mouseX,mouseY]
-	# 	fill(0) ; rect(50,50,200,100)
-	# 	fill(123,90,90,100)
-	# 	text("#{coords}",100,100)
-	# end
-####
-
 
 
