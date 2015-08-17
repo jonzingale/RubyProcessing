@@ -59,7 +59,7 @@ require 'matrix'
 
 	# one can see that the whole inner core becomes a sphere.
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 2 ; SCALE = (200 / (1 + RAD).to_f).freeze
+	RAD = 0 ; SCALE = (200 / (1 + RAD).to_f).freeze
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 	
 	def draw

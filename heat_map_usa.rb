@@ -8,7 +8,6 @@ require 'nokogiri'
 require 'open-uri'
 require 'mechanize'
 
-	PI = 3.1415926.freeze
 	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
@@ -105,10 +104,15 @@ require 'mechanize'
 			# fill(0) ; text("#{temp}",*coords)
 		end
 
-		message = "granularity: every #{(SECONDS/60.0).round(1)} minutes"
-		fill(0,0,100) ; text(message, 75, 660)
+
+		message = "#{(SECONDS/60.0).round(1)} minutes"
+		elapsed = "elapsed minutes: #{((@t - SECONDS/60.0) + SECONDS/60.0).round} "
+		fill(0,0,100) ; text(message,130, 673)
+		fill(30,100,100) ; rect(100,660,15,15)
 
 		images
+		fill(0,0,0) ; rect(240,635,70,17)
+		fill(0,0,100) ; text(elapsed, 100, 650)
 	end
 
 ### Testing and IO
