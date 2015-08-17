@@ -43,3 +43,7 @@ require 'matrix'
 		b = k % 256
 		[r,g,b]
 	end
+
+	def all_pairs(height,width)
+		(0...height).inject([]){|a,h|a + (0...width).map{|w|[w,h]} }
+	end
