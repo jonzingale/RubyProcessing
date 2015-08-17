@@ -27,3 +27,19 @@ require 'matrix'
 		fill(200, 140, 100)
 		text(string,100,100)
 	end
+
+	def trigs(theta)#:: Theta -> R2
+	  %w(cos sin).map{|s| eval("Math.#{s} #{theta}")}
+	end
+
+	def rootsUnity(numbre)#::Int -> [trivalStar]
+		(0...numbre).map{|i|trigs(i*2*PI/numbre)}
+	end
+
+	def rgb_converter(m=0,n=0)
+		k = get(m,n)
+		r = 256 + k/(256**2)
+		g = k/256 % 256
+		b = k % 256
+		[r,g,b]
+	end

@@ -1,72 +1,84 @@
-# sprinkle over torus
-# random walk the radius R
-# save as slow frames and edit out to make faster movies.
+# super impose over a pic of color wheel
+# a disc of hsb values. create fibers
+# over the values showing the distribution
+# of colors from a source.
+
+# this is almost completely todo as nothing but
+# taking from my other code has happened yet.
 
 require 'matrix'
 	def setup
-		frame_rate 7
-		size(800,800)
-		@w,@h = [400] * 2
-		@i, @j = [0] * 2
-
+		size(600,800) #HOME
+		text_font create_font("SanSerif",25) ; no_stroke
+		@img = loadImage("/Users/Jon/Desktop/crude/Ruby/data/colorwheel.png")
+		@jmg = loadImage("/Users/Jon/Desktop/scans/apollonius.jpg");
 		colorMode(HSB,360,100,100)
-		@all_coords = (0..10000).map{ sprinkle }
-		@all_diagonals = (0..700).map{ sprinkle_diag }
+
+		background(20) ; frame_rate 3
+		@w,@h = [width,height].map{|i|i/2.0}
+  	@m = [235,18,85] ; @i = 0
 	end
 
-	# color setting:
-	def set_color(x,y,z,matrix)
-		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
-		color = [(c * 1200) + 200, ((a+10) * 20), 100]
-		# color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
-		set(x+@w, z+@h, color(*color))
+	def	mouseMoved#Dragged#Clicked
+		@m = rgb_converter(mouseX,mouseY)
 	end
 
-	def set_diag_color(x,y,z,matrix)
-		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
-		set(x+@w, z+@h, color(0,0,100))
-	end
-	#
+# tonight: work with pixels and 
+# see what can be seen.
 
-	def sprinkle_diag
-		sin_p, cos_p = sin_cos (360 - (rand 360))/360.0 
-
-		x = (RAD + cos_p) * cos_p
-		y = (RAD + cos_p) * sin_p
-		z = sin_p
-
-		Matrix.columns([[x,y,z]])
-	end
-
-	def sprinkle
-		sin_p, cos_p = sin_cos (360 - (rand 360))/360.0 
-		sin_t, cos_t = sin_cos (360 - (rand 360))/360.0 
-
-		x = (RAD + cos_p) * cos_t
-		y = (RAD + cos_p) * sin_t
-		z = sin_p
-
-		Matrix.columns([[x,y,z]])
+	def images
+		if @i < 1
+			image(@jmg,10,10) # left picture
+			scale(5) ; image(@img,width, 10)# ; scale(1/1.0) #Wheel
+			scale(0.2) ; image(@img, width-450, 10) ; scale(5/20.0) #APOLLONIUS
+			save('/Users/Jon/Desktop/test.png')
+			@loaded = loadImage("/Users/Jon/Desktop/test.png")
+		else
+			image(@loaded,0,0)
+		end
 	end
 
-	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 2 ; SCALE = (300 / (1 + RAD).to_f).freeze
-	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
+	def all_pairs
+		(0...height).inject([]){|ary,h|ary+ (0...width).map{|w|[w,h]} }
+	end
+
+	def rgb_converter(m=0,n=0)
+		k = get(m,n)
+		r = 256 + k/(256**2)
+		g = k/256 % 256
+		b = k % 256
+		[r,g,b]
+	end
 
 	def draw
-		clear
+		clear ; images
+# eternal things
 
-		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*PI}")}
-		tranny = [[1,0,0],[sin,cos,0],[0,sin,cos]]		
-		rotation = Matrix.rows(tranny)
+		@i = 1 ; fill(0,0,0)
 
-		@all_coords.each do |mtrx|
-			x_y_z = (rotation * SCALE * mtrx).to_a.flatten
-			set_color(*x_y_z,mtrx)
+# temporal things
+		@loaded = get
+
+		# 201552 pixels
+		# bit = @jmg.pixels.map{|k| color 200}
+
+		# loadPixels
+			# @jmg.pixels[0..10000].map{|t| @jmg.pixels[20] = color(0)}
+		# updatePixels
+
+		pixels = all_pairs[0..1].map do |x,y| 
+			color = rgb_converter(get(x,y))
+			color = get(x,y)
+			set(300,300,color)
 		end
 
-		@all_diagonals.each do |mtrx|
-			x_y_z = (rotation * SCALE  * mtrx).to_a.flatten
-			set_diag_color(*x_y_z,mtrx)
-		end
+		text("#{ pixels}",200,100)
+
+		# ellipse(mouseX,mouseY,10,10)
+		# text("#{loadPixels.class}",10,190)
 	end
+
+
+
+
+
