@@ -34,9 +34,9 @@ require 'matrix'
 		set(x+@w, z+@h, color(0,0,100))
 	end
 	#
-
 	def sprinkle_diag
-		sin_p, cos_p = sin_cos (360 - (rand 360))/360.0 
+		sin_p, cos_p = (sin_cos (360 - (rand 360))/360.0)
+		# sin_t, cos_t = (sin_cos (360 - (rand 360))/360.0)
 
 		x = (RAD + cos_p) * cos_p
 		y = (RAD + cos_p) * sin_p
@@ -57,7 +57,7 @@ require 'matrix'
 	end
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 2 ; SCALE = (300 / (1 + RAD).to_f).freeze
+	RAD = 0 ; SCALE = (300 / (1 + RAD).to_f).freeze
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 
 	def draw
