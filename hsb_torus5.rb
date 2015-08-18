@@ -1,4 +1,4 @@
-# Torus Curves
+# Torus Curves, JUST THE INNER_PART
 # save as slow frames and edit out to make faster movies.
 
 # make a new def for all_coords all_diagonals
@@ -6,6 +6,7 @@
 
 require 'matrix'
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
+	def abs(i) ; ((i**2)**0.5).to_f ; end
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
 	RAD = 0 ; SCALE = (300 / (1 + RAD).to_f).freeze
@@ -14,16 +15,17 @@ require 'matrix'
 												   [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
 												   [0,0,1]]).freeze
 
-	POLYNOMIAL = [0,0.33333,0,0].freeze # [0,1] is diagonal
-	CURVE_RESOLUTION = 3000.freeze
+	# POLYNOMIAL = [0,0.33333,0,0].freeze # [0,1] is diagonal
+	POLYNOMIAL = [0,10,1].freeze # [0,1] is diagonal
+	CURVE_RESOLUTION = 8000.freeze
 	BODY_RESOLUTION = 7200.freeze
 
 	def to_torus(x,y)
 		sin_p, cos_p = sin_cos x
 		sin_t, cos_t = sin_cos y
 
-		x = (RAD + cos_p) * cos_t
-		y = (RAD + cos_p) * sin_t
+		x = (RAD + -abs(cos_p)) * cos_t
+		y = (RAD + -abs(cos_p)) * sin_t
 		z = sin_p
 
 		Matrix.columns([[x,y,z]])
@@ -54,7 +56,7 @@ require 'matrix'
 		@i = 0
 
 		colorMode(HSB,360,100,100)
-		@all_coords = body_points BODY_RESOLUTION
+		# @all_coords = body_points BODY_RESOLUTION
 		@all_diagonals = poly_points CURVE_RESOLUTION
 
 	  # text_font create_font("SanSerif",10)
@@ -81,10 +83,10 @@ require 'matrix'
 		rotation_x = Matrix.rows([[1,0,0],[0,cos,sin],[0,sin,cos]])
 		rotation = rotation_x * ROTATION_Z
 
-		@all_coords.each do |mtrx|
-			x_y_z = (rotation * SCALE * mtrx).to_a.flatten
-			set_color(*x_y_z,mtrx)
-		end
+		# @all_coords.each do |mtrx|
+		# 	x_y_z = (rotation * SCALE * mtrx).to_a.flatten
+		# 	set_color(*x_y_z,mtrx)
+		# end
 
 		@all_diagonals.each do |mtrx|
 			x_y_z = (rotation * SCALE  * mtrx).to_a.flatten
