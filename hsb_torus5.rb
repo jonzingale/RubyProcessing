@@ -9,7 +9,8 @@ require 'matrix'
 	def abs(i) ; ((i**2)**0.5).to_f ; end
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 0 ; SCALE = (300 / (1 + RAD).to_f).freeze
+	RAD = 2 ; SCALE = (300 / (1 + RAD).to_f).freeze
+	
 
 	ROTATION_Z = Matrix.rows([[Math.cos(0.5*PI),Math.sin(0.5*PI),0],
 												   [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
