@@ -3,8 +3,9 @@
 class Torus
 	require 'matrix'
 
-	# def self.radius ; 0.6 ; end
-	def self.radius ; 1.03 ; end
+	def self.radius ; 0.6 ; end
+	# def self.radius ; 0.4 ; end
+	# def self.radius ; 2 ; end
 
 	def self.abs(i) ; ((i**2)**0.5).to_f ; end
 
@@ -16,10 +17,14 @@ class Torus
 		sin_p, cos_p = sin_cos x
 		sin_t, cos_t = sin_cos y
 
-		# -abs on cos_p gives inner saddle
-		x = (radius + -abs(cos_p)) * cos_t
-		y = (radius + -abs(cos_p)) * sin_t
+		x = (radius + cos_p) * cos_t
+		y = (radius + cos_p) * sin_t
 		z = sin_p
+
+		# -abs on cos_p gives inner saddle
+		# x = (radius + -abs(cos_p)) * cos_t
+		# y = (radius + -abs(cos_p)) * sin_t
+		# z = sin_p
 
 		Matrix.columns([[x,y,z]])
 	end
@@ -27,20 +32,21 @@ end
 
 require 'matrix'
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	SCALE = (800 / (Math.log(2 + Torus.radius) ).to_f).freeze
+	SCALE = (200 / (Math.log(2 + Torus.radius) ).to_f).freeze
 
 	ROTATION_Z = Matrix.rows([[Math.cos(0.5*PI),Math.sin(0.5*PI),0],
-												   [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
-												   [0,0,1]]).freeze
+												    [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
+												    [0,0,1]]).freeze
 
-	# POLYNOMIAL = [0,0.33333,0,0].freeze # [0,1] is diagonal
-	POLYNOMIAL = [0,1/3.0,10].freeze # [0,1] is diagonal
-	CURVE_RESOLUTION = 8000.freeze
+	POLYNOMIAL = [0,0.33333,1,0].freeze # [0,1] is diagonal
+	# POLYNOMIAL = [0,1/3.0,10].freeze # [0,1] is diagonal
+	# POLYNOMIAL = [0,0,Math.log(1.2)].freeze # [0,1] is diagonal
+	CURVE_RESOLUTION = 7000.freeze
 	BODY_RESOLUTION = 3200.freeze
 
 	def poly_points(integer)
 		(0..integer).map do |x|
-			x = x/(integer.to_f) * PI * 2
+			x = x/(integer.to_f) * PI # * 2
 			y = POLYNOMIAL.map.with_index{|p,i| p * (x ** i)}.inject(0,:+)
 
 			Torus.coords x, y
@@ -57,9 +63,10 @@ require 'matrix'
 	end
 
 	def setup
+		grid = 800
 		frame_rate 7
-		size(800,800)
-		@w, @h = [400] * 2
+		size(grid,grid)
+		@w, @h = [ grid/2.0 ] * 2
 		@i = 0
 
 		colorMode(HSB,360,100,100)
