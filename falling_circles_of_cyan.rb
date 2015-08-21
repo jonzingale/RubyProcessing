@@ -6,7 +6,8 @@
 																170 + rand(90),# hue
 																rand(20) + 70, # sat
 																rand(10) + 90, # bright
-																100            # opacity
+																100,           # opacity
+																rand(100), # radius
 																] }
 	  end
 
@@ -14,9 +15,9 @@
 		def trip_y(s) ; rand(3) == 1 ? rand(2) : s ; end
 
 	  def walk
-	  	@coords.map! do |x, y, s, t, hue, sat, bri, opac|
+	  	@coords.map! do |x, y, s, t, hue, sat, bri, opac, r|
 	  		coords = [x + trip_x(t) * 3, y + trip_y(s) * 2, s, t]
-	  		coords.map{|i| i % 1920} + [hue,sat,bri,opac]
+	  		coords.map{|i| i % 1920} + [hue,sat,bri,opac,r]
 	  	end
 	  end
 	end
@@ -41,9 +42,9 @@
 	def draw
 		clear
 
-		@coords.walk.each do |x, y, s, t, hue, sat, bri, opac|
+		@coords.walk.each do |x, y, s, t, hue, sat, bri, opac, r|
 			stroke(hue,sat,bri,opac)
-			ellipse(x,y, 100, 100)
-			[x,y,s,t,hue,sat,bri,opac]
+			ellipse(x, y, 50 + r, 50 + r)
+			[x,y,s,t,hue,sat,bri,opac,r]
 		end
 	end
