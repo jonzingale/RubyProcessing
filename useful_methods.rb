@@ -2,13 +2,14 @@
 # random walk the radius R
 require 'matrix'
 	def setup
-		frame_rate 7
-		size(800,800)
-		@w,@h = [400] * 2
-		@i, @j, @t = [0] * 3
 
-		colorMode(HSB,360,100,100)
-		text_font create_font("SanSerif",10)
+		size(displayWidth, displayHeight)
+		@w, @h = [width/2.0, 0]
+		@i = 0 ; @t = 0
+    frame_rate 20
+
+		colorMode(HSB,360,100,100,100)
+	  text_font create_font("SanSerif",10)
 
 		background(0)
 		@all_coords = (0..3000).map{ sprinkle }

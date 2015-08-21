@@ -1,5 +1,4 @@
 # The goal here is to make falling cyan circles
-
 	class Bubbles
 		def initialize(num)
 	  	@coords = (0..num).map { [rand(2000), rand(2000), 0, 0,
@@ -7,7 +6,7 @@
 																rand(20) + 70, # sat
 																rand(10) + 90, # bright
 																100,           # opacity
-																rand(100), # radius
+																rand(300),		 # radius_var
 																] }
 	  end
 
@@ -23,16 +22,12 @@
 	end
 
 	def setup
-		size(1920,1000) # JackRabbit
+		colorMode(HSB,360,100,100,100)
+		size(displayWidth, displayHeight)
 		@w, @h = [width/2.0, 0]
-		@i = 0 ; @t = 0
-
     frame_rate 20
 
-		colorMode(HSB,360,100,100,100)
-	  text_font create_font("SanSerif",10)
-
-	  no_fill
+	  no_fill 
 	  stroke(200,100,100)
 	  stroke_weight(5)
 
