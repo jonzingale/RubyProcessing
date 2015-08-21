@@ -16,12 +16,12 @@ require 'mechanize'
 							 ['bullhead city','86429', [302, 374]],
 							 ['cleveland','44107', [1041, 251]],
 							 ['monroe','98272', [355, 130]],
-							 ['quakertown','18951', [1147, 230]],
-							 ['new orleans','70112',[956,571]],
-							 ['austin','78705',[700,554]],
-							 ['bad lands','57750',[617,224]],
-							 ['albuquerque','87101',[420,407]],
-							 ['san francisco','94101',[197,279]],
+							 # ['quakertown','18951', [1147, 230]],
+							 # ['new orleans','70112',[956,571]],
+							 # ['austin','78705',[700,554]],
+							 # ['bad lands','57750',[617,224]],
+							 # ['albuquerque','87101',[420,407]],
+							 # ['san francisco','94101',[197,279]],
 							 ['bismarck','58501',[706,190]],
 							 ['helena','59601',[509,223]],
 							 ['everglades','34139',[1347,707]],
@@ -48,7 +48,6 @@ require 'mechanize'
 
 	def setup
 		text_font create_font("SanSerif",17)
-
 		square = [1450, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		frame_rate 1 ; colorMode(HSB,360,100,100)
@@ -58,7 +57,7 @@ require 'mechanize'
 		@i, @t = [0 , 1]
 
 		# border color scale
-		(0..150).each{|i| fill(scale(i),100,100)
+		(0..200).each{|i| fill(scale(i-10),100,100)
 											ellipse(i*9,height,20,20) }
 
 		# scaling is a bitch, don't touch
@@ -92,8 +91,7 @@ require 'mechanize'
 		@data.each do |temp,coords|
 			hue = scale(temp)
 
-			# add some random walk sway.
-			# make a shadow?
+			# add some random walk sway. Make a shadow?
 			x, y = coords ; coords = [x , y-@t*7]
 			fill(hue,100,100,70) ; rect(*coords,7,7)
 
