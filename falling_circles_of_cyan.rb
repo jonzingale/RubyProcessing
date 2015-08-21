@@ -3,7 +3,7 @@
 	class Bubbles
 		def initialize(num)
 	  	@coords = (0..num).map { [rand(2000), rand(2000), 0, 0,
-																170 + rand(90),# hue
+																160 + rand(90),# hue
 																rand(20) + 70, # sat
 																rand(10) + 90, # bright
 																100,           # opacity
