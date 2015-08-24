@@ -1,6 +1,9 @@
 # The goal here is show a map of the united states
 # and to show, by scraping, how various cities 'warm up'
 # as the day begins and 'cool down' as the sun sets.
+
+# diff in humidity as bent line?
+
 require 'nokogiri'
 require 'open-uri'
 require 'mechanize'
@@ -16,12 +19,12 @@ require 'mechanize'
 							 ['bullhead city','86429', [302, 374]],
 							 ['cleveland','44107', [1041, 251]],
 							 ['monroe','98272', [355, 130]],
-							 # ['quakertown','18951', [1147, 230]],
-							 # ['new orleans','70112',[956,571]],
-							 # ['austin','78705',[700,554]],
-							 # ['bad lands','57750',[617,224]],
-							 # ['albuquerque','87101',[420,407]],
-							 # ['san francisco','94101',[197,279]],
+							 ['quakertown','18951', [1147, 230]],
+							 ['new orleans','70112',[956,571]],
+							 ['austin','78705',[700,554]],
+							 ['bad lands','57750',[617,224]],
+							 ['albuquerque','87101',[420,407]],
+							 ['san francisco','94101',[197,279]],
 							 ['bismarck','58501',[706,190]],
 							 ['helena','59601',[509,223]],
 							 ['everglades','34139',[1347,707]],

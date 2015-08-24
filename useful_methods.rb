@@ -1,6 +1,10 @@
 # sprinkle over torus
 # random walk the radius R
 require 'matrix'
+require 'mechanize'
+
+	APARTMENT_URL = 'http://santafe.craigslist.org/search/apa'.freeze
+
 	def setup
 
 		size(displayWidth, displayHeight)
@@ -21,6 +25,13 @@ require 'matrix'
 	cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.004)*PI}")}
 	
 	def abs(i) ; ((i**2)**0.5).to_f ; end
+
+	def gcd(a,b)	
+		if b == 0 ; a ; else ;
+			q = a < b ? [a, b % a] : [b, a % b]
+			gcd(*q)
+		end
+	end
 
 	def text_block(string='')
 		fill(0,0,0)
@@ -58,4 +69,14 @@ require 'matrix'
 		fill(0) ; rect(50,50,200,100)
 		fill(123,90,90,100)
 		text("#{coords}",100,100)
+	end
+
+	def search(query)
+		agent = Mechanize.new
+		request_hash = {'max_price' => '1500', 
+										'bedrooms' => '2',
+									  'searchNearby' => '0', 
+									  'query' => query }
+	
+		agent.get(APARTMENT_URL,request_hash)
 	end
