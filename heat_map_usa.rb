@@ -89,15 +89,15 @@ require 'mechanize'
 		text("started at #{STARTTIME}",100,620)
 
 		current_time = Time.now.strftime('%l:%M %P')
-		message = "currently#{current_time}"
+		message = "currently #{current_time}"
 		text(message,100,645)
 
 		fill(0,0,100,100)
 		text(DateNow,100, 590)
 
 		message = "#{(SECONDS/60.0).round(1)} minutes"
-		fill(0,0,100) ; text(message,140, 673)
-		fill(30,100,100) ; rect(100,660,15,15)
+		fill(0,0,100) ; text(message,140, 678)
+		fill(30,100,100) ; rect(100,665,15,15)
 
 		if @i == 0
 			scrape_temps ; @t += 1
