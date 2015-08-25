@@ -80,3 +80,14 @@ require 'mechanize'
 	
 		agent.get(APARTMENT_URL,request_hash)
 	end
+
+	# a source directory off of crude. --untracked.
+	# FILES_PATH = File.expand_path('./..', __FILE__).freeze
+
+	# # some_listing = agent.get(LISTING_STUB % listings_data[5]['id'])
+	# file = File.open(FILES_PATH+'/some_listing.html')
+	# listing = '' ; file.each { |line| listing << line }
+	# listing = Nokogiri.parse(listing)
+
+	##########
+	
