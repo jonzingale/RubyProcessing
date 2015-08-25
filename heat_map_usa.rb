@@ -33,7 +33,8 @@ require 'mechanize'
 							 ['everglades','34139',[1347,707]],
 							 ['annapolis','21401',[1182,301]],
 							 ['detroit','48201',[1000,253]],
-							 ['phoenix','85001',[327,420]]
+							 ['phoenix','85001',[327,420]],
+							 ['atlanta','30301',[1065,435]]
 							]
 
 	def counter ; @i = (@i + 1) % SECONDS ; end
@@ -126,4 +127,9 @@ require 'mechanize'
 		images
 	end
 
-
+	def mouseMoved
+		coords = [mouseX,mouseY]
+		fill(0) ; rect(50,50,200,100)
+		fill(123,90,90,100)
+		text("#{coords}",100,100)
+	end
