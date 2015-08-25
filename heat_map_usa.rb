@@ -127,9 +127,9 @@ require 'mechanize'
 		images
 	end
 
-	def mouseMoved
-		coords = [mouseX,mouseY]
-		fill(0) ; rect(50,50,200,100)
-		fill(123,90,90,100)
-		text("#{coords}",100,100)
-	end
+	# def mouseMoved
+	# 	coords = [mouseX,mouseY]
+	# 	fill(0) ; rect(50,50,200,100)
+	# 	fill(123,90,90,100)
+	# 	text("#{coords}",100,100)
+	# end
