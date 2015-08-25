@@ -8,6 +8,9 @@ require 'nokogiri'
 require 'open-uri'
 require 'mechanize'
 
+	DateNow = DateTime.now.strftime('%B %d, %Y').freeze
+	STARTTIME = Time.now.strftime('%l:%M %P').freeze
+
 	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
@@ -78,6 +81,23 @@ require 'mechanize'
 	end	
 
 	def images
+		# text rendering
+		fill(0,0,0,100) ; rect(100,607,160,50)
+
+		fill(0,100,100,100)
+		text("started at #{STARTTIME}",100,620)
+
+		current_time = Time.now.strftime('%l:%M %P')
+		message = "currently#{current_time}"
+		text(message,100,645)
+
+		fill(0,0,100,100)
+		text(DateNow,100, 590)
+
+		message = "#{(SECONDS/60.0).round(1)} minutes"
+		fill(0,0,100) ; text(message,140, 673)
+		fill(30,100,100) ; rect(100,660,15,15)
+
 		if @i == 0
 			scrape_temps ; @t += 1
 			save(USA_MAP_TEMP)
@@ -95,17 +115,13 @@ require 'mechanize'
 			hue = scale(temp)
 
 			# add some random walk sway. Make a shadow?
+			# humidity for curve?
 			x, y = coords ; coords = [x , y-@t*7]
 			fill(hue,100,100,70) ; rect(*coords,7,7)
 
 			# dont let the number get blurry.
 			# fill(0) ; text("#{temp}",*coords)
 		end
-
-
-		message = "#{(SECONDS/60.0).round(1)} minutes"
-		fill(0,0,100) ; text(message,130, 673)
-		fill(30,100,100) ; rect(100,660,15,15)
 
 		images
 	end
