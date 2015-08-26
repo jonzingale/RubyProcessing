@@ -30,8 +30,8 @@ require 'matrix'
 	SCALE = (800 / (Math.log(2 + Torus.radius) ).to_f).freeze
 
 	ROTATION_Z = Matrix.rows([[Math.cos(0.5*PI),Math.sin(0.5*PI),0],
-												   [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
-												   [0,0,1]]).freeze
+												    [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
+												    [0,0,1]]).freeze
 
 	# POLYNOMIAL = [0,0.33333,0,0].freeze # [0,1] is diagonal
 	POLYNOMIAL = [0,1/3.0,10].freeze # [0,1] is diagonal

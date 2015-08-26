@@ -17,15 +17,25 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 	def draw
 		# clear
 		pt = @bezier.plot(rand)
+
+		# better would likely be to use
+		# line segments.
 		color = [200+rand(100),50+rand(50),100]
 		set(*pt,color(*color))
+
+		text("#{@bezier.polynomial}",100,199)
 	end
 
 	def mouseMoved
 		coords = [mouseX,mouseY]
+
+		points = [coords,[0,0],[width,height]]
+		@bezier = Bezier.new(points)
+		# clear
+
 		fill(0) ; rect(50,50,200,100)
 		fill(123,90,90,100)
-		text("#{coords}",100,100)
+		# text("#{coords}",100,100)
 	end
 
 	def text_block(string='')
