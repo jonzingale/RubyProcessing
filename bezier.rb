@@ -5,9 +5,28 @@
 
 class Bezier
 
+	def pascal(i,num=[1])
+		if num.count < i
+			ary = num.unshift(0)
+
+			mum = ary.map.with_index do |k,j|
+				right = ary[j+1].nil? ? 0 : ary[j+1]
+				ary[j] + right
+			end
+
+			pascal(i,mum)
+		else
+			num
+		end
+	end
+
+	def polynomial
+		n = @points.count
+		pascal(n)
+	end
+
 	def initialize(points)
 		@points = points
-		# num_points = points.count
 	end
 
 	def to_s ; @points ; end
