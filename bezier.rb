@@ -2,41 +2,26 @@
 # a bezier category
 
 # Sigma (1-t)^k*t^n-k*Pk
-
 class Bezier
-
-	def pascal(i,num=[1])
-		if num.count < i
-			ary = num.unshift(0)
-
-			mum = ary.map.with_index do |k,j|
-				right = ary[j+1].nil? ? 0 : ary[j+1]
-				ary[j] + right
-			end
-
-			pascal(i,mum)
-		else
-			num
-		end
-	end
-
-	def polynomial
-		n = @points.count
-		pascal(n)
-	end
 
 	def initialize(points)
 		@points = points
+		@count = points.count - 1
 	end
 
 	def to_s ; @points ; end
 
-	def plot(t)
-		a = @points[2].map{ |p| t**2 * p }
-		b = @points[1].map{ |p| (t-t**2) * p }
-		c = @points[0].map{ |p| (1 - 2*t + t**2) * p }
-
-		[a,b,c].transpose.map{|i| i.inject(:+) }
+	def plot(t) # (1-t)**(n-k) * t(n) * P0
+		scalars = (0..@count).map{|k| (1-t)**k * t**(@count-k) }
+		it = @points.zip(scalars).map{|pts,s| pts.map{|xs| xs*s}}
+		it.transpose.map{|i| i.inject :+}
 	end
-
 end
+
+# # for ruby 2.0
+# require 'byebug'
+# it = Bezier.new([[0,400],[200,0],[400,400]])
+# it.plot(0.14)
+#  (0..10).map{|t|it.plot(t/10.0)}.to_s
+# byebug ; 4
+
