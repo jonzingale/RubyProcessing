@@ -34,7 +34,6 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 		end
 	end
 
-
 	def worm
 		(0..RES).each do |q|
 			pt = @bezier.plot(q/RES)

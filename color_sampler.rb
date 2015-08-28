@@ -9,6 +9,9 @@
 # If not close enough, give up and walk
 # a second guesser that emulates shaking the mouse!!
 
+require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
+
+
 
 	def setup
 		text_font create_font("SanSerif",25) ; no_stroke
