@@ -22,7 +22,6 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 		stroke_width 100
 	end
 
-
 	def bugs # fireflies for the worm to follow?
 		@bugs.each do |bug|
 			colors = [80+rand(100),10+rand(10),100,50]
@@ -33,7 +32,6 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 			ellipse(*bug_pts,*rand_size)
 		end
 	end
-
 
 	def worm
 		(0..RES).each do |q|
