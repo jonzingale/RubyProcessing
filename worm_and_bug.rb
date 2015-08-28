@@ -12,28 +12,24 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 		colorMode(HSB,360,100,100,60)
 	  text_font create_font("SanSerif",30)
 
-		@bugs = (0..12).map do
-			bug_pts = [rand(width),rand(height)]
-			Glowbug.new(bug_pts)
-		end
+		bug_pts = [rand(width),rand(height)]
+		@bug = Glowbug.new(bug_pts)
 
 		points = [[0,height],[@w,0],[@w,height]]
 		@bezier = Bezier.new(points)
 		stroke_width 100
 	end
-
-
-	def bugs # fireflies for the worm to follow?
-		@bugs.each do |bug|
-			colors = [80+rand(100),10+rand(10),100,50]
-			bug_pts = bug.walk(width,height)
-			rand_size = [rand(10)] * 2
-			fill(*colors)
 	
-			ellipse(*bug_pts,*rand_size)
-		end
-	end
+	# it would be nice to make many,
+	# but that seems to require understanding state better
+	def bug # a light for the worm to follow?
+		colors = [80+rand(100),10+rand(10),100,50]
+		bug_pts = @bug.walk(width,height)
+		rand_size = [rand(10)] * 2
+		fill(*colors)
 
+		ellipse(*bug_pts,*rand_size)
+	end
 
 	def worm
 		(0..RES).each do |q|
@@ -51,10 +47,10 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 	end
 
 	def draw
-		# clear
-		
-		fill(0,0,0,20) # trails
+		fill(0,0,0,20)
 		rect(-60,-60,width+120,height+120)
 
-		bugs ; worm
+		bug
+		worm
+
 	end
