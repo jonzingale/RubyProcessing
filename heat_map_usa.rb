@@ -11,7 +11,6 @@
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	SECONDS = 800.freeze
 
-	BASE_URL = 'http://forecast.weather.gov/MapClick.php?'.freeze
 	CITY_DATA = [['santa fe','87505', [441, 372]],
 							 ['bullhead city','86429', [302, 374]],
 							 ['cleveland','44107', [1041, 251]],
