@@ -3,14 +3,13 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 
 	RES = 48.0.freeze
 	def setup
-		# size(displayWidth/2.3, displayHeight/1.3)
-		size(displayWidth, displayHeight/1.1)
-
+		size(displayWidth/2.3, displayHeight/1.3)
+		# size(displayWidth, displayHeight/1.1)
 		@w, @h = [width/2.0, 0]
-    frame_rate 48
 
 		colorMode(HSB,360,100,100,60)
 	  text_font create_font("SanSerif",30)
+	  colors = [80+rand(100),10+rand(10),100,50]
 
 		@bugs = (0..12).map do
 			bug_pts = [rand(width),rand(height)]
@@ -24,12 +23,11 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 
 	def bugs # fireflies for the worm to follow?
 		@bugs.each do |bug|
-			colors = [80+rand(100),10+rand(10),100,50]
 			bug_pts = bug.walk(width,height)
 			rand_size = [rand(10)] * 2
-			fill(*colors)
-	
-			ellipse(*bug_pts,*rand_size)
+
+			colors = [80+rand(100),10+rand(10),100,50]
+			fill(*colors) ; ellipse(*bug_pts,*rand_size)
 		end
 	end
 
@@ -37,6 +35,7 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 		(0..RES).each do |q|
 			pt = @bezier.plot(q/RES)
 			qt = @bezier.plot((q+1)/RES)
+
 			color = [200+rand(100),50+rand(50),100]
 			stroke(*color) ; line(*pt,*qt)
 		end
@@ -50,8 +49,8 @@ require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 
 	def draw
 		# clear
-		
-		fill(0,0,0,20) # trails
+
+		fill(0,0,0,10) # trails
 		rect(-60,-60,width+120,height+120)
 
 		bugs ; worm
