@@ -83,8 +83,10 @@ class ColorCrawlers
 	end
 
 	def motive_y # center of mass
-		roots, color = self.sense.transpose
-		total_weight = color.transpose.map{|cs| cs.inject :+}
+		roots, colors = self.sense.transpose
+		norm = colors.count
+
+		color_weights = colors.map{|color| diff_color(@desire,color)}
 
 		# step = self.sense.min_by{|r,color| diff_color([@desire, color])}.first
 		# @position = step.zip(self.position).map{|rp|rp.inject :+}

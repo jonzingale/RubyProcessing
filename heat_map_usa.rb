@@ -61,7 +61,7 @@
 		@i, @t = [0 , 1]
 
 		# border color scale
-		(0..200).each{|i| fill(scale(i-10),100,100)
+		(0..200).each{|i| fill(scale_temp(i-10),100,100)
 											ellipse(i*9,height,20,20) }
 
 		# It would be cool to geocode and place somehow.
@@ -77,11 +77,6 @@
 	end
 
 	def counter ; @i = (@i + 1) % SECONDS ; end
-
-	def scale(temp) # linear
-		scale = 360 * ((136-temp)/136.to_f)
-		translate = scale - 82 % 360
-	end	
 
 	def map_key
 		fill(0,0,0,90) ; rect(100,570,160,130)
@@ -102,7 +97,6 @@
 	end
 
 	def images
-
 		if @i == 0 ; @t += 1
 			cities.each{|city| city.scrape_temp }
 
@@ -113,6 +107,11 @@
 		end
 	end
 
+	def scale_temp(temp) # linear
+		scaled = 360 * ((136-temp)/136.to_f)
+		translate = scaled - 82 % 360
+	end	
+
 	def draw
 		counter
 		map_key
@@ -122,7 +121,8 @@
 		cities.each do |city|
 			x, y = city.coords
  			coords = [x, y-@t*DataPt]
-			fill(city.temp,100,100,70) ; rect(*coords,DataPt,DataPt)
+ 			hue = scale_temp(city.temp)
+			fill(hue,100,100,70) ; rect(*coords,DataPt,DataPt)
 
 			# dont let the number get blurry.
 			# fill(200,30,100) ; text("#{city.temp}",*coords)
