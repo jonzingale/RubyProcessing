@@ -10,6 +10,7 @@
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	SECONDS = 800.freeze
+	DataPt = 9.freeze
 
 	CITY_DATA = [['santa fe','87505', [441, 372]],
 							 ['bullhead city','86429', [302, 374]],
@@ -108,7 +109,7 @@
 			# saves, loads, then displays loaded pic.
 			save(USA_MAP_TEMP)
 			loaded = loadImage(USA_MAP_TEMP)
-			image(@loaded,0,0)
+			image(loaded,0,0)
 		end
 	end
 
@@ -119,9 +120,9 @@
 		# add some random walk sway. 
 		# Make a shadow? humidity for curve?
 		cities.each do |city|
-			hue = scale(city.temp)
-			x, y = city.coords ; coords = [x, y-@t*11]
-			fill(hue,100,100,70) ; rect(*coords,11,11)
+			x, y = city.coords
+ 			coords = [x, y-@t*DataPt]
+			fill(city.temp,100,100,70) ; rect(*coords,DataPt,DataPt)
 
 			# dont let the number get blurry.
 			# fill(200,30,100) ; text("#{city.temp}",*coords)

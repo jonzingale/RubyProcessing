@@ -10,6 +10,18 @@
 	# collaborative crawlers: scratch my back . .
 	# grasshopper
 
+# Todo
+# crawl color gradients
+# find best_possible RGB
+# color matchers
+# energy curves (equipotential)
+# Winston points out that Euclidean metric
+#    might not be what I want as it matches
+#    luminosity most likely.
+# If not close enough, give up and walk
+# a second guesser that emulates shaking the mouse!!
+
+
 module Maths
 	PI = 3.1415926.freeze
 
@@ -48,51 +60,44 @@ class ColorCrawlers
 	def desired(mouse_color) ; @desire = mouse_color ; end
 	def see(sense) ; @sense = sense ; end
 
-	def look_z
+	def look_z # :: Crawler -> ([STEP],[f(STEP)])
 		e_ball = rand(@guess)
 
-		@interest = rootsUnity(17).unshift([0,0]).map do |inquiry|
+		rootsUnity(17).unshift([0,0]).map do |inquiry|
 			[inquiry, @position.zip(inquiry).map{|p,r|p+r*e_ball}]
 		end
 	end
 
 	def motive_z # least difference
-		step = self.sense.min_by{|r,color| diff_color([@desire, color])}[0]
+		step = self.sense.min_by{|r,color| diff_color([@desire, color])}.first
 		@position = step.zip(self.position).map{|rp|rp.inject :+}
 	end
 
-	# def walker_z(sampled) # least difference
-	# 	pair = @low_pair.nil? ? @walker : @low_pair
-	# 	e_ball = rand(100) # <- novel idea
+#####
+	def look_y
+		e_ball = rand(@guess)
+		neighborhood = rootsUnity(17)+[[0,0]]
+		neighborhood.map do |inquiry|
+			[inquiry, @position.zip(inquiry).map{|p,r|p+r*e_ball}]
+		end
+	end
 
-	# 	@low_pair = (rootsUnity(17)+[[0,0]]).min_by do |s|
-	# 		unital_color = pair.zip(s).map{|p,r|p+r*e_ball}
-	# 		diff([rgb_converter(*unital_color), @m])
-	# 	end.zip(pair).map{|rp|rp.inject :+}
-	# 	# fill(0,0,0) ; text('z',*@low_pair)
+	def motive_y # center of mass
+		roots, color = self.sense.transpose
+		total_weight = color.transpose.map{|cs| cs.inject :+}
+
+		# step = self.sense.min_by{|r,color| diff_color([@desire, color])}.first
+		# @position = step.zip(self.position).map{|rp|rp.inject :+}
 	# end
 
-# 	def walker_y(p=@walker) # center of mass 
-# 		# center of mass, not very robust, 
-# 		# bug when all nears are the same.
-# 		pair = @high_pair.nil? ? @walker : @high_pair
-# 		e_ball = rand(100) # <- novel idea
+		aTTw = neighborhood.zip(rgb_weights).inject([]) do |s,abw| 
+			s << abw[0].map{|i|i*abw[1]}
+		end.transpose.map{|i|i.inject :+}
+		norm = aTTw.map{|i|-i*10/total_weight}
+		@high_pair = norm.zip(pair).map{|rp|rp.inject :+}
 
-# 		neighborhood = rootsUnity(17)+[[0,0]]
-# 		rgb_weights = neighborhood.map do |s|
-# 			unital_color = pair.zip(s).map{|p,r|p+r*e_ball}
-# 			diff([rgb_converter(*unital_color), @m])
-# 		end
-
-# 		weight_total = rgb_weights.inject(0,:+)
-# 		aTTw = neighborhood.zip(rgb_weights).inject([]) do |s,abw| 
-# 			s << abw[0].map{|i|i*abw[1]}
-# 		end.transpose.map{|i|i.inject :+}
-# 		norm = aTTw.map{|i|-i*10/weight_total}
-# 		@high_pair = norm.zip(pair).map{|rp|rp.inject :+}
-
-# 		fill(255,255,255) ; text('y',*@high_pair)
-# 	end
+		# fill(255,255,255) ; text('y',*@high_pair)
+	end
 
 # 	def walker_w(p=@walker) # modifier
 # 		pair = @mod_pair.nil? ? @walker : @mod_pair
