@@ -3,10 +3,15 @@
 # as the day begins and 'cool down' as the sun sets.
 
 # diff in humidity as bent line?
+
+# maybe it would be good to persist data so that
+# at a mouse_wheel roll one can see data at various scales.
 	DateNow = DateTime.now.strftime('%B %d, %Y').freeze
 	StartTime = Time.now.strftime('%l:%M %P').freeze
 
 	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
+	CURRENT_CONDS_SEL = './/div[@id="current_conditions_detail"]/table/tr'.freeze
+
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	SECONDS = 800.freeze
@@ -41,12 +46,17 @@
 			@temp, @humidity = 0, 0
 		end
 
-		def scrape_temp
+		def scrape_data
 			form = page.form('getForecast')
 			form.inputstring = self.zipcode
 			page = form.submit
 
 			@temp = page.at(CURRENT_TEMP_SEL).text.to_i
+
+			data_rows = page.search(CURRENT_CONDS_SEL)
+			humidity_row = data_rows.detect{|row| /humidity/i =~ row.text}
+			/(\d+)%/i.match(humidity_row.text)
+			@humidity = $1 unless $1.nil?
 		end
 	end
 
@@ -73,7 +83,7 @@
 		image(@loaded,350,180)
 
 		@cities = CITY_DATA.map{|data| Place.new(*data) }
-		@cities.each{|city| city.scrape_temp}
+		@cities.each{|city| city.scrape_data}
 	end
 
 	def counter ; @i = (@i + 1) % SECONDS ; end
@@ -98,8 +108,7 @@
 
 	def images
 		if @i == 0 ; @t += 1
-			cities.each{|city| city.scrape_temp }
-
+			cities.each{|city| city.scrape_data }
 			# saves, loads, then displays loaded pic.
 			save(USA_MAP_TEMP)
 			loaded = loadImage(USA_MAP_TEMP)
@@ -125,7 +134,7 @@
 			fill(hue,100,100,70) ; rect(*coords,DataPt,DataPt)
 
 			# dont let the number get blurry.
-			# fill(200,30,100) ; text("#{city.temp}",*coords)
+			fill(200,30,100) ; text("#{city.humidity}",*coords)
 		end
 
 		images
