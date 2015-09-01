@@ -17,7 +17,8 @@
 	SECONDS = 800.freeze
 	DataPt = 9.freeze
 
-	CITY_DATA = [['santa fe','87505', [441, 372]],
+	CITY_DATA = [['helena','59601',[509,223]],
+							 ['santa fe','87505', [441, 372]],
 							 ['bullhead city','86429', [302, 374]],
 							 ['cleveland','44107', [1041, 251]],
 							 ['monroe','98272', [355, 130]],
@@ -28,7 +29,6 @@
 							 ['albuquerque','87101',[420,407]],
 							 ['san francisco','94101',[197,279]],
 							 ['bismarck','58501',[706,190]],
-							 ['helena','59601',[509,223]],
 							 ['everglades','34139',[1347,707]],
 							 ['annapolis','21401',[1182,301]],
 							 ['detroit','48201',[1000,253]],
@@ -39,10 +39,10 @@
 	class Place
 		require 'mechanize'
 		attr_accessor :temp, :humidity, :agent, :page, :zipcode, :coords,
-									:pressure, :dewpoint
+									:pressure, :dewpoint, :name
 
-		def initialize(city,zipcode,coords)
-			@city, @zipcode, @coords = city, zipcode, coords
+		def initialize(name,zipcode,coords)
+			@name, @zipcode, @coords = name, zipcode, coords
 			@page = Mechanize.new.get('http://www.weather.gov')
 			@temp, @humidity, @pressure, @dewpoint = [0] * 4
 		end
@@ -117,6 +117,7 @@
 	def images
 		if @i == 0 ; @t += 1
 			cities.each{|city| city.scrape_data }
+
 			# saves, loads, then displays loaded pic.
 			save(USA_MAP_TEMP)
 			loaded = loadImage(USA_MAP_TEMP)
@@ -133,17 +134,12 @@
 		counter
 		map_key
 
-		# add some random walk sway. 
-		# Make a shadow? humidity for curve?
+		# humidity as curve?
 		cities.each do |city|
 			x, y = city.coords
  			coords = [x, y-@t*DataPt]
  			hue = scale_temp(city.temp)
 			fill(hue,100,100,70) ; rect(*coords,DataPt,DataPt)
-
-			# dont let the number get blurry.
-			fill(200,30,100)
-			text("#{city.humidity} #{city.pressure} #{city.dewpoint}",*coords)
 		end
 
 		images
