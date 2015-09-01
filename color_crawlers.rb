@@ -87,18 +87,9 @@ class ColorCrawlers
 		norm = colors.count
 
 		color_weights = colors.map{|color| diff_color(@desire,color)}
+		total_weight = color_weights.inject :+
 
-		# step = self.sense.min_by{|r,color| diff_color([@desire, color])}.first
-		# @position = step.zip(self.position).map{|rp|rp.inject :+}
-	# end
 
-		aTTw = neighborhood.zip(rgb_weights).inject([]) do |s,abw| 
-			s << abw[0].map{|i|i*abw[1]}
-		end.transpose.map{|i|i.inject :+}
-		norm = aTTw.map{|i|-i*10/total_weight}
-		@high_pair = norm.zip(pair).map{|rp|rp.inject :+}
-
-		# fill(255,255,255) ; text('y',*@high_pair)
 	end
 
 # 	def walker_w(p=@walker) # modifier
