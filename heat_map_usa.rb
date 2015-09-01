@@ -38,12 +38,18 @@
 
 	class Place
 		require 'mechanize'
-		attr_accessor :temp, :humidity, :agent, :page, :zipcode, :coords
+		attr_accessor :temp, :humidity, :agent, :page, :zipcode, :coords,
+									:pressure, :dewpoint
 
 		def initialize(city,zipcode,coords)
 			@city, @zipcode, @coords = city, zipcode, coords
 			@page = Mechanize.new.get('http://www.weather.gov')
-			@temp, @humidity = 0, 0
+			@temp, @humidity, @pressure, @dewpoint = [0] * 4
+		end
+
+		def data_grabber(tr,regex)
+			regex.match(tr.text)
+			$1.nil? ? 0 : $1
 		end
 
 		def scrape_data
@@ -53,11 +59,13 @@
 
 			@temp = page.at(CURRENT_TEMP_SEL).text.to_i
 
-			data_rows = page.search(CURRENT_CONDS_SEL)
-			humidity_row = data_rows.detect{|row| /humidity/i =~ row.text}
-			/(\d+)%/i.match(humidity_row.text)
-			@humidity = $1 unless $1.nil?
+			data = page.search(CURRENT_CONDS_SEL).each do |tr|
+				/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
+				/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
+				/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
+			end
 		end
+
 	end
 
 	attr_reader :cities, :loaded
@@ -134,7 +142,8 @@
 			fill(hue,100,100,70) ; rect(*coords,DataPt,DataPt)
 
 			# dont let the number get blurry.
-			fill(200,30,100) ; text("#{city.humidity}",*coords)
+			fill(200,30,100)
+			text("#{city.humidity} #{city.pressure} #{city.dewpoint}",*coords)
 		end
 
 		images
