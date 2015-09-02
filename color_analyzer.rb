@@ -11,8 +11,9 @@
 			@pixels = pixels
 		end
 
-		def partition_colors
-			@sorted = sort_colors(pixels.take(50))
+		def partition_colors # these arrays are huge.
+			limited_number = pixels.take(pixels.count/100)
+			@sorted = sort_colors(limited_number)
 		end
 
 		def sort_colors(ary,accum=[])# :: [[Color,Num]]
@@ -35,7 +36,8 @@
 		colorMode(HSB,360,100,100,100)
 	  text_font create_font("SanSerif",10)
 
-		background(0)
+		@img = loadImage("/Users/Jon/Desktop/scans/imgo_daniel.jpeg")
+		image(@img,0,0)
 
 		@pxls = Pixels.new
 		@pxls.get_pixels(pixels)
