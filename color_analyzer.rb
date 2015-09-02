@@ -12,8 +12,9 @@
 		end
 
 		def partition_colors # these arrays are huge.
-			limited_number = pixels.take(pixels.count/100)
-			@sorted = sort_colors(limited_number)
+			rand_sample = (0..500).map{|i| pixels[i]} 
+			# limited_number = pixels.take(pixels.count/100)
+			@sorted = sort_colors(rand_sample)
 		end
 
 		def sort_colors(ary,accum=[])# :: [[Color,Num]]
