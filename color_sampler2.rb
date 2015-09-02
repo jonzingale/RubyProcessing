@@ -23,6 +23,10 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 			those = theres.map{|root,there| [root,rgb_converter(*there)]}
 			crawler.see(those)
 		end
+
+		def impose(crawler)
+
+		end
 	end
 
 	include ColorConversion
