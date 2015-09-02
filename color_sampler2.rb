@@ -18,15 +18,15 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 			crawler.desired(@m)
 		end
 
-		def perceive(crawler)
-			theres = crawler.look_z #<--- look_z to be generalized.
+		def perceive(crawler,look)
+			theres = crawler.send(look)
 			those = theres.map{|root,there| [root,rgb_converter(*there)]}
 			crawler.see(those)
 		end
 	end
 
 	include ColorConversion
-	attr_reader :thing, :crawler_z
+	attr_reader :thing, :crawler_z, :crawler_y
 	def setup
 		size(displayWidth, displayHeight)
 		text_font create_font("SanSerif",25) ; no_stroke
@@ -38,6 +38,7 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 		@i = 0
 
 		@crawler_z = ColorCrawlers.new('z',@w,@h)
+		@crawler_y = ColorCrawlers.new('y',@w,@h)
 		@thing = BeingInTheWorld.new
 	end
 
@@ -60,13 +61,14 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 		end
 	end
 
-	def be_in_world(crawler)
+	def be_in_world(crawler,look,motive)
 		thing.suggest(crawler)
-		thing.perceive(crawler)
-		crawler.motive_z
+
+		thing.perceive(crawler,look)
+		crawler.send(motive)
 
 		pos = crawler.position
-		name = crawler_z.name
+		name = crawler.name
 		fill 0 ; text(name,*pos)
 	end
 
@@ -85,7 +87,8 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 
 	def draw
 		images
-		be_in_world(crawler_z)
+		be_in_world(crawler_z, :look_roots, :motive_z)
+		be_in_world(crawler_y, :look_roots, :motive_y)
 		ellipses
 
 		# # show best guess distance

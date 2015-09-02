@@ -36,6 +36,7 @@
 							 ['atlanta','30301',[1065,435]]
 							]
 
+	# probably want to move this into its own world. testing would be easier.
 	class Place
 		require 'mechanize'
 		attr_accessor :temp, :humidity, :agent, :page, :zipcode, :coords,
