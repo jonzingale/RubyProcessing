@@ -14,7 +14,7 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 		include ColorConversion
 
 		def suggest(crawler)
-			@m = @m.nil? ? [0,0,0] : rgb_converter(mouseX,mouseY)
+			@m = @m.nil? ? crawler.desire : rgb_converter(mouseX,mouseY)
 			crawler.desired(@m)
 		end
 
@@ -30,7 +30,7 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 	end
 
 	include ColorConversion
-	attr_reader :thing, :crawler_z, :crawler_y
+	attr_reader :thing, :crawler_z, :crawler_y, :crawler_p
 	def setup
 		size(displayWidth, displayHeight)
 		text_font create_font("SanSerif",25) ; no_stroke
@@ -43,6 +43,7 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 
 		@crawler_z = ColorCrawlers.new('z',@w,@h)
 		@crawler_y = ColorCrawlers.new('y',@w,@h)
+		@crawler_p = ColorCrawlers.new('p',@w,@h)
 		@thing = BeingInTheWorld.new
 	end
 
@@ -80,7 +81,7 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 		c, *oords = [(width+@w)/1.9, (height+@h)/1.8, 200, 200]
 
 		# color ellipse
-		@m = @m.nil? ? [0,0,0] : rgb_converter(mouseX,mouseY)
+		@m = @m.nil? ? [255,40,50] : rgb_converter(mouseX,mouseY)
 		fill(*@m,250) ; ellipse(c-100,*oords)
 
 		# best guess ellipse
@@ -93,8 +94,12 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 		images
 		be_in_world(crawler_z, :look_roots, :motive_z)
 		be_in_world(crawler_y, :look_roots, :motive_y)
+		be_in_world(crawler_p, :look_roots, :motive_p)
 		ellipses
 
+		# no idea.
+		# fill(0) ; text("distance from desire: #{@m} units",100,40)
+
 		# # show best guess distance
-		fill(0) ; text("distance from desire: #{crawler_z.guess.round} units",100,40)
+		fill(0) ; text("distance from desire: #{crawler_p.guess.round} units",100,40)
 	end
