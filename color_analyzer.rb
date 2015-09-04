@@ -1,24 +1,34 @@
 	module Files
 		require 'csv'
-		FILES_PATH = File.expand_path('./../data', __FILE__)
-		COLOR_FILE = "#{FILES_PATH}/color_distribution.csv"
+			FILES_PATH = File.expand_path('./../data', __FILE__)
+			COLOR_FILE = "#{FILES_PATH}/color_distribution.csv"
+			COLOR_FILE2 = "#{FILES_PATH}/color_distribution_2.csv"
 
-		def direct_to_file(ary)
-	  	File.open(COLOR_FILE, 'w') { |file| file.write('') }
-	  	File.open(COLOR_FILE,'a') { |file| file << ary }
-		end
-
-	  def clean_csv ; File.open(COLOR_FILE, 'w') { |file| file.write('') } ; end
+	  def clean_csv(file) ; File.open(file, 'w') ; end
 
 	  def pair_to_csv(color, count)
-	  	File.open(COLOR_FILE,'a') { |file| file.write("#{color}, #{count}\n") }
+	  	CSV.open(COLOR_FILE, 'a'){|csv| csv << [color,count] }
 	  end
 
-	  def csv_to_ary
-	  	ary = []
-	  	ary << File.read(COLOR_FILE)
-	  end
+		# POSTPROCESSING
+		def sort_csv_processor
+			File.open(COLOR_FILE2, 'w'){''}
+			csv = CSV.read(COLOR_FILE).map{|row| row.map(&:to_i)}
+			sort_colors_in_file(csv)
+		end
+	
+		def sort_colors_in_file(ary)
+			unless ary.empty?
+				ins, ary = ary.partition{|color,count| color == ary[0][0] }
+	
+				count = ins.transpose[1].inject :+
+				color = ins[0][0]
+				ins = nil
 
+				CSV.open(COLOR_FILE2, 'a'){|csv| csv << [color,count] }
+				sort_colors_in_file(ary)
+			end
+		end
 	end
 
 	class Pixels
@@ -26,7 +36,9 @@
 		attr_accessor :pixels#, :distribution
 		# @distribution to come from file
 
-		CHUNK_SIZE = 2000# about the limit
+		# CHUNK_SIZE = 2000# about the limit
+		CHUNK_SIZE = 20# about the limit
+
 
 		def initialize
 			loadPixels ; updatePixels
@@ -41,18 +53,20 @@
 		def sort_colors_to_file(ary=pixels[0..CHUNK_SIZE])
 			unless ary.empty?
 				ary, ys = ary.partition{|i| i == ary.first}
-				pair_to_csv(ary.first, ary.count)
+
+				color_count = ary[0], ary.count
+				CSV.open(COLOR_FILE, 'a'){|csv| csv << color_count }
+				ary = nil
+
 				sort_colors_to_file(ys)
 			end
 		end
 
-		# count the pixels and break them up into
-		# digestable chunks to be sorted and stored.
-		# requires reopening the file and working
-		# with the repetitions.
+		# PREPROCESSES PIXELS
 		def sort_color_processor
 			count = pixels.count
 			chunks = count/CHUNK_SIZE
+			File.open(COLOR_FILE, 'w'){''}
 
 			(0..chunks).each do |i|
 				range = ((0+i)..(CHUNK_SIZE+i))
@@ -77,16 +91,14 @@
 		@img = loadImage("/Users/Jon/Desktop/scans/imgo_daniel.jpeg")
 		image(@img,0,0)
 
-		# @pxls = Pixels.new
-		# @pxls.get_pixels(pixels)
-		# clean_csv ; @pxls.sort_color_processor
-
-		it = csv_to_ary
-
-		text("#{it[0..4]}",100,199)
+		@pxls = Pixels.new
+		@pxls.get_pixels(pixels)
+		@pxls.sort_color_processor
+		sleep(2)
+		sort_csv_processor
 	end
 
 	def draw
-		# text("#{pxls.distribution[10]}",100,100)
+		text("#{pxls.pixels.count}",100,100)
 	end
 
