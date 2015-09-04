@@ -60,11 +60,11 @@
 
 			@temp = page.at(CURRENT_TEMP_SEL).text.to_i
 
-			data = page.search(CURRENT_CONDS_SEL).each do |tr|
-				/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
-				/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
-				/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
-			end
+			# data = page.search(CURRENT_CONDS_SEL).each do |tr|
+			# 	/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
+			# 	/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
+			# 	/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
+			# end
 		end
 
 	end
@@ -74,8 +74,8 @@
 		text_font create_font("SanSerif",17)
 		square = [1450, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
-		frame_rate 1 ; colorMode(HSB,360,100,100)
-		no_stroke
+		colorMode(HSB,360,100,100)
+		no_stroke ; frame_rate 1
 
 		@i, @t = [0 , 1]
 
