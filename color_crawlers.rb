@@ -2,7 +2,7 @@ module Maths
 	PI = 3.1415926.freeze
 
 	def p_norm(p,n,i=0)
-		n == 0 ? 0 : n % p**i == 0 ? p_norm(p,n,i+=1) : p**(i-1)
+		n == 0 ? 0 : n % p**i == 0 ? p_norm(p,n,i+1) : p**(1-i)
 	end
 
 	def trigs(theta)#:: Theta -> R2
@@ -22,6 +22,11 @@ module Maths
 
 		p_norm(3,r_diff) + p_norm(3,g_diff) + p_norm(3,b_diff)
 	end
+
+	# def p_adic_diff(desire_n_sensed)# ::[R^3,R^3]->Distance
+	# 	desire_sum, color_sum = desire_n_sensed.map{|colors| colors.inject :+}
+	# 	p_norm(3,desire_sum - color_sum)
+	# end
 
 	def euclidean_diff(w)# ::[R^3,R^3]->Distance
 		norm = w.transpose.map{|p|p.inject(:-)**2}
@@ -44,8 +49,6 @@ class ColorCrawlers
 	def guess # to see what the distance is.
 		@guess = @sense.map do |root,color|
 			euclidean_diff([@desire, color])
-			# not very good as p-adic distances stay small.
-			# p_adic_diff([@desire,color])
 		end.min
 	end
 
@@ -62,7 +65,7 @@ class ColorCrawlers
 
 	# motives :: [(Root,Color)]
 	def motive_p # least p_adic difference
-		step = self.sense.max_by{|r,color| p_adic_diff([@desire, color])}.first
+		step = self.sense.min_by{|r,color| p_adic_diff([@desire, color])}.first
 		@position = step.zip(self.position).map{|rp|rp.inject :+}
 	end
 
@@ -71,7 +74,7 @@ class ColorCrawlers
 		@position = step.zip(self.position).map{|rp|rp.inject :+}
 	end
 
-	def motive_y # center of mass
+	def motive_y # center of euclidean mass
 		roots, colors = self.sense.transpose
 		weights = colors.map{|color| euclidean_diff([@desire,color])}
 		total_weight = weights.inject(:+)

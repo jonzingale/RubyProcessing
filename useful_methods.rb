@@ -71,6 +71,10 @@ require 'mechanize'
 		text("#{coords}",100,100)
 	end
 
+	def pretty(it)
+		it.map{|i| puts "#{i}"}.compact
+	end
+
 	def search(query)
 		agent = Mechanize.new
 		request_hash = {'max_price' => '1500', 

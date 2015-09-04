@@ -1,18 +1,33 @@
-	module File
-		FILES_PATH = File.expand_path('./files', __FILE__)
+	module Files
+		require 'csv'
+		FILES_PATH = File.expand_path('./../data', __FILE__)
+		COLOR_FILE = "#{FILES_PATH}/color_distribution.csv"
 
-		# def hash_to_csv(file_name, key_values, headers)
-		# 	file = "#{FILES_PATH}/#{file_name}" # :: String x [Hash] x [String] -> [Hash]
-	 #  	CSV.open(file, 'w'){|csv| csv << headers.map(&:upcase) }
-		# 	CSV.open(file, 'a'){|csv| key_values.map(&:values).each{|line| csv << [line].flatten}}
-		# end
-end
+		def direct_to_file(ary)
+	  	File.open(COLOR_FILE, 'w') { |file| file.write('') }
+	  	File.open(COLOR_FILE,'a') { |file| file << ary }
+		end
+
+	  def clean_csv ; File.open(COLOR_FILE, 'w') { |file| file.write('') } ; end
+
+	  def pair_to_csv(color, count)
+	  	File.open(COLOR_FILE,'a') { |file| file.write("#{color}, #{count}\n") }
+	  end
+
+	  def csv_to_ary
+	  	ary = []
+	  	ary << File.read(COLOR_FILE)
+	  end
 
 	end
 
 	class Pixels
-		attr_accessor :pixels, :distribution
-		
+		include Files
+		attr_accessor :pixels#, :distribution
+		# @distribution to come from file
+
+		CHUNK_SIZE = 2000# about the limit
+
 		def initialize
 			loadPixels ; updatePixels
 			@pixels = 0
@@ -23,26 +38,31 @@ end
 			@pixels = pixels
 		end
 
-		# better idea would be to cache the info
-		# in a file.
-		def partition_colors # these arrays are huge.
-			# rand_sample = (0..500).map{|i| pixels[i]} 
-			# limited_number = pixels.take(pixels.count/100)
-			# @distribution = sort_colors(rand_sample)
-
-			@distribution = sort_colors(pixels)
-		end
-
-		def sort_colors(ary,accum=[])# :: [[Color,Num]]
+		def sort_colors_to_file(ary=pixels[0..CHUNK_SIZE])
 			unless ary.empty?
 				ary, ys = ary.partition{|i| i == ary.first}
-				data = [ary.first,ary.count]
-				sort_colors(ys,accum << data)
-			end ; accum
+				pair_to_csv(ary.first, ary.count)
+				sort_colors_to_file(ys)
+			end
+		end
+
+		# count the pixels and break them up into
+		# digestable chunks to be sorted and stored.
+		# requires reopening the file and working
+		# with the repetitions.
+		def sort_color_processor
+			count = pixels.count
+			chunks = count/CHUNK_SIZE
+
+			(0..chunks).each do |i|
+				range = ((0+i)..(CHUNK_SIZE+i))
+				sort_colors_to_file(pixels[range])
+			end
 		end
 
 	end
 
+	include Files
 	attr_reader :pxls
 	def setup
 		size(displayWidth/2.4, displayHeight/1.4)
@@ -57,13 +77,16 @@ end
 		@img = loadImage("/Users/Jon/Desktop/scans/imgo_daniel.jpeg")
 		image(@img,0,0)
 
-		@pxls = Pixels.new
-		@pxls.get_pixels(pixels)
-		@pxls.partition_colors
+		# @pxls = Pixels.new
+		# @pxls.get_pixels(pixels)
+		# clean_csv ; @pxls.sort_color_processor
 
+		it = csv_to_ary
+
+		text("#{it[0..4]}",100,199)
 	end
 
 	def draw
-		text("#{pxls.distribution[0..10]}",100,100)
+		# text("#{pxls.distribution[10]}",100,100)
 	end
 
