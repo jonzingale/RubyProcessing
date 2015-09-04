@@ -30,12 +30,6 @@
 		it.map{|i| puts "#{i}"}.compact
 	end
 
-
-def p_norm(p,n,i=0)
-	n == 0 ? 0 : n % p**i == 0 ? p_norm(p,n,i+=1) : p**(i-1)
-end
-
-
 	pixels = Pixels.new
 
 	ary = (0..200).map{ rand(100) }
