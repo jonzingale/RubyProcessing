@@ -119,7 +119,7 @@
 		if @i == 0 ; @t += 1
 			cities.each{|city| city.scrape_data }
 
-			# saves, loads, then displays loaded pic.
+			# saves, loads, then displays.
 			save(USA_MAP_TEMP)
 			loaded = loadImage(USA_MAP_TEMP)
 			image(loaded,0,0)
@@ -135,7 +135,7 @@
 		counter
 		map_key
 
-		# humidity as curve?
+		# temps
 		cities.each do |city|
 			x, y = city.coords
  			coords = [x, y-@t*DataPt]
@@ -143,12 +143,8 @@
 			fill(hue,100,100,70) ; rect(*coords,DataPt,DataPt)
 		end
 
+		# humidity as curve?
+
 		images
 	end
 
-	# def mouseMoved
-	# 	coords = [mouseX,mouseY]
-	# 	fill(0) ; rect(50,50,200,100)
-	# 	fill(123,90,90,100)
-	# 	text("#{coords}",100,100)
-	# end
