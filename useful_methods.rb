@@ -85,6 +85,23 @@ require 'mechanize'
 		agent.get(APARTMENT_URL,request_hash)
 	end
 
+	def wait_for_key_press
+		begin
+		  system("stty raw -echo")
+		  str = STDIN.getc
+		ensure
+		  system("stty -raw echo")
+		end
+		str
+	end
+
+	  def clean_file(file) ; File.open(file, 'w') ; end
+
+	  def pair_to_csv(color, count)
+	  	FILE.open(COLOR_FILE, 'a'){|file| file << [color,count] }
+	  end
+
+
 	# a source directory off of crude. --untracked.
 	# FILES_PATH = File.expand_path('./..', __FILE__).freeze
 

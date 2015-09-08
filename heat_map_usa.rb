@@ -17,7 +17,7 @@
 	SECONDS = 800.freeze
 	DataPt = 9.freeze
 
-	CITY_DATA = [['helena','59601',[509,223]],
+	CITY_DATA = [['helena','59601',[455,177]],
 							 ['santa fe','87505', [441, 372]],
 							 ['bullhead city','86429', [302, 374]],
 							 ['cleveland','44107', [1041, 251]],
@@ -75,7 +75,7 @@
 		square = [1450, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		colorMode(HSB,360,100,100)
-		no_stroke ; frame_rate 1
+		no_stroke ; frame_rate 1 #<--- slow this down?
 
 		@i, @t = [0 , 1]
 

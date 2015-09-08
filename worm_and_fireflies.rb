@@ -1,6 +1,11 @@
 require (File.expand_path('./bezier', File.dirname(__FILE__)))
 require (File.expand_path('./glowbug', File.dirname(__FILE__)))
 
+
+	# slow movement of neck toward the direction
+	# some density of fireflies. Let's say two or
+	# three get within an epsilon ball.
+
 	RES = 48.0.freeze
 	def setup
 		# size(displayWidth/2.3, displayHeight/1.3)
