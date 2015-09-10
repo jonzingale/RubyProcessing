@@ -40,11 +40,20 @@
 	class Place
 		require 'mechanize'
 		attr_accessor :temp, :humidity, :agent, :page, :zipcode, :coords,
-									:pressure, :dewpoint, :name
+									:pressure, :dewpoint, :name, :agent
 
 		def initialize(name,zipcode,coords)
 			@name, @zipcode, @coords = name, zipcode, coords
-			@page = Mechanize.new.get('http://www.weather.gov')
+
+			@agent = Mechanize.new
+			agent.follow_meta_refresh = true # new data
+			agent.keep_alive = false # no time outs
+
+			page = agent.get('http://www.weather.gov')
+			form = page.form('getForecast')
+			form.inputstring = self.zipcode
+			@page = form.submit
+
 			@temp, @humidity, @pressure, @dewpoint = [0] * 4
 		end
 
@@ -58,13 +67,13 @@
 			form.inputstring = self.zipcode
 			page = form.submit
 
-			@temp = page.at(CURRENT_TEMP_SEL).text.to_i
+			temp = page.at(CURRENT_TEMP_SEL).text.to_i
 
-			# data = page.search(CURRENT_CONDS_SEL).each do |tr|
-			# 	/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
-			# 	/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
-			# 	/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
-			# end
+			data = page.search(CURRENT_CONDS_SEL).each do |tr|
+				/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
+				/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
+				/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
+			end
 		end
 
 	end
@@ -75,7 +84,7 @@
 		square = [1450, 800, P3D] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		colorMode(HSB,360,100,100)
-		no_stroke ; frame_rate 1 #<--- slow this down?
+		no_stroke ; frame_rate 1
 
 		@i, @t = [0 , 1]
 
@@ -142,8 +151,6 @@
  			hue = scale_temp(city.temp)
 			fill(hue,100,100,70) ; rect(*coords,DataPt,DataPt)
 		end
-
-		# humidity as curve?
 
 		images
 	end
