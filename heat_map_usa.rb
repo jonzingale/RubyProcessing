@@ -9,13 +9,15 @@
 	DateNow = DateTime.now.strftime('%B %d, %Y').freeze
 	StartTime = Time.now.strftime('%l:%M %P').freeze
 
+	LAT_LON_REGEX = /lat=-?(\d+\.\d+)&lon=-?(\d+\.\d+)/.freeze
 	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 	CURRENT_CONDS_SEL = './/div[@id="current_conditions_detail"]/table/tr'.freeze
 
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
-	SECONDS = 800.freeze
-	DataPt = 9.freeze
+	PHI = 1.618033988749895.freeze
+	SECONDS = 900.freeze
+	DataPt = 5.freeze
 
 	CITY_DATA = [['helena','59601',[455,177]],
 							 ['santa fe','87505', [441, 372]],
@@ -36,25 +38,21 @@
 							 ['atlanta','30301',[1065,435]]
 							]
 
-	# probably want to move this into its own world. testing would be easier.
 	class Place
 		require 'mechanize'
-		attr_accessor :temp, :humidity, :agent, :page, :zipcode, :coords,
-									:pressure, :dewpoint, :name, :agent
+		attr_reader :name, :zipcode, :coords, :geocoords, :agent
+		attr_accessor :temp, :humidity, :page, :pressure, :dewpoint
 
-		def initialize(name,zipcode,coords)
+		def initialize name, zipcode, coords
 			@name, @zipcode, @coords = name, zipcode, coords
 
 			@agent = Mechanize.new
 			agent.follow_meta_refresh = true # new data
 			agent.keep_alive = false # no time outs
+			@page = agent.get('http://www.weather.gov')
+			scrape_data
 
-			page = agent.get('http://www.weather.gov')
-			form = page.form('getForecast')
-			form.inputstring = self.zipcode
-			@page = form.submit
-
-			@temp, @humidity, @pressure, @dewpoint = [0] * 4
+			@geocoords = LAT_LON_REGEX.match(page.uri.to_s)[1..2]
 		end
 
 		def data_grabber(tr,regex)
@@ -65,11 +63,11 @@
 		def scrape_data
 			form = page.form('getForecast')
 			form.inputstring = self.zipcode
-			page = form.submit
+			@page = form.submit
 
-			temp = page.at(CURRENT_TEMP_SEL).text.to_i
+			@temp = page.at(CURRENT_TEMP_SEL).text.to_i
 
-			data = page.search(CURRENT_CONDS_SEL).each do |tr|
+			page.search(CURRENT_CONDS_SEL).each do |tr|
 				/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
 				/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
 				/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
@@ -121,13 +119,12 @@
 		text(message,140, 678)
 		text(DateNow,100, 590)
 
-		fill(30,100,100) ; rect(100,665,15,15)
+		fill(30,100,100) ; rect(100,665,21*PHI,21)
 	end
 
 	def images
 		if @i == 0 ; @t += 1
-			cities.each{|city| city.scrape_data }
-
+			cities.each{ |city| city.scrape_data }
 			# saves, loads, then displays.
 			save(USA_MAP_TEMP)
 			loaded = loadImage(USA_MAP_TEMP)
@@ -135,7 +132,7 @@
 		end
 	end
 
-	def scale_temp(temp) # linear
+	def scale_temp temp # linear
 		scaled = 360 * ((136-temp)/136.to_f)
 		translate = scaled - 82 % 360
 	end	
@@ -149,7 +146,7 @@
 			x, y = city.coords
  			coords = [x, y-@t*DataPt]
  			hue = scale_temp(city.temp)
-			fill(hue,100,100,70) ; rect(*coords,DataPt,DataPt)
+			fill(hue,100,100,70) ; rect(*coords,DataPt*PHI,DataPt)
 		end
 
 		images
