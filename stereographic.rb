@@ -1,18 +1,13 @@
 # StereoGraphic Projections
+	LAT_LON_REGEX = /lat=-?(\d+\.\d+)&lon=-?(\d+\.\d+)/.freeze
+	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
+	CURRENT_CONDS_SEL = './/div[@id="current_conditions_detail"]/table/tr'.freeze
+
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	PHI = 1.618033988749895.freeze
 	SECONDS = 900.freeze
 	DataPt = 5.freeze
-	GeoCoords  =[[46.5172, 112.121],[35.6785, 105.954],
-							 [35.1414, 114.492],[41.4838, 81.8015],
-							 [47.8703, 121.881],[40.4396, 75.346 ],
-							 [30.0658, 89.9314],[30.267, 97.743	],
-							 [43.7274, 101.983],[35.1172, 106.625],
-							 [37.775, 122.418	],[46.8055, 100.767],
-							 [25.86, 81.385		],[38.9716, 76.503	],
-							 [42.3831, 83.1022],[33.4507, 112.068],
-							 [33.855, 84.3959	]].freeze
 
 	CITY_DATA = [['helena','59601',[455,177]],
 							 ['santa fe','87505', [441, 372]],
@@ -33,10 +28,30 @@
 							 ['atlanta','30301',[1065,435]]
 							]
 
-	# name , lat ,long
-	DATA = CITY_DATA.transpose.first.zip(GeoCoords).map{|data|data.flatten}
+	class Place
+		require 'mechanize'
+		attr_reader :name, :zipcode, :coords, :geocoords, :agent
+		attr_accessor :page
+
+		def initialize name, zipcode, coords
+			@name, @zipcode, @coords = name, zipcode, coords
+
+			@agent = Mechanize.new
+			agent.follow_meta_refresh = true # new data
+			agent.keep_alive = false # no time outs
+			@page = agent.get('http://www.weather.gov')
+			form = page.form('getForecast')
+			form.inputstring = self.zipcode
+			@page = form.submit
+
+			@geocoords = LAT_LON_REGEX.match(@page.uri.to_s)[1..2].map(&:to_f)
+		end
+	end
+
+
 
 	attr_reader :points, :loaded
+
 	def setup
 		text_font create_font("SanSerif",17)
 		square = [1450, 800, P3D] ; size(*square)
@@ -51,29 +66,31 @@
 		# @loaded.resize(1152*rs,718*rs)
 		# image(@loaded,350,180)
 
-		@points = DATA.map{|data| Spherical.new(*data) }
+		@cities = CITY_DATA.map{|data| Place.new(*data) }
+
+		@points = @cities.map do |city|
+			data = [city.name, *(city.geocoords)]
+			Spherical.new(*data)
+		end
 	end
 
 	def mouseMoved
 		clear
-		@points.map{|pt| pt.stereo_pi }
+		@points.map{|pt| pt.stereo_pi width, height }
 		@points.each{|pt| text(pt.name,pt.radius,pt.angle)}
 	end
 
 	class Spherical
 		attr_accessor :phi, :theta, :radius, :angle, :name
 		def initialize(name,lat,lon)
-			@name = name
-			@phi = lat
-			@theta = lon
-			@radius = 0
-			@angle = 0
+			@name, @phi, @theta = name, lat, lon
+			@radius, @angle = 0, 0
 		end
 
-		def stereo_pi
-			mx, my = mouseX.nil? ? [1,1] : [mouseX, mouseY]
-			@radius = (1/(Math.tan(phi/2)) * mx/10.0 ) + 400
-			@angle = theta * my/100.0
+		def stereo_pi width, height
+			mx, my = mouseX.nil? ? [1,1] : [mouseX-width/2.0, mouseY-height/2.0]
+			@radius = ((1/(Math.tan(theta/2)) * mx/10.0 ) + width/2.0)
+			@angle = ((phi * my/100.0) + height/2.0)
 		end
 	end
 
