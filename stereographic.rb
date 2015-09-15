@@ -1,11 +1,12 @@
 # StereoGraphic Projections
-	LAT_LON_REGEX = /lat=-?(\d+\.\d+)&lon=-?(\d+\.\d+)/.freeze
+	LAT_LON_REGEX = /lat=(-?\d+\.\d+)&lon=(-?\d+\.\d+)/.freeze
 	CURRENT_TEMP_SEL = './/p[@class="myforecast-current-lrg"]'.freeze
 	CURRENT_CONDS_SEL = './/div[@id="current_conditions_detail"]/table/tr'.freeze
 
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	PHI = 1.618033988749895.freeze
+	PI = 3.145926.freeze
 	SECONDS = 900.freeze
 	DataPt = 5.freeze
 
@@ -61,10 +62,10 @@
 
 		@i, @t = [0 , 1]
 
-		# rs = 0.70 ; rotateX(PI/5.0)
-		# @loaded = loadImage(USA_MAP)
-		# @loaded.resize(1152*rs,718*rs)
-		# image(@loaded,350,180)
+		rs = 0.70 ; rotateX(PI/5.0)
+		@loaded = loadImage(USA_MAP)
+		@loaded.resize(1152*rs,718*rs)
+		image(@loaded,350,180)
 
 		@cities = CITY_DATA.map{|data| Place.new(*data) }
 
@@ -75,38 +76,63 @@
 	end
 
 	def mouseMoved
-		clear
-		@points.map{|pt| pt.stereo_pi width, height }
-		@points.each{|pt| text(pt.name,pt.radius,pt.angle)}
+		@points.map{ |pt| pt.stereo_pi width, height }
+		# @points.each { |pt| text(pt.name,pt.radius,pt.angle) }
 	end
 
 	class Spherical
+		require 'matrix'
 		attr_accessor :phi, :theta, :radius, :angle, :name
 		def initialize(name,lat,lon)
-			@name, @phi, @theta = name, lat, lon
+			@name = name
+			@phi = to_rad(lat)
+			@theta = to_rad(-lon)
+			self.rotation(PI/2.0)
+
 			@radius, @angle = 0, 0
 		end
 
+		def rotation(rad)
+			cos, sin = Math.cos(rad), Math.sin(rad)
+
+			rotation = [[cos, -sin],[sin, cos]]
+			rotate_by = Matrix.columns(rotation)
+
+			coords = Vector.elements([self.phi, self.theta])
+
+			@phi, @theta = (rotate_by * coords).to_a
+		end
+
+		def to_rad(deg)
+			deg * PI / 180.0
+		end
+
 		def stereo_pi width, height
-			mx, my = mouseX.nil? ? [1,1] : [mouseX-width/2.0, mouseY-height/2.0]
-			@radius = ((1/(Math.tan(theta/2)) * mx/10.0 ) + width/2.0)
-			@angle = ((phi * my/100.0) + height/2.0)
+			scale_h = 1/2.0
+			scale_w = 1.8
+			mx, my = mouseX.nil? ? [1,1] : [mouseX-width/1.8, mouseY * 5 ]
+			@radius = (mx * scale_w  / Math.tan(phi/2.0)) - width/3.5
+			@angle = theta * my * scale_h + height * 1.7
 		end
 	end
 
-	# def images
-	# 	if @i == 0 ; @t += 1
-	# 		# add changes here?
+	def images
+		if @i == 0 ; @t += 1
 
-	# 		# saves, loads, then displays.
-	# 		save(USA_MAP_TEMP)
-	# 		loaded = loadImage(USA_MAP_TEMP)
-	# 		image(loaded,0,0)
-	# 	end
-	# end
+			# saves, clears, loads, then displays.
+			save(USA_MAP_TEMP) ; clear
+
+			loaded = loadImage(USA_MAP_TEMP)
+			image(loaded,0,0)
+
+			#where to add
+			@points.each { |pt| text(pt.name,pt.radius,pt.angle) }
+
+		end
+	end
 
 
 	def draw
-		# images
+		images
 	end
 
