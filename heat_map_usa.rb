@@ -16,7 +16,8 @@
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	PHI = 1.618033988749895.freeze
-	SECONDS = 900.freeze
+	# SECONDS = 900.freeze # 15 min
+	SECONDS = 1800.freeze
 	DataPt = 5.freeze
 
 	CITY_DATA = [['helena','59601',[455,177]],
