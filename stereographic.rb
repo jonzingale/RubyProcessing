@@ -12,20 +12,20 @@
 
 	CITY_DATA = [['helena','59601',[455,177]],
 							 ['santa fe','87505', [441, 372]],
-							 ['bullhead city','86429', [302, 374]],
-							 ['cleveland','44107', [1041, 251]],
+							 # ['bullhead city','86429', [302, 374]],
+							 # ['cleveland','44107', [1041, 251]],
 							 ['monroe','98272', [355, 130]],
-							 ['quakertown','18951', [1147, 230]],
+							 # ['quakertown','18951', [1147, 230]],
 							 ['new orleans','70112',[956,571]],
-							 ['austin','78705',[700,554]],
-							 ['bad lands','57750',[617,224]],
+							 # ['austin','78705',[700,554]],
+							 # ['bad lands','57750',[617,224]],
 							 ['albuquerque','87101',[420,407]],
 							 ['san francisco','94101',[197,279]],
-							 ['bismarck','58501',[706,190]],
+							 # ['bismarck','58501',[706,190]],
 							 ['everglades','34139',[1347,707]],
 							 ['annapolis','21401',[1182,301]],
-							 ['detroit','48201',[1000,253]],
-							 ['phoenix','85001',[327,420]],
+							 # ['detroit','48201',[1000,253]],
+							 # ['phoenix','85001',[327,420]],
 							 ['atlanta','30301',[1065,435]]
 							]
 
@@ -49,8 +49,6 @@
 		end
 	end
 
-
-
 	attr_reader :points, :loaded
 
 	def setup
@@ -60,7 +58,7 @@
 		colorMode(HSB,360,100,100)
 		no_stroke ; frame_rate 30
 
-		@i, @t = [0 , 1]
+		@i, @t = [0 , 0]
 
 		rs = 0.70 ; rotateX(PI/5.0)
 		@loaded = loadImage(USA_MAP)
@@ -117,22 +115,18 @@
 	end
 
 	def images
-		if @i == 0 ; @t += 1
-
-			# saves, clears, loads, then displays.
-			save(USA_MAP_TEMP) ; clear
-
-			loaded = loadImage(USA_MAP_TEMP)
-			image(loaded,0,0)
-
-			#where to add
-			@points.each { |pt| text(pt.name,pt.radius,pt.angle) }
-
+		# looks good, better might be to
+		# keep it lucid!
+		if @t == 0
+			@t += 1 ; save(USA_MAP_TEMP) 
 		end
-	end
 
+	 loaded = loadImage(USA_MAP_TEMP)
+	 clear ; image(loaded,0,0)
+	end
 
 	def draw
 		images
+		@points.each { |pt| text(pt.name,pt.radius,pt.angle) }
 	end
 
