@@ -1,11 +1,13 @@
-# The goal here is show a map of the united states
-# and to show, by scraping, how various cities 'warm up'
-# as the day begins and 'cool down' as the sun sets.
+# This is an attempt to have meaningful humidity visualization.
 
-# diff in humidity as bent line?
+# Todo: incorporate the Bezier Class into
+# humidity data so that I can sum to the 
+# curve depending on the current humidity
+# and the history of humidity.
+# straight up for none, 90 deg for 100 %
 
-# maybe it would be good to persist data so that
-# at a mouse_wheel roll one can see data at various scales.
+require (File.expand_path('./bezier', File.dirname(__FILE__)))
+
 	DateNow = DateTime.now.strftime('%B %d, %Y').freeze
 	StartTime = Time.now.strftime('%l:%M %P').freeze
 
@@ -16,29 +18,12 @@
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	PHI = 1.618033988749895.freeze
-	SECONDS = 900.freeze # 15 min
-	# SECONDS = 1200.freeze # 20 min
-	# SECONDS = 3600.freeze # 1 hour
+	SECONDS = 30.freeze
 	DataPt = 5.freeze
 
-	CITY_DATA = [['santa fe','87505',[441, 372]],
-					  	 # ['helena','59601',[455,177]],
-							 ['bullhead city','86429',[302, 374]],
-							 ['cleveland','44107',[1041, 251]],
-							 # ['monroe','98272',[355, 130]],
-							 # ['quakertown','18951',[1147, 230]],
-							 # ['new orleans','70112',[956,571]],
-							 # ['austin','78705',[700,554]],
-							 # ['bad lands','57750',[617,224]],
-							 # ['albuquerque','87101',[420,407]],
-							 # ['san francisco','94101',[197,279]],
-							 # ['bismarck','58501',[706,190]],
-							 # ['everglades','34139',[1347,707]],
-							 # ['annapolis','21401',[1182,301]],
-							 # ['detroit','48201',[1000,253]],
-							 ['phoenix','85001',[327,420]],
-							 ['atlanta','30301',[1065,435]]
-							]
+	CITY_DATA = [['santa fe','87505', [441, 372]],
+							 ['bullhead city','86429', [302, 374]],
+							 ['cleveland','44107', [1041, 251]]]
 
 	class Place
 		require 'mechanize'
@@ -92,9 +77,6 @@
 		(0..200).each{|i| fill(scale_temp(i-10),100,100)
 											ellipse(i*9,height,20,20) }
 
-		# It would be cool to geocode and place somehow.
-		# somekind of linear transformation I suspect.
-		# scaling is a bitch, don't touch
 		rs = 0.70 ; rotateX(PI/5.0)
 		@loaded = loadImage(USA_MAP)
 		@loaded.resize(1152*rs,718*rs)
@@ -105,24 +87,6 @@
 	end
 
 	def counter ; @i = (@i + 1) % SECONDS ; end
-
-	def map_key
-		fill(0,0,0,90) ; rect(100,570,160,130)
-
-		fill(0,100,100)
-		text("started at #{StartTime}",100,620)
-
-		current_time = Time.now.strftime('%l:%M %P')
-		message = "currently #{current_time}"
-		text(message,100,645)
-
-		message = "#{(SECONDS/60.0).round(0)} minutes"
-		fill(0,0,100)
-		text(message,140, 678)
-		text(DateNow,100, 590)
-
-		fill(30,100,100) ; rect(100,665,21*PHI,21)
-	end
 
 	def images
 		if @i == 0 ; @t += 1
@@ -141,18 +105,15 @@
 
 	def draw
 		counter
-		map_key
 
-		# temps
+		# humidity
 		cities.each do |city|
 			x, y = city.coords
  			coords = [x, y-@t*DataPt]
  			hue = scale_temp(city.temp)
-			fill(hue,100,100,70) ; 
-
-			bad_coords = coords[1] < 0
-			rect(*coords,DataPt*PHI,DataPt) unless bad_coords
+			fill(hue,100,100,70) ; rect(*coords,DataPt*PHI,DataPt)
 		end
 
 		images
 	end
+

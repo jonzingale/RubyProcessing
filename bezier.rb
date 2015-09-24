@@ -10,8 +10,8 @@ class Bezier
 
 	def to_s ; @points ; end
 
-	def plot(t) # Sigma (1-t)^k*t^n-k*Pk
-		scalars = (0..@count).map{|k| (1-t)**k * t**(@count-k) }
+	def plot(time) # Sigma (1-t)^k * t^(n-k) * Pk
+		scalars = (0..@count).map{|k| (1-time)**k * time**(@count-k) }
 		it = @points.zip(scalars).map{|pts,s| pts.map{|xs| xs*s}}
 		it.transpose.map{|i| i.inject :+}
 	end
