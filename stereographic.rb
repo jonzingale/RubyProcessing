@@ -60,7 +60,7 @@
 
 		@i, @t = [0 , 0]
 
-		rs = 0.70 ; rotateX(PI/5.0)
+		rs = 0.70 ; #rotateX(PI/5.0)
 		@loaded = loadImage(USA_MAP)
 		@loaded.resize(1152*rs,718*rs)
 		image(@loaded,350,180)
@@ -75,6 +75,7 @@
 
 	def mouseMoved
 		@points.map{ |pt| pt.stereo_pi width, height }
+		text("#{[mouseX,mouseY]}",100,100)
 		# @points.each { |pt| text(pt.name,pt.radius,pt.angle) }
 	end
 
@@ -108,8 +109,9 @@
 		def stereo_pi width, height
 			scale_h = 1/2.0
 			scale_w = 1.8
-			mx, my = mouseX.nil? ? [1,1] : [mouseX-width/1.8, mouseY * 5 ]
-			@radius = (mx * scale_w  / Math.tan(phi/2.0)) - width/3.5
+			# mx, my = mouseX.nil? ? [1,1] : [mouseX-width/2.1, mouseY * 5 ]
+			mx, my = [1000-width/2.1,586*5]
+			@radius = (mx * scale_w  / Math.tan(phi/2.0)) - 300#width/3.9999
 			@angle = theta * my * scale_h + height * 1.7
 		end
 	end
@@ -118,7 +120,11 @@
 		# looks good, better might be to
 		# keep it lucid!
 		if @t == 0
-			@t += 1 ; save(USA_MAP_TEMP) 
+
+			@t += 1
+			@points.map{ |pt| pt.stereo_pi width, height }
+			rotateX(PI/5.0)
+			save(USA_MAP_TEMP)
 		end
 
 	 loaded = loadImage(USA_MAP_TEMP)
@@ -127,6 +133,7 @@
 
 	def draw
 		images
+
 		@points.each { |pt| text(pt.name,pt.radius,pt.angle) }
 	end
 
