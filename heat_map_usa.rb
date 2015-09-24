@@ -16,26 +16,26 @@
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	PHI = 1.618033988749895.freeze
-	SECONDS = 900.freeze # 15 min
-	# SECONDS = 1200.freeze # 20 min
+	# SECONDS = 900.freeze # 15 min
+	SECONDS = 1200.freeze # 20 min
 	# SECONDS = 3600.freeze # 1 hour
 	DataPt = 5.freeze
 
 	CITY_DATA = [['santa fe','87505',[441, 372]],
-					  	 # ['helena','59601',[455,177]],
+					  	 ['helena','59601',[455,177]],
 							 ['bullhead city','86429',[302, 374]],
 							 ['cleveland','44107',[1041, 251]],
-							 # ['monroe','98272',[355, 130]],
-							 # ['quakertown','18951',[1147, 230]],
-							 # ['new orleans','70112',[956,571]],
-							 # ['austin','78705',[700,554]],
-							 # ['bad lands','57750',[617,224]],
-							 # ['albuquerque','87101',[420,407]],
-							 # ['san francisco','94101',[197,279]],
-							 # ['bismarck','58501',[706,190]],
-							 # ['everglades','34139',[1347,707]],
-							 # ['annapolis','21401',[1182,301]],
-							 # ['detroit','48201',[1000,253]],
+							 ['monroe','98272',[355, 130]],
+							 ['quakertown','18951',[1147, 230]],
+							 ['new orleans','70112',[956,571]],
+							 ['austin','78705',[700,554]],
+							 ['bad lands','57750',[617,224]],
+							 ['albuquerque','87101',[420,407]],
+							 ['san francisco','94101',[197,279]],
+							 ['bismarck','58501',[706,190]],
+							 ['everglades','34139',[1347,707]],
+							 ['annapolis','21401',[1182,301]],
+							 ['detroit','48201',[1000,253]],
 							 ['phoenix','85001',[327,420]],
 							 ['atlanta','30301',[1065,435]]
 							]
