@@ -103,15 +103,22 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 		translate = scaled - 82 % 360
 	end	
 
+	def plot_temps
+		x, y = city.coords
+ 		coords = [x, y-@t*DataPt]
+ 		hue = scale_temp(city.temp)
+		fill(hue,100,100,70) ; rect(*coords,DataPt*PHI,DataPt)
+	end
+
+	def plot_humidity
+
+	end
+
 	def draw
 		counter
 
-		# humidity
 		cities.each do |city|
-			x, y = city.coords
- 			coords = [x, y-@t*DataPt]
- 			hue = scale_temp(city.temp)
-			fill(hue,100,100,70) ; rect(*coords,DataPt*PHI,DataPt)
+			plot_temps
 		end
 
 		images
