@@ -67,22 +67,18 @@
 			form.inputstring = self.zipcode
 			@page = form.submit
 
-			# an experiment. still no good. hmm.
-			# i wonder what it is doing not finding
-			# the page?
-			# while @page.at(CURRENT_TEMP_SEL).nil?
-			# 	@page = form.submit
-			# end
-
-			@temp = @page.at(CURRENT_TEMP_SEL).text.to_i
-
-			page.search(CURRENT_CONDS_SEL).each do |tr|
-				/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
-				/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
-				/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
+			# avoids bad pages for now.
+			unless @page.at(CURRENT_TEMP_SEL).nil?
+				@temp = @page.at(CURRENT_TEMP_SEL).text.to_i
+	
+				page.search(CURRENT_CONDS_SEL).each do |tr|
+					/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
+					/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
+					/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
+				end
 			end
-		end
 
+		end
 	end
 
 	attr_reader :cities, :loaded
@@ -152,7 +148,7 @@
 		translate = scaled - 82 % 360
 	end	
 
-	def plot_temps
+	def plot_temps(city)
 		x, y = city.coords
  		coords = [x, y-@t*DataPt]
  		hue = scale_temp(city.temp)
@@ -171,7 +167,7 @@
 		map_key
 
 		cities.each do |city|
-			plot_temps
+			plot_temps(city)
 		end
 
 		images
