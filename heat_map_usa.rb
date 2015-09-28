@@ -67,7 +67,14 @@
 			form.inputstring = self.zipcode
 			@page = form.submit
 
-			@temp = page.at(CURRENT_TEMP_SEL).text.to_i
+			# an experiment. still no good. hmm.
+			# i wonder what it is doing not finding
+			# the page?
+			# while @page.at(CURRENT_TEMP_SEL).nil?
+			# 	@page = form.submit
+			# end
+
+			@temp = @page.at(CURRENT_TEMP_SEL).text.to_i
 
 			page.search(CURRENT_CONDS_SEL).each do |tr|
 				/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
@@ -145,19 +152,26 @@
 		translate = scaled - 82 % 360
 	end	
 
+	def plot_temps
+		x, y = city.coords
+ 		coords = [x, y-@t*DataPt]
+ 		hue = scale_temp(city.temp)
+		fill(hue,100,100,70)
+
+		bad_coords = coords[1] < 0
+		rect(*coords,DataPt*PHI,DataPt) unless bad_coords
+	end
+
+	def plot_humidity
+
+	end
+
 	def draw
 		counter
 		map_key
 
-		# temps
 		cities.each do |city|
-			x, y = city.coords
- 			coords = [x, y-@t*DataPt]
- 			hue = scale_temp(city.temp)
-			fill(hue,100,100,70) ; 
-
-			bad_coords = coords[1] < 0
-			rect(*coords,DataPt*PHI,DataPt) unless bad_coords
+			plot_temps
 		end
 
 		images
