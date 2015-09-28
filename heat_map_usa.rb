@@ -124,8 +124,14 @@
 		fill(30,100,100) ; rect(100,665,21*PHI,21)
 	end
 
+	def archive
+		dated_name = DateTime.now.strftime('%m_%d_%Y')
+		saveFrame("/Users/Jon/Desktop/Weather/#{dated_name}.jpg")
+	end
+
 	def images
 		if @i == 0 ; @t += 1
+			archive
 			cities.each{ |city| city.scrape_data }
 			# saves, loads, then displays.
 			save(USA_MAP_TEMP)
