@@ -18,12 +18,20 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 	USA_MAP = "/Users/Jon/Desktop/us_maps/us_topographic.jpg".freeze # 1152 × 718
 	USA_MAP_TEMP = '/Users/Jon/Desktop/us_maps/us_topographic_tmp.jpg'.freeze
 	PHI = 1.618033988749895.freeze
-	SECONDS = 30.freeze
+	# SECONDS = 900.freeze # 15 min
+	SECONDS = 1200.freeze # 20 min
+	# SECONDS = 3600.freeze # 1 hour
 	DataPt = 5.freeze
 
-	CITY_DATA = [['santa fe','87505', [441, 372]],
-							 ['bullhead city','86429', [302, 374]],
-							 ['cleveland','44107', [1041, 251]]]
+	CITY_DATA = [['santa fe','87505',[441, 372]],
+							 ['bullhead city','86429',[302, 374]],
+							 ['cleveland','44107',[1041, 251]],
+							 ['new orleans','70112',[956,571]],
+							 ['austin','78705',[700,554]],
+							 ['bad lands','57750',[617,224]],
+							 ['everglades','34139',[1347,707]],
+							 ['atlanta','30301',[1065,435]]
+							]
 
 	class Place
 		require 'mechanize'
@@ -52,15 +60,18 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 			form.inputstring = self.zipcode
 			@page = form.submit
 
-			@temp = page.at(CURRENT_TEMP_SEL).text.to_i
-
-			page.search(CURRENT_CONDS_SEL).each do |tr|
-				/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
-				/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
-				/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
+			# avoids bad pages for now.
+			unless @page.at(CURRENT_TEMP_SEL).nil?
+				@temp = @page.at(CURRENT_TEMP_SEL).text.to_i
+	
+				page.search(CURRENT_CONDS_SEL).each do |tr|
+					/humidity/i =~ tr.text ?  @humidity = data_grabber(tr,/(\d+)%/i) :
+					/barometer/i =~ tr.text ? @pressure = data_grabber(tr,/(\d+\.\d+)/i) :
+					/dewpoint/i =~ tr.text ?  @dewpoint = data_grabber(tr,/(\d+)°F/i): nil
+				end
 			end
-		end
 
+		end
 	end
 
 	attr_reader :cities, :loaded
@@ -77,6 +88,9 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 		(0..200).each{|i| fill(scale_temp(i-10),100,100)
 											ellipse(i*9,height,20,20) }
 
+		# It would be cool to geocode and place somehow.
+		# somekind of linear transformation I suspect.
+		# scaling is a bitch, don't touch
 		rs = 0.70 ; rotateX(PI/5.0)
 		@loaded = loadImage(USA_MAP)
 		@loaded.resize(1152*rs,718*rs)
@@ -88,8 +102,32 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 
 	def counter ; @i = (@i + 1) % SECONDS ; end
 
+	def map_key
+		fill(0,0,0,90) ; rect(100,570,160,130)
+
+		fill(0,100,100)
+		text("started at #{StartTime}",100,620)
+
+		current_time = Time.now.strftime('%l:%M %P')
+		message = "currently #{current_time}"
+		text(message,100,645)
+
+		message = "#{(SECONDS/60.0).round(0)} minutes"
+		fill(0,0,100)
+		text(message,140, 678)
+		text(DateNow,100, 590)
+
+		fill(30,100,100) ; rect(100,665,21*PHI,21)
+	end
+
+	def archive
+		dated_name = DateTime.now.strftime('%m_%d_%Y')
+		saveFrame("/Users/Jon/Desktop/Weather/#{dated_name}.jpg")
+	end
+
 	def images
 		if @i == 0 ; @t += 1
+			archive
 			cities.each{ |city| city.scrape_data }
 			# saves, loads, then displays.
 			save(USA_MAP_TEMP)
@@ -103,22 +141,27 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 		translate = scaled - 82 % 360
 	end	
 
-	def plot_temps
+	def plot_temps(city)
 		x, y = city.coords
  		coords = [x, y-@t*DataPt]
  		hue = scale_temp(city.temp)
-		fill(hue,100,100,70) ; rect(*coords,DataPt*PHI,DataPt)
+		fill(hue,100,100,70)
+
+		bad_coords = coords[1] < 0
+		rect(*coords,DataPt*PHI,DataPt) unless bad_coords
 	end
 
+	# Todo: incorporate Humidity and BEZIERS
 	def plot_humidity
 
 	end
 
 	def draw
 		counter
+		map_key
 
 		cities.each do |city|
-			plot_temps
+			plot_temps(city)
 		end
 
 		images
