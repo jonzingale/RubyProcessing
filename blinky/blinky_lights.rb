@@ -2,7 +2,7 @@
 #optimizations
 	#set color ahead?
 	require (File.expand_path('blinky', File.dirname(__FILE__)))
-
+	# access variety of pretty_prints
 		def setup
 			size(900,900)
 			background 0
