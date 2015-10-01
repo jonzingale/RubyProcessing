@@ -4,15 +4,16 @@
 	require (File.expand_path('blinky', File.dirname(__FILE__)))
 
 		def setup
-			size(800,800)
+			size(900,900)
 			background 0
 
 			bs = [@width,@height].map{|s| s * 3 / 16}
 
-			frame_rate_hash = {1200 => 1, 1000 => 2, 800 => 3}
-			
-			fr = frame_rate_hash[@height]
-			# fr = (@height/100) *(1/Math.log(15)) # can i scale better?
+			# frame_rate_hash = {1200 => 1, 1000 => 2, 800 => 3}
+			# fr = frame_rate_hash[@height]
+
+			# [800,1000,1200].map{|i| 7 - i / Math.log(i**30)}
+			fr = (7 - @height / Math.log(@height**30)).to_i
 
 			@blinky = Blinky.new(*bs)
 
