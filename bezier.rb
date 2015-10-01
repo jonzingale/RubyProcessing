@@ -1,8 +1,4 @@
-# This is an idea for 
-# a bezier category
-
 class Bezier
-
 	def initialize(points)
 		@points = points
 		@count = points.count - 1

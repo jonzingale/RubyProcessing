@@ -24,13 +24,13 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 	DataPt = 5.freeze
 
 	CITY_DATA = [['santa fe','87505',[441, 372]],
-							 ['bullhead city','86429',[302, 374]],
-							 ['cleveland','44107',[1041, 251]],
-							 ['new orleans','70112',[956,571]],
-							 ['austin','78705',[700,554]],
-							 ['bad lands','57750',[617,224]],
-							 ['everglades','34139',[1347,707]],
-							 ['atlanta','30301',[1065,435]]
+							 # ['bullhead city','86429',[302, 374]],
+							 # ['cleveland','44107',[1041, 251]],
+							 # ['new orleans','70112',[956,571]],
+							 # ['austin','78705',[700,554]],
+							 # ['bad lands','57750',[617,224]],
+							 # ['everglades','34139',[1347,707]],
+							 # ['atlanta','30301',[1065,435]]
 							]
 
 	class Place
@@ -152,8 +152,14 @@ require (File.expand_path('./bezier', File.dirname(__FILE__)))
 	end
 
 	# Todo: incorporate Humidity and BEZIERS
-	def plot_humidity
+	def plot_humidity(city)
+		# x, y = city.coords
+ 		# coords = [x, y-@t*DataPt]
+ 		# hue = scale_temp(city.temp)
+		# fill(hue,100,100,70)
 
+		# bad_coords = coords[1] < 0
+		# rect(*coords,DataPt*PHI,DataPt) unless bad_coords
 	end
 
 	def draw
