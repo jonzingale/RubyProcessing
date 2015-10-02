@@ -41,9 +41,19 @@ class Blinky
 		beers = (0...@width).inject([]) do |is,i| 
 			is + (0...@height).map{|j| blink cell_at(i,j), neighborhood(i,j)}
 		end
-
 		update(beers)
 	end
+
+# faster version?
+	# def go_team(board)
+	# 	beers = (0...@wide).inject([]){|is,i| is + (0...@high).map{|j| [i,j]} }
+	# 	b_row=beers.map do |xy|
+	# 		b_params = xy<<board
+	# 		blink(cell_at(*b_params),neighborhood(*b_params))
+	# 	end		
+	# 	blink_once(b_row)
+	# end
+
 
 	def run_blinky
 		while @i<10**5
