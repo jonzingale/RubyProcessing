@@ -13,10 +13,9 @@ def setup
 	# frame_rate_hash = {1200 => 1, 1000 => 2, 800 => 3}
 	# fr = (7 - @height / Math.log(@height**30)).to_i
 	# frame_rate fr
-	frame_rate 2
 
 	# strokeWeight(1)
-	# frame_rate 2 # grasses
+	frame_rate 2 # grasses
 	@blinky = Blinky.new(*bs)
 end
 
