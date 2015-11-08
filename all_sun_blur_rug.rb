@@ -7,7 +7,7 @@ def setup
 	# width, height
 	# size(1920,1080) #JackRabbit
 	size(1500,900) #HOME
-  frame_rate 20
+  frame_rate 2
   fill 2.8, 2.6
   smooth
   @t=1 ; @i = 0

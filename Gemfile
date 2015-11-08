@@ -2,10 +2,10 @@
 source "https://rubygems.org"
 # 
 # ruby '1.9.3'
-ruby '2.0.0'
+# ruby '2.0.0'
 # ruby '2.0.0-p247'
 # ruby '1.9.3'
-ruby '1.7.19'
+ruby '1.7.12-complete'
 
 gem 'nokogiri'
 gem 'mechanize'
@@ -16,4 +16,3 @@ gem 'rspec', :require => 'spec'
 
 gem 'java'
 gem 'ruby-processing'
-# gem 'rubyprocessing'

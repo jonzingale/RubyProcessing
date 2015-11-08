@@ -8,6 +8,7 @@
 #    luminosity most likely.
 # If not close enough, give up and walk
 # a second guesser that emulates shaking the mouse!!
+# CHI SQUARE AND PIXELATORS
 
 require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 
@@ -60,6 +61,7 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 		# modifiers: slash_n_burn(replaces with distant color);cultivator(smooths landscape);sorter
 		# collaborative crawlers: scratch my back . .
 		# grasshopper
+		# CHI SQUARE ROTATOR.
 ###########
 	def walker_y(p=@walker) # center of mass 
 		# center of mass, not very robust, bug when all nears are the same.
