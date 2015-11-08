@@ -34,6 +34,9 @@ module Maths
 	end
 end
 
+
+# Chi Sqr rotator wheel and pixelators.
+
 class ColorCrawlers
 	include Maths
 	attr_reader :desire, :sense, :position, :guess, :name
