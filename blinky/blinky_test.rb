@@ -42,17 +42,33 @@ class Blinky
 	# 	sum == 3 ? 1 : (sum==2&&state==1) ? 1 : 0 
 	# end
 
-	# rgb_blink, find a way to ignore black?
-	def is_white?(colors) ; colors.first > 200 ; end
+
+### rgb_blink, find a way to ignore black?
 	def blink(color_state,neigh)
 		state = is_white?(color_state) ? 0 : 1
 		sum = neigh.map{|n| is_white?(n) ? 0 : 1}.inject :+
 		good_neighs = neigh.reject{|n| n[0] == 255 }
 		avg = good_neighs.empty? ? 0 : good_neighs.map(&:first).inject(:+)/3
 
+		state==0&&is_black?(color_state) ? [0] * 3 :
 		state==0&&sum==3 ? [avg] * 3  :
 		state==1&&(sum==3||sum==2) ? color_state : [255] * 3
 	end
+
+	# tinker here for ranges.
+	def is_white?(colors) ; colors.first > 200 ; end
+	def is_black?(colors) ; colors.first < 200 ; end
+
+	# def blink(color_state,neigh)
+	# 	state = is_white?(color_state) ? 0 : 1
+	# 	sum = neigh.map{|n| is_white?(n) ? 0 : 1}.inject :+
+	# 	good_neighs = neigh.reject{|n| n[0] == 255 }
+	# 	avg = good_neighs.empty? ? 0 : good_neighs.map(&:first).inject(:+)/3
+
+	# 	state==0&&sum==3 ? [avg] * 3  :
+	# 	state==1&&(sum==3||sum==2) ? color_state : [255] * 3
+	# end
+###
 
 	def update(board)
 		b = board.take @width
