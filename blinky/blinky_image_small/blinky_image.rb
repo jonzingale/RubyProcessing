@@ -29,7 +29,7 @@ CHRISTMAP_TEMP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
 		r = 256 + k/(256**2)
 		g = k/256 % 256
 		b = k % 256
-		[r,g,b]
+		[r,g,b,100]
 	end
 
 	def scan_image# scans images to pass to a board as state.

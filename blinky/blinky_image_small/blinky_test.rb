@@ -24,17 +24,10 @@ class Blinky
 		NEARS.map{|ns| cell_at((row+ns[0]) % @width, (col+ns[1]) % @height) }
 	end
 
-	# # generalize this
 	# rgb_blink, find a way to ignore black?
 	def rgb_avg(color_ary)
-		good_neighs = color_ary.reject{|n| little_green?(n) } #<< [0]*3
-
-		good_neighs.map{|t| t.count == 3 ? t<<100 : t}
-
-		it = good_neighs.transpose.map do |cs|
-			cs.inject(0,:+)/(good_neighs.count)
-		end
-
+		good_neighs = color_ary.reject{|n| little_green?(n) }
+		good_neighs.transpose.map{|cs| cs.inject(0,:+)/(good_neighs.count)}
 	end
 
 	def blink(color_state,neigh)
@@ -42,9 +35,7 @@ class Blinky
 		sum_neigh_state = neigh.map{|n| little_green?(n) ? 0 : 1 }.inject :+
 
 		# turn off
-		state==0&&little_green?(color_state)&&sum_neigh_state<2 ? [0] * 3 << 100 :
-		# state==0&&little_green?(color_state) ? [0] * 3 << 100 :
-
+		state==0&&little_green?(color_state)&&sum_neigh_state<3 ? [0] * 3 << 100 :
 		# turn on
 		state==0&&sum_neigh_state==3 ? rgb_avg(neigh) :
 		# don't change
