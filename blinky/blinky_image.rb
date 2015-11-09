@@ -5,6 +5,7 @@ require (File.expand_path('pretty_blinks', File.dirname(__FILE__)))
 IMAGES_PATH = File.expand_path('blinky_images', File.dirname(__FILE__)).freeze
 
 LOGMAP = "#{IMAGES_PATH}/LogisticMap.jpg".freeze
+LOGMAP = "#{IMAGES_PATH}/LogisticMap.jpg".freeze
 LOGMAP_TEMP = "#{IMAGES_PATH}/LogisticMap_tmp.jpg".freeze
 
 	attr_reader :loaded
