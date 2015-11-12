@@ -1,4 +1,11 @@
 # Blinky Lights for blinky images.
+
+# require 'benchmark'
+# Benchmark.bm do |x|
+#   x.report{('A'..'Z').inject([]){|ws,t| ws+('A'..'Z').map{|s|s+t} }}
+#   x.report{y = ('a'..'z').to_a ; y.product(y).map{|s,t| s+t } }
+# end
+
 class Blinky
 	NEARS = [-1,0,1].product([-1,0,1]).select{|i| i!=[0,0]}
 
