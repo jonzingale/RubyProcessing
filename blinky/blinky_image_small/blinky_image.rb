@@ -14,8 +14,9 @@ CHRISTMAP_TEMP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
 		@w, @h = @width/2.0, @height/2.0
 		background 0 ; @i, @t = 0, 1
 
-		no_stroke ; frame_rate 1 # really fast for small boards.
-		bs = [335] * 2
+		no_stroke ; frame_rate 0.2 # really fast for small boards.
+		bs = [670] * 2
+		# bs = [335] * 2 # for pixels of size 2
 		
 		# bs = [@height/2.0, @height/2.0]
 		# no_stroke ; frame_rate 0.1 # really slow for big boards.
@@ -33,7 +34,7 @@ CHRISTMAP_TEMP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
 	end
 
 	def scan_image# scans images to pass to a board as state.
-		e_size = 2 # must mirror the logistic_print somehow.
+		e_size = 1 # must mirror the logistic_print somehow.
 		@blinky.board.map.with_index do |row,c_dex|
 			row.map.with_index do |c,r_dex|
 				params = [r_dex * e_size + 0, c_dex * e_size + 0]

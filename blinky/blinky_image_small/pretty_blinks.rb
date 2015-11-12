@@ -11,7 +11,7 @@ def pretty_print(board)
 end
 
 def logistic_print(board) # get or pixel?
-	e_size = 2 # must be the same as the grabber somehow.
+	e_size = 1 # must be the same as the grabber somehow.
 	board.each_with_index do |row,c_dex|
 		row.each_with_index do |c,r_dex|
 			params = [r_dex*e_size+0, c_dex*e_size+0] + [e_size] * 2

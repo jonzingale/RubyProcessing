@@ -35,7 +35,7 @@ class Blinky
 		sum_neigh_state = neigh.map{|n| little_green?(n) ? 0 : 1 }.inject :+
 
 		# turn off
-		state==0&&little_green?(color_state)&&sum_neigh_state<1 ? [0] * 3 << 100 :
+		state==0&&little_green?(color_state)&&sum_neigh_state<2 ? [0] * 3 << 100 :
 		# turn on
 		state==0&&sum_neigh_state==3 ? rgb_avg(neigh) :
 		# don't change
@@ -50,7 +50,7 @@ class Blinky
 	# def is_white?(colors) ; colors.first > 220 ; end
 	# def is_black?(colors) ; colors.first < 10 ; end
 	def much_green?(colors) ; colors[1] > 200 ; end
-	def little_green?(colors) ; colors[0] < 100 ; end # 30
+	def little_green?(colors) ; colors[1] < 100 ; end # 30
 	def middle_green?(colors) ; !much_green?(colors)&&!little_green?(colors) ; end
 
 ###
