@@ -3,8 +3,8 @@
 
 	module Vector
 		def dot_product(vect,wect) ; vect.zip(wect).map{|v,w| v * w}.inject :+ ; end
-		def orthogonal(vect,wect)
-
+		def orthogonal(vect)
+			vect.reverse.zip([1,-1]).map{|v,s|v*s}
 		end
 	end
 
@@ -34,7 +34,7 @@
 		def initialize
 			# creates the coordinates and
 			# direction of movement for a ball
-			@coords = [500,500]
+			@coords = [200,200]
 			theta = TU * rand
 			@vect = [Math.sin(theta), Math.cos(theta)]
 			@inc = 10 # move by increment
@@ -48,7 +48,9 @@
 		def move
 			new_coords = @coords.zip(@vect).map{|c,v| c+v}
 			# not realistic bounce. dotproduct with boundary to be sure.
-			@vect = collision?(new_coords) ? @vect.map{|v|-1 * v} : @vect
+
+			@vect = boundary?(new_coords) ? @vect.zip([1,-1]).map{|v,s|v*s} : @vect
+			@vect = paddle?(new_coords) ? @vect.zip([-1,1]).map{|v,s|v*s} : @vect
 			@coords = new_coords
 		end
 
@@ -58,15 +60,15 @@
 		end
 
 		def boundary?(coords)
-			norm = 
-			top = coords[1] < 0
-			bottom = coords[1] > 600
+			# norm = 
+			top = coords[1] < Low_Bound
+			bottom = coords[1] > Hi_Bound
 			top || bottom
 		end
 
 		def paddle?(coords)
-			left = coords[0] < 0
-			right = coords[0] > 800
+			left = coords[0] < Low_Bound
+			right = coords[0] > Hi_Bound
 			left || right
 		end
 
@@ -76,21 +78,33 @@
 
 	end
 
+	Ball_Size = 40.freeze
+	Low_Bound = 100 + Ball_Size/2.0
+	Hi_Bound = 700 - Ball_Size/2.0
+
 	def setup
 		text_font create_font("SanSerif",17)
 		square = [1450, 800] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		colorMode(HSB,360,100,100)
-		no_stroke ; frame_rate 100
+		frame_rate 300
 
+		stroke(200,100,100)
 		@ball = Ball.new
+	end
+
+	def draw_boundary
+		no_fill ; rect(100,100,600,600)
+	end
+
+	def draw_ball(coords)
+		# fill(200,100,100)
+		ellipse(*coords, Ball_Size, Ball_Size)
 	end
 
 	def draw
 		clear
 		@ball.move
-		coords = @ball.coords
-
-		fill(200,100,100)
-		ellipse(*coords, 20,20)
+		draw_boundary
+		draw_ball(@ball.coords)
 	end
