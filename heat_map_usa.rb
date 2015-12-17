@@ -128,8 +128,12 @@
 	end
 
 	def archive
-		dated_name = DateTime.now.strftime('%m_%d_%Y')
-		saveFrame("/Users/Jon/Desktop/Weather/#{dated_name}.jpg")
+		# for achiving a handful of sequential frames
+		dated_name = DateTime.now.strftime('%s')
+		saveFrame("/Users/Jon/Desktop/Weather/one_day/#{dated_name}.jpg")
+
+		# dated_name = DateTime.now.strftime('%m_%d_%Y')
+		# saveFrame("/Users/Jon/Desktop/Weather/#{dated_name}.jpg")
 	end
 
 	def images

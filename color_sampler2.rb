@@ -24,7 +24,7 @@ require (File.expand_path('./color_crawlers', File.dirname(__FILE__)))
 			crawler.see(those)
 		end
 
-		def impose(crawler)
+		def impose(crawler) # modify the space.
 
 		end
 	end
