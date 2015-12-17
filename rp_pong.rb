@@ -1,66 +1,43 @@
 # RP_Pong
-# require 'Matrix'
+	class Paddle
+		attr_reader :y_val
+		def initialize
+			@y_val = 200
+		end
 
-	module Vector
-		def dot_product(vect,wect) ; vect.zip(wect).map{|v,w| v * w}.inject :+ ; end
-		def orthogonal(vect)
-			vect.reverse.zip([1,-1]).map{|v,s|v*s}
+		def move(y_val)
+			(@y_val = y_val) if y_val < 600 && y_val > 200
 		end
 	end
-
-	class Paddle
-		def initialize(x_coord,y_coord,height,width)
-			@coords =  x_coord, y_coord
-			@inc = 10 # move by increment
-		end
-	end	
-
-	class Boundaries
-		# board should have hard top and bottom
-		# left and right should pass, increment score
-		# and reset level.
-		def initialize(x_size,y_size)
-			@coords =  x_coord, y_coord
-			@inc = 10 # move by increment
-		end
-	end	
-
 	
 	class Ball
-		include Vector
-		attr_reader :coords
+		attr_reader :coords, :color
 		TU = 6.28318531.freeze
 
 		def initialize
-			# creates the coordinates and
-			# direction of movement for a ball
+			@color = [rand(360), 100, 100]
 			@coords = [200,200]
-			theta = TU * rand
-			@vect = [Math.sin(theta), Math.cos(theta)]
-			@inc = 10 # move by increment
+			theta = theta_init
+ 			@vect = [Math.sin(theta), Math.cos(theta)]
+			@inc = 4 # move by increment
 		end
 
-		# Moves ball along some direction at 
-		# some increment. If a collision, 
-		# change the direction. Collisions can
-		# happen between a paddle and the ball
-		# or between the ball and a wall.
+		def theta_init
+			(it = rand) > 0.7 || it < 0.3 ? theta_init : it * TU
+		end
+
 		def move
-			new_coords = @coords.zip(@vect).map{|c,v| c+v}
-			# not realistic bounce. dotproduct with boundary to be sure.
-
-			@vect = boundary?(new_coords) ? @vect.zip([1,-1]).map{|v,s|v*s} : @vect
-			@vect = paddle?(new_coords) ? @vect.zip([-1,1]).map{|v,s|v*s} : @vect
-			@coords = new_coords
+			@coords = @coords.zip(@vect).map{|c,v| c+v*@inc}
+			update_vect
 		end
 
-		# Checks that movement hasn't caused collision
-		def collision?(coords)
-			boundary?(coords) || paddle?(coords)
+		def update_vect
+			@vect = boundary?(@coords) ? @vect.zip([1,-1]).map{|v,s|v*s} :
+							paddle?(@coords) ? @vect.zip([-1,1]).map{|v,s|v*s} : 
+							@vect
 		end
 
 		def boundary?(coords)
-			# norm = 
 			top = coords[1] < Low_Bound
 			bottom = coords[1] > Hi_Bound
 			top || bottom
@@ -71,11 +48,6 @@
 			right = coords[0] > Hi_Bound
 			left || right
 		end
-
-		def reflection(vect,wall)
-			# a method which reflects a vector off a given wall.
-		end
-
 	end
 
 	Ball_Size = 40.freeze
@@ -87,24 +59,43 @@
 		square = [1450, 800] ; size(*square)
 		@w,@h = [square[0]/2] * 2 ; background(0)
 		colorMode(HSB,360,100,100)
-		frame_rate 300
+		frame_rate 48
 
 		stroke(200,100,100)
-		@ball = Ball.new
+		@ball, @paddle = Ball.new, Paddle.new
 	end
 
 	def draw_boundary
 		no_fill ; rect(100,100,600,600)
 	end
 
-	def draw_ball(coords)
-		# fill(200,100,100)
+	def draw_ball(coords) # make hypercube?
+		fill(260, 100, 100)
 		ellipse(*coords, Ball_Size, Ball_Size)
 	end
+
+	def mouseMoved
+		@paddle.move(mouseY)
+	end
+
+	def draw_paddle1(y_val)
+		fill(160, 100, 100)
+		y_val = @ball.coords[1] # delete when no longer funny
+		ellipse(100, y_val, 20, 200 )
+	end
+
+	def draw_paddle2(y_val)
+		y_val = @ball.coords[1]
+		fill(160, 100, 100)
+		ellipse(700, y_val, 20, 200 )
+	end
+
 
 	def draw
 		clear
 		@ball.move
 		draw_boundary
+		draw_paddle1(@paddle.y_val)
+		draw_paddle2(300) # opponent
 		draw_ball(@ball.coords)
 	end
