@@ -15,9 +15,7 @@
 
 	class Paddle
 		attr_reader :y_val, :vect, :side
-		# TODO:
-		# work on deflecting correctly.
-		# paddle ball collisions.
+		# TODO: work on deflecting correctly.
 		def initialize(side = 'left')
 			@y_val, @vect, @side = 400, 1, side
 		end
@@ -34,9 +32,9 @@
 
 		def initialize
 			@color = [rand(360), 100, 100]
-			@coords = 380, 400
  			@vect = [Math.sin(TU * rand), 1]
-			@inc = 8 # move by increment
+			@coords = 380, 400
+			@inc = 8 # ball speed
 		end
 
 		def move
@@ -51,13 +49,12 @@
 
 		def abs(val) ; Math.sqrt(val**2) ; end
 
-		def paddle?(coords, paddle)
-			# scoring must happen here somewhere.
-			# drop out condition, bound then check for collision
-			# how should the bounce off happen?
+		def paddle?(paddle)
+			# How should the deflection happen?
+			# when the ball gets behind it still feels the effect.
 			left_cond = paddle.side == 'left'
-			cond_1 = left_cond ? coords[0] < Low_Bound : coords[0] > Hi_Bound
-			cond_2 = abs(coords[1] - paddle.y_val) <  100
+			cond_1 = left_cond ? @coords[0] < Low_Bound : @coords[0] > Hi_Bound
+			cond_2 = abs(@coords[1] - paddle.y_val) <  100
 
 			@vect = @vect.zip([-1,1]).map{|v,s|v*s} if cond_1 && cond_2
 		end
@@ -73,9 +70,10 @@
 		colorMode(HSB,360,100,100)
 		frame_rate 48 ; @i = 0
 		@l_score, @r_score = [0] * 2
+		@ball = Ball.new
 		@paddle1 = Paddle.new('left')
 		@paddle2 = Paddle.new('right')
-		@ball = Ball.new
+
 		@cube = HyperCube.new(width, height)
 	end
 
@@ -87,16 +85,16 @@
 		ellipse(*coords, Ball_Size, Ball_Size)
 	end
 
-	def draw_paddle1(y_val)
+	def draw_paddle1(paddle)
 		fill(160, 100, 100)
-		ellipse(100, y_val, 20, 200 )
+		ellipse(100, paddle.y_val, 20, 200 )
 	end
 
 	# slower than ball
 	# change paddle direction
 	# vect roots unity.
 	# std badness.
-	def draw_paddle2(y_val)
+	def draw_paddle2(paddle)
 		y_val = @ball.coords[1]
 		@paddle2.move(y_val)
 		fill(160, 100, 100)
@@ -111,7 +109,7 @@
 			(rotation*Matrix.columns(@cube.coords.transpose[i])* height/12.0).transpose.to_a
 		end.transpose
 
-		stroke(260, 100, 100)
+		stroke(200,100,100)
 		transform_edges.each do |edge|
 			a,b = edge.map{|d,e| [d+400,e+400]}
 			line(*a,*b)
@@ -129,16 +127,11 @@
 	end
 
 	def draw
-		clear ; draw_boundary
+		clear ; draw_boundary ; draw_hypercube
+		[@paddle1, @paddle2].each{|pad| @ball.paddle?(pad)}
 
-		# do i want these here?
-		@ball.paddle?(@ball.coords, @paddle1)
-		@ball.paddle?(@ball.coords, @paddle2)
-
-		draw_paddle1(@paddle1.y_val)
-		draw_paddle2(@paddle2.y_val) # opponent
-
-		draw_hypercube
+		draw_paddle1(@paddle1)
+		draw_paddle2(@paddle2) # opponent
 		@ball.move ; draw_ball(@ball.coords)
 		reset
 	end
