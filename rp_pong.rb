@@ -43,21 +43,23 @@
 		end
 
 		def boundary?(coords)
+			# boundary walls no near verticals
 			cond = coords[1] < Low_Bound || coords[1] > Hi_Bound
 			(@vect = @vect.zip([1,-1]).map{|v,s|v*s}) if cond
 		end
 
-		def abs(val) ; Math.sqrt(val**2) ; end
-
 		def paddle?(paddle)
 			# How should the deflection happen?
-			# when the ball gets behind it still feels the effect.
+			# when the ball gets behind it still 
+			# feels the effect.
 			left_cond = paddle.side == 'left'
 			cond_1 = left_cond ? @coords[0] < Low_Bound : @coords[0] > Hi_Bound
 			cond_2 = abs(@coords[1] - paddle.y_val) <  100
 
 			@vect = @vect.zip([-1,1]).map{|v,s|v*s} if cond_1 && cond_2
 		end
+
+		def abs(val) ; Math.sqrt(val**2) ; end
 	end
 
 	Ball_Size = 40.freeze
@@ -95,10 +97,14 @@
 	# vect roots unity.
 	# std badness.
 	def draw_paddle2(paddle)
-		y_val = @ball.coords[1]
-		@paddle2.move(y_val)
+		ball_y = @ball.coords[1]
+		padd_y = @paddle2.y_val
+		sign = ball_y - padd_y > 0 ? 1 : -1
+		go = padd_y + 4 * sign
+
+		@paddle2.move(go)
 		fill(160, 100, 100)
-		ellipse(700, y_val, 20, 200 )
+		ellipse(700, go, 20, 200 )
 	end
 
 	def draw_hypercube
