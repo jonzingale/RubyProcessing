@@ -14,6 +14,7 @@ require 'mechanize'
 
 		colorMode(HSB,360,100,100,100)
 	  text_font create_font("SanSerif",10)
+	  tint(200, 153, 204,100)
 
 		background(0)
 		@all_coords = (0..3000).map{ sprinkle }
@@ -59,6 +60,9 @@ require 'mechanize'
 	def all_pairs(height,width)
 		(0...height).inject([]){|a,h|a + (0...width).map{|w|[w,h]} }
 	end
+
+	# IN DRAW.
+	if mouse_pressed? then text("YO YO YO",400,100) end
 
 	def	mouseMoved#Dragged#Clicked
 		@m = rgb_converter(mouseX,mouseY)
