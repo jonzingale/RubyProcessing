@@ -5,8 +5,12 @@ require 'mechanize'
 
 	APARTMENT_URL = 'http://santafe.craigslist.org/search/apa'.freeze
 
-	def setup
+  # load_library :video
+    
+  # We need the video classes to be included here.
+  # include_package "processing.video"
 
+	def setup
 		size(displayWidth, displayHeight)
 		@w, @h = [width/2.0, 0]
 		@i = 0 ; @t = 0
@@ -19,6 +23,19 @@ require 'mechanize'
 		background(0)
 		@all_coords = (0..3000).map{ sprinkle }
 		@all_diagonals = (0..500).map{ sprinkle_diag }
+
+		#### video capture
+		# @sample_rate = 10
+
+		# or you can use your default
+		# webcam by leaving it out of
+		# the parameters ..
+		#     
+		# camera = "Sony Eye Toy (2)"
+		# @capture = Capture.new(self, width, height, camera, 30)
+
+		# @capture = Capture.new(self, width, height, 30)
+		# @capture.start
 	end
 
 	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
