@@ -1,13 +1,12 @@
 # The goal here is modify an image with blinkiness.
 # 
-require (File.expand_path('blinky_test', File.dirname(__FILE__)))
+require (File.expand_path('blinky', File.dirname(__FILE__)))
 require (File.expand_path('pretty_blinks', File.dirname(__FILE__)))
-# load_java_library "opengl"
-# include_package "processing.opengl"
+
 IMAGES_PATH = File.expand_path('blinky_images', File.dirname(__FILE__)).freeze
 
-CHRISTMAP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
-CHRISTMAP_TEMP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
+RUSS_GARDEN = "#{IMAGES_PATH}/russ_garden.jpg".freeze
+RUSS_GARDEN_TEMP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
 
 	attr_reader :loaded
 	def setup
@@ -23,7 +22,7 @@ CHRISTMAP_TEMP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
 		# bs = [@height/2.0, @height/2.0]
 		# no_stroke ; frame_rate 0.1 # really slow for big boards.
 
-		@loaded = loadImage(CHRISTMAP) ; image(@loaded,0,0)
+		@loaded = loadImage(RUSS_GARDEN) ; image(@loaded,0,0)
 		@blinky = Blinky.new(*bs) ; @blinky.image_board(scan_image)
 	end
 
@@ -54,8 +53,8 @@ CHRISTMAP_TEMP = "#{IMAGES_PATH}/russ_garden.jpg".freeze
 	def images
 		if @i == 0 ; @t += 1
 			# saves, loads, then displays.
-			save(CHRISTMAP_TEMP)
-			loaded = loadImage(CHRISTMAP_TEMP)
+			save(RUSS_GARDEN_TEMP)
+			loaded = loadImage(RUSS_GARDEN_TEMP)
 			image(loaded,0,0)
 		end
 	end
