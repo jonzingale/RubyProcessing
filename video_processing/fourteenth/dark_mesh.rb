@@ -70,7 +70,7 @@ class RainyWindowWithVideo < Processing::App
         sat = saturation(capture.pixels[pixel])
         bri = brightness(capture.pixels[pixel])
 
-        e_width = map(saturation(capture.pixels[pixel]), 0, 200, 0, 100)#100)
+        e_width = map(saturation(capture.pixels[pixel]), 0, 255, 0, 10)# 100)
 
         fill(hue, sat, bri, 255)
         ellipse(x, y, e_width, e_width)        
