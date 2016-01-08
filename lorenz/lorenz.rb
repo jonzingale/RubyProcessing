@@ -1,9 +1,9 @@
 # require 'byebug'
-
 class Lorenz
 	Eball = 0.01
-	attr_accessor :x, :y, :z
-	def initialize(x=nil, y=nil, z=nil)
+	attr_reader :x, :y, :z, :color
+	def initialize(x=nil, y=nil, z=nil, color=nil)
+		@color = color || [rand(360), 80, 90]
 		@x = x||rand(17) # -18 < x <18
 		@y = y||rand(23) # -24 < y < 24
 		@z = z||rand(44) # 4 < z < 45
@@ -18,9 +18,11 @@ class Lorenz
 		 @y = Eball*dy + @y,
 		 @z = Eball*dz + @z]
 	end
+
+	def test(attractor)
+		puts "#{(0...10).map{ attractor.blink }}"
+	end
 end
 
 # uncomment when testing
-# it = Lorenz.new
-# go = (0...10).map{ it.blink }
-# byebug ; 4
+# it = Lorenz.new ; test it
