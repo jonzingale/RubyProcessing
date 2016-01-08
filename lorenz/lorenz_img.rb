@@ -1,16 +1,14 @@
-require (File.expand_path('./lorenz', File.dirname(__FILE__)))
-	RES = 40.0.freeze
+# require (File.expand_path('./lorenz', File.dirname(__FILE__)))
 	# binding = $app
-	# perhaps following a lorenz?
-
 	def setup
 		size(displayWidth, displayHeight)
 		text_font create_font("SanSerif",50)
 		colorMode(HSB,360,100,100,60)
 		@w, @h = [width/2.0, height/2.0]
 		@i = 0 ; @t = 0
+		no_stroke
 		background(0)
-    frame_rate 50
+    frame_rate 100
 
 		@attractor = Lorenz.new
 		@bttractor = Lorenz.new
@@ -24,7 +22,7 @@ require (File.expand_path('./lorenz', File.dirname(__FILE__)))
 		attractor.blink
 	end
 
-	def draw #; clear
+	def draw
 		plot_lorenz(@attractor)
 		plot_lorenz(@bttractor)
 	end
