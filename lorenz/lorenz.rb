@@ -3,7 +3,7 @@ class Lorenz
 	Eball = 0.003
 	attr_reader :x, :y, :z, :color
 	def initialize(x=nil, y=nil, z=nil, color=nil)
-		@color = color || [rand(360), 80, 90]
+		@color = color || [rand(360), 80, 90, 70]
 		@x = x||rand(17) # -18 < x <18
 		@y = y||rand(23) # -24 < y < 24
 		@z = z||rand(44) # 4 < z < 45
