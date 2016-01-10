@@ -1,4 +1,5 @@
 require (File.expand_path('./monster', File.dirname(__FILE__)))
+require (File.expand_path('./snow', File.dirname(__FILE__)))
 	RES = 40.0.freeze
 	# binding = $app
 
@@ -10,6 +11,7 @@ require (File.expand_path('./monster', File.dirname(__FILE__)))
 		@i = 0 ; @t = 0 ; background(0)
     frame_rate 30
 
+    @flakes = create_flakes 2300
 		@monsters = create_monsters 1
 	end
 
@@ -22,6 +24,14 @@ require (File.expand_path('./monster', File.dirname(__FILE__)))
 		end
 	end
 
+	def create_flakes num
+		(1..num).map{ Snow.new(width, height) }
+	end
+
+	def render_flake flake
+		x, y, *zs = flake.coords
+		ellipse(x, y, flake.size, flake.size)
+	end
 	# def render_lorenz monster
 	# 	monster.beziers.each do |bezier|
 	# 		pts = bezier.points[0].map{|t| t*SCALAR}
@@ -73,4 +83,11 @@ require (File.expand_path('./monster', File.dirname(__FILE__)))
 			render monster
 			# render_lorenz monster
 		end
+
+		no_stroke ; fill(0,0,100,40)
+		@flakes.map do |flake|
+			flake.drift
+			render_flake flake
+		end
+
 	end
