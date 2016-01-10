@@ -19,8 +19,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 	# so that translations are less awkward.
 	def create_monsters num
 		(1..num).map do |i|
-			Monster.new(@w, @h, 5, 15)
-			# x, y, legs, thick
+			Monster.new(@w, @h, 5, 15) # legs, thickness
 		end
 	end
 
@@ -32,13 +31,6 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		x, y, *zs = flake.coords
 		ellipse(x, y, flake.size, flake.size)
 	end
-	# def render_lorenz monster
-	# 	monster.beziers.each do |bezier|
-	# 		pts = bezier.points[0].map{|t| t*SCALAR}
-	# 		color = monster.color[0,3]+[50]
-	# 		fill(*color) ; ellipse(*pts,30*SCALAR,30*SCALAR)
-	# 	end
-	# end
 
 	def translate p, q
 		[p + 600, q + 300]
@@ -77,11 +69,13 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		end
 	end
 
-	def draw  ; clear
+	def draw ;  clear
+		fill(0,0,100,50)
+		rect(0,@h-60,width,height)
+
 		@monsters.map do |monster| 
 			monster.dynamics
 			render monster
-			# render_lorenz monster
 		end
 
 		no_stroke ; fill(0,0,100,40)
@@ -89,5 +83,4 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 			flake.drift
 			render_flake flake
 		end
-
 	end

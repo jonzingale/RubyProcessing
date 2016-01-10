@@ -18,9 +18,7 @@
 	def preferences ; no_stroke ; fill(0,0,100,70) ; end
 
 	def create_flakes num
-		(1..num).map do
-			Snow.new(width, height)
-		end
+		(1..num).map{ Snow.new(width, height) }
 	end
 
 	def render flake
