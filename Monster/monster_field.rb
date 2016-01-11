@@ -70,6 +70,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 	end
 
 	def draw ;  clear
+		# snow bank
 		fill(0,0,100,50)
 		rect(0,@h-60,width,height)
 
