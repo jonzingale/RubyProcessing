@@ -84,4 +84,8 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 			flake.drift
 			render_flake flake
 		end
+
+		text("#{[@flakes[0].poisson,@flakes[0].size]}", 100,100)
+		text("#{[@flakes[1].poisson,@flakes[1].size]}", 100,200)
+
 	end
