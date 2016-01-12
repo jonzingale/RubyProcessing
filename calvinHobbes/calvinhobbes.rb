@@ -18,6 +18,7 @@ def setup
 	size(displayWidth, displayHeight)
 
 	rand(2) == 0 ? get_hubble_pic : get_nasa_pic
+	# get_nasa_pic
 
 	@star_image = loadImage(StarPath)
 	image(@star_image, 0, 0, *rescalar)
