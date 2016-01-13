@@ -17,7 +17,8 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 	end
 
 	def create_monsters num # 		legs, thickness
-		(1..num).map{|i| Monster.new(@w, @h, 5, 15)}
+		# (1..num).map{|i| Monster.new(@w, @h, 5, 15)}
+		(1..num).map{|i| Monster.new(@w, @h, 5, 20)}
 	end
 
 	def create_flakes num, density=3
@@ -33,14 +34,15 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		ellipse(x, y, flake.size, flake.size)
 	end
 
-	SCALAR = 0.3 # see here
+	SCALAR = 0.27 # see here
+	TRANSLATE = 410
 	def render monster
 		# body
 		monster.beziers.each do |bezier|
 			(0..RES).each do |q|
 				# line(pt, qt)
-				pt = bezier.plot(q / RES).map{|t| t*SCALAR + 550}
-				qt = bezier.plot((q+1) / RES).map{|t| t*SCALAR + 550}
+				pt = bezier.plot(q / RES).map{|t| t*SCALAR + TRANSLATE}
+				qt = bezier.plot((q+1) / RES).map{|t| t*SCALAR + TRANSLATE}
 
 				stroke_width(monster.thickness)
 				hue, sat, bri, opa = monster.color
@@ -49,13 +51,13 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 			end
 
 			# head
-			pts = bezier.points[0].map{|t| t*SCALAR + 550}
+			pts = bezier.points[0].map{|t| t*SCALAR + TRANSLATE - 2}
 			color = monster.color[0,3]+[50]
 			fill(*color) ; ellipse(*pts,30*SCALAR,30*SCALAR)
 		end
 	end
 
-	def draw ;  clear
+	def draw ; clear
 		# snow bank
 		fill(0,0,100,50)
 		rect(0,height-380,width,height)
