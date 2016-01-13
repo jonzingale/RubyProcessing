@@ -1,6 +1,6 @@
 # require (File.expand_path('./snow', File.dirname(__FILE__)))
-	# text("#{flake.class}",100,100)
-	# binding = $app
+require (File.expand_path('./poisson_process', File.dirname(__FILE__)))
+# binding = $app
 
 	def setup
 		text_font create_font("SanSerif",50)
@@ -9,8 +9,8 @@
 		@w, @h = [width/2.0, height/2.0]
 		@i = 0 ; @t = 0 ; background(0)
     frame_rate 40
-
     preferences
+
 		@flakes = create_flakes 2300
 	end
 
@@ -18,7 +18,12 @@
 	def preferences ; no_stroke ; fill(0,0,100,70) ; end
 
 	def create_flakes num
-		(1..num).map{ Snow.new(width, height) }
+		density = 3
+		components, snow = Poisson.new(num, density).components, []
+
+		components.each_with_index do |n, size|
+			n.times{ snow << Snow.new(width, height, size) }
+		end ; snow
 	end
 
 	def render flake
@@ -26,7 +31,7 @@
 		ellipse(x, y, flake.size, flake.size)
 	end
 
-	def draw  ; clear
+	def draw ; clear
 		@flakes.map do |flake|
 			flake.drift
 			render flake
@@ -37,10 +42,10 @@ class Snow
 	Lambda = 8.freeze
 
 	attr_accessor :coords, :size, :circum
-	def initialize(width, height)
+	def initialize(width, height, size=nil)
 		@coords = [rand(width), rand(height), 0, 0]
 		@width, @height = width, height
-		@size = 1 + rand(Lambda)
+		@size = size || 1 + rand(Lambda)
 		@circum = get_circum
 	end
 
