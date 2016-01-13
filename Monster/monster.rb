@@ -1,18 +1,22 @@
-# require 'byebug'
 require (File.expand_path('./bezier', File.dirname(__FILE__)))
 require (File.expand_path('./lorenz', File.dirname(__FILE__)))
+# require 'byebug'
 
 class Monster
 	attr_reader :beziers, :thickness, :color
 
 	def initialize x_coord, y_coord, legs=4, thickness=40, input_dyn=nil
-		@color = [rand(360), 30, 80, 70] # better this
+		# 199:209 purple, 342:301 red, 139 blue, 6 red/green
+		color = [199,209,342,301,139][rand 5]
+		@color = [color, 30, 80, 75]
 		@w, @h = x_coord, y_coord
 		@thickness = thickness
 		@legs = legs
 		get_beziers
 
-		# So that each can dance about its own.
+		#write a switch for dynamics.
+
+		# for the monster to bob about.
 		@attractor = input_dyn || Lorenz.new
 	end
 
@@ -20,16 +24,23 @@ class Monster
 		[100*inc+ @w/2.8, rand(150)+@h+40]
 	end
 
+	def dynamics_switch # XXXX needs a better condition.
+		@i = @i.nil? ? 1 : rand(500) == 1 ? -1*@i : @i
+	end
+
 	def dynamics
 		@attractor.blink
-		# gentle_giants
-		x = @attractor.x * 10 + @w/1.0
-		y = @attractor.z * 10 + @h/3.0
 
-		# beasts
-		# x = @attractor.x * 10 + @w/1.0
-		# y = @attractor.y * 10 + @h/3.0
-		# changes points here.
+		if dynamics_switch > 1 #<--- 0 is the real condition
+			# gentle_giants
+			x = @attractor.x * 10 + @w/1.0
+			y = @attractor.z * 10 + @h/3.0
+		else
+			# beasts
+			x = @attractor.x * 10 + @w/1.0
+			y = @attractor.y * 10 + @h/3.0
+		end
+
 		@beziers.map{|bezier| bezier.coords([x,y])}
 	end
 
