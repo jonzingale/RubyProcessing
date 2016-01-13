@@ -8,7 +8,7 @@ class Monster
 	def initialize x_coord, y_coord, legs=4, thickness=40, input_dyn=nil
 		# 199:209 purple, 342:301 red, 139 blue, 6 red/green
 		color = [199,209,342,301,139][rand 5]
-		@color = [color, 30, 80, 75]
+		@color = [color, 30, 80, 80]
 		@w, @h = x_coord, y_coord
 		@thickness = thickness
 		@legs = legs
