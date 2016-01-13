@@ -33,7 +33,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		ellipse(x, y, flake.size, flake.size)
 	end
 
-	SCALAR = 0.3
+	SCALAR = 0.3 # see here
 	def render monster
 		# body
 		monster.beziers.each do |bezier|

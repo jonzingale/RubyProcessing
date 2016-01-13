@@ -1,5 +1,5 @@
 class Snow
-	Lambda = 9.freeze
+	Lambda = 10.freeze
 	Density = 4.freeze
 	Exp = 2.718281828.freeze
 
@@ -18,7 +18,7 @@ class Snow
 		# XXXXX y+5 could be adjust with * and things get weird.
 		x, y, s, t = @coords
 		@coords = [(x + trip_x(s) * 3) % @width,
-							 (y+5 + trip_y(t) * 5 * (1 - poisson*5)) % @circum,
+							 (y+3 + trip_y(t) * 5 * (1 - poisson*5)) % @circum,
 							 s, t]
 	end
 
