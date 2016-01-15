@@ -14,6 +14,9 @@ HubbleImage_Sel = './/div[@class="wallpaper"]//img'.freeze
 NasaPath = 'http://apod.nasa.gov/apod/'.freeze
 NasaImage_Sel = './/img/parent::a'.freeze
 
+# best is likely to let the hubble/nasa image decide size
+# as calvin and hobbes is mostly blank.
+
 def setup
 	size(displayWidth, displayHeight)
 
@@ -25,13 +28,18 @@ def setup
 
 	calvin_or_hobbes = [HobbesPath, CalvinPath][rand 2]
 	@hobbes_image = loadImage(calvin_or_hobbes)
+
+	# image(@hobbes_image, 0, 0, width, height)
 	image(@hobbes_image, 0, 0, 1920, 1040)
 end
 
 def rescalar
 	width = @star_image.width
 	height = @star_image.height
+
+	# s = width/@star_image.width.to_f
 	s = 1920/@star_image.width.to_f
+
 	[width * s, height * s]
 end
 

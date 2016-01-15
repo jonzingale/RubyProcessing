@@ -1,4 +1,3 @@
-# require 'byebug'
 class Lorenz
 	Eball = 0.003
 	attr_reader :x, :y, :z, :color
@@ -25,4 +24,7 @@ class Lorenz
 end
 
 # uncomment when testing
-# it = Lorenz.new ; test it
+# it = Lorenz.new
+# it.blink
+# require 'byebug'
+# byebug ; nil
