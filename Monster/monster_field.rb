@@ -17,8 +17,8 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 	end
 
 	def create_monsters num # 		legs, thickness
-		# (1..num).map{|i| Monster.new(@w, @h, 5, 15)}
-		(1..num).map{|i| Monster.new(@w, @h, 5, 20)}
+		(1..num).map{|i| Monster.new(@w, @h, 5, 15)}
+		# (1..num).map{|i| Monster.new(@w, @h, 5, 20)}
 	end
 
 	def create_flakes num, density=3
