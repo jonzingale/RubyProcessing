@@ -21,8 +21,11 @@ class Monster
 
 	def dynamics
 		@attractor.blink
-		@attractor.centered_coords # not likely necessary
+		# @attractor.centered_coords # not likely necessary
 	end
+
+	def coords ; @attractor.centered_coords ; end
+
 
 	def get_beziers
 		@beziers = (1..@legs).map do |inc|
