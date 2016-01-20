@@ -19,7 +19,7 @@ require (File.expand_path('./monster', File.dirname(__FILE__)))
 
 	def render_dynamics monster
 		lorenz = monster.attractor
-		x, y, z = lorenz.centered_coords.map{|t| t*15}
+		x, y, z = monster.coords.map{|t| t*15}
 
 		pair = x + @w, y + @h
 		hue, sat, bri, opa = monster.color
@@ -33,7 +33,8 @@ require (File.expand_path('./monster', File.dirname(__FILE__)))
 
 	def render_monster giraffe
 		# body
-		x, y, z = giraffe.dynamics.map{|t| t*15}
+		# x, y, z = giraffe.dynamics.map{|t| t*15}
+		x, y, z = giraffe.coords.map{|t| t*15}
 		giraffe.beziers.map{|bezier| bezier.coords([x+@w,y+@h])}
 
 		giraffe.beziers.each do |bezier|
