@@ -29,8 +29,10 @@ def setup
 	calvin_or_hobbes = [HobbesPath, CalvinPath][rand 2]
 	@hobbes_image = loadImage(calvin_or_hobbes)
 
-	image(@hobbes_image, 0, 0, width, height)
-	# image(@hobbes_image, 0, 0, 1920, 1040)
+	# image(@hobbes_image, 0, 0, width, height)
+	image(@hobbes_image, 0, 0, 1920, 1080)
+
+	save("#{IMAGES_PATH}/new_nasa.png")
 end
 
 def rescalar
