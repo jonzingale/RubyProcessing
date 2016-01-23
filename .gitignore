@@ -1,0 +1,15 @@
+# Can ignore specific files
+.DS_Store
+bank_stuff.rb
+craigslist/email.txt
+craigslist/emailing.rb
+banking_test.rb
+Emailer/untracked.txt
+Emailer/email_template.txt
+# Use wildcards as well
+*~
+*.swp
+
+# Can also ignore all directories and files in a directory.
+tmp/**/* 
+images/
