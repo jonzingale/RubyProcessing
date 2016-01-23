@@ -1,7 +1,6 @@
 # !/usr/bin/env ruby
 require 'open-uri'
 require 'mechanize'
-# require 'byebug'
 
 IMAGES_PATH = File.expand_path('.', File.dirname(__FILE__)).freeze
 HobbesPath = "#{IMAGES_PATH}/hobbes.png".freeze
@@ -13,35 +12,28 @@ HubbleImage_Sel = './/div[@class="wallpaper"]//img'.freeze
 
 NasaPath = 'http://apod.nasa.gov/apod/'.freeze
 NasaImage_Sel = './/img/parent::a'.freeze
-
-# best is likely to let the hubble/nasa image decide size
-# as calvin and hobbes is mostly blank.
+NAME_REGEX = /\/(\w+_?)+(.jpg)?$/.freeze
 
 def setup
 	size(displayWidth, displayHeight)
 
-	rand(2) == 0 ? get_hubble_pic : get_nasa_pic
-	# get_nasa_pic
+	rand(3) == 0 ? get_nasa_pic : get_hubble_pic
 
 	@star_image = loadImage(StarPath)
 	image(@star_image, 0, 0, *rescalar)
 
 	calvin_or_hobbes = [HobbesPath, CalvinPath][rand 2]
 	@hobbes_image = loadImage(calvin_or_hobbes)
-
-	# image(@hobbes_image, 0, 0, width, height)
 	image(@hobbes_image, 0, 0, 1920, 1080)
 
-	save("#{IMAGES_PATH}/new_nasa.png")
+	epoch = DateTime.now.strftime('%s')
+	save("#{IMAGES_PATH}/images/calvinhobbes_#{@stub}.png")
 end
 
 def rescalar
 	width = @star_image.width
 	height = @star_image.height
-
-	# s = width/@star_image.width.to_f
 	s = 1920/@star_image.width.to_f
-
 	[width * s, height * s]
 end
 
@@ -54,6 +46,7 @@ def get_hubble_pic
 	hubble_pic = stub + '1920x1200_wallpaper.jpg'
 
 	open(StarPath, 'wb') {|f| f << open(hubble_pic).read }
+	name_stub stub
 end
 
 def get_nasa_pic
@@ -62,4 +55,10 @@ def get_nasa_pic
 	stub = page.at(NasaImage_Sel)['href']
 
 	open(StarPath, 'wb') {|f| f << open(NasaPath+stub).read }
+	name_stub stub
+end
+
+def name_stub stub
+	stub.gsub!('-','_')
+	@stub = NAME_REGEX.match(stub)[1]
 end
