@@ -1,9 +1,11 @@
+# pulls in far and away bubbles into aggregate blob.
+
 class Walker
 	attr_reader :color, :size, :coords
 	def initialize(width, height)
 		@color = [rand(360), rand(100), rand(30)+70, rand(70) + 30]
 		@width, @height = width, height
-		@coords = width/2, height/2
+		@coords = rand(width), rand(height)
 		@size = rand(15) + 3
 	end
 
@@ -60,7 +62,7 @@ end
 	end
 
 	def draw
-		clear
+		# clear
 		counter
 		spawn
 		render
