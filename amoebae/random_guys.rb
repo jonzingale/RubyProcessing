@@ -38,7 +38,7 @@ end
 	def lightning
 		range = @walkers.count
 		me, you = [0,1].map{ @walkers[rand(range)]}
-		stroke(*me.color) ; stroke_width(1)
+		stroke(*me.color) ; stroke_width(2)
 		vect, wect = [me.coords, you.coords]
 		line(*vect,*wect)
 
