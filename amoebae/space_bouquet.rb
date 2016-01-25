@@ -27,7 +27,7 @@ end
 	  @walkers = [0,1].map{ Walker.new(width, height) }
 	end
 
-	Eb = 0.1.freeze # attractive constant
+	Eb = 0.06.freeze # attractive constant
 	# Eb = 0.5.freeze # attractive constant
 	def diff(x, y, w, z) ; [Eb * (w-x) + x, Eb * (z-y) + y] ; end
 	def counter(n=3600) ; @i = ((@i||0) + 1) % n ; end
