@@ -1,4 +1,4 @@
-# pulls in far and away bubbles into aggregate blob.
+# pushes till far and away bubbles.
 
 class Walker
 	attr_reader :color, :size, :coords
@@ -26,9 +26,18 @@ end
 	  @walkers = [0,1].map{ Walker.new(width, height) }
 	end
 
-	Eb = 0.1.freeze # attractive constant
-	# Eb = 0.5.freeze # attractive constant
-	def diff(x, y, w, z) ; [Eb * (w-x) + x, Eb * (z-y) + y] ; end
+	# the goal here is an inverse
+	# square law. hmmm. big_dist weak.
+	# 1 - p kinda thing.
+	# q1*q2/r^2
+	Eb = 0.99.freeze
+	def diff(x, y, w, z)
+		force_x = (w-x) /Eb
+		force_y = (z-y) /Eb
+		[force_x + x, force_y + y]
+	end
+
+
 	def counter(n=3600) ; @i = ((@i||0) + 1) % n ; end
 	def abs(n) ; (n**2)**0.5 ; end 
 
@@ -41,9 +50,9 @@ end
 	def lightning
 		range = @walkers.count
 		me, you = [0,1].map{ @walkers[rand(range)]}
-		stroke(*me.color) ; stroke_width(0.2)
+		stroke(*me.color) ; stroke_width(1)
 		vect, wect = [me.coords, you.coords]
-		line(*vect,*wect)
+		# line(*vect,*wect)
 
 		# keep those that zap close.	
 		mes = diff(*vect, *wect)
@@ -65,7 +74,7 @@ end
 	def draw
 		# clear
 		counter
-		spawn 3000
+		spawn 20
 		render
 		lightning
 	end
