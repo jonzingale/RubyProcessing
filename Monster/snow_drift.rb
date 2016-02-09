@@ -17,16 +17,6 @@
 	# all white flakes
 	def preferences ; no_stroke ; fill(0,0,100,70) ; end
 
-	# like when light happens to
-	# catch flakes and things shimmer.
-	# better with pixels and rands
-	def random_sparklies
-		(0..1000).each do
-			color(100)
-			ellipse(rand(width), rand(height/1.6), 1,1)
-		end
-	end
-
 	def create_flakes num
 		density = 4
 		components, snow = Poisson.new(num, density).components, []
@@ -42,8 +32,6 @@
 	end
 
 	def draw ; clear
-		random_sparklies 
-
 		@flakes.map do |flake|
 			flake.drift
 			render flake
