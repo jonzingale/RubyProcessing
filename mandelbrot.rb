@@ -37,6 +37,7 @@
 			filtered_bright = it.step < 15 ? 0 : 100
 			
 			c = color(tuned_color, 100, filtered_bright)
+
 			set(*coords.rect, c)
 		end
 	end
