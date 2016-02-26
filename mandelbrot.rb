@@ -24,17 +24,17 @@ def setup
 	size(displayWidth, displayHeight)
 	@w, @h = width/2.0 + 200, height/2.0 - 50
 	colorMode(HSB,360,100,100,100)
-	background(0)
   frame_rate 20
-
+	background 0
   load_pixels
-  @threads = 6.times{Thread.new{ calculate_points }}
+
+  @threads = 8.times{Thread.new{ calculate_points }}
 end
 
 def calculate_points
 	10_000_000.times do
 		it = Mandelbrot.new	
-		coords = it.point * 400 + Complex(@w, @h)
+		coords = it.point * 330 + Complex(@w, @h)
 
 		tuned_color = Math.log(it.step) * 59 + 10
 		filtered_bright = it.step < 15 ? 0 : 100
@@ -46,6 +46,6 @@ def calculate_points
 	end
 end
 
-	def draw
-		update_pixels
-	end
+def draw
+	update_pixels
+end
