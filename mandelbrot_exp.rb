@@ -45,7 +45,7 @@
 			z = Complex(*resized)
 			@it.set_point(z)
 			
-			c = color(@it.iterate, 100, @it.iterate < 13 ? 0 : 100)
+			c = color(@it.iterate, 300, @it.iterate < 13 ? 0 : 100)
 			coords = @unscalar * @it.point + Complex(@w+100, @h+20)
 			set(*coords.rect, c)
 		end
