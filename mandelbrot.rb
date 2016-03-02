@@ -28,7 +28,7 @@ def setup
 	background 0
   load_pixels
 
-  @threads = 8.times{Thread.new{ calculate_points }}
+  8.times{Thread.new{ calculate_points }}
 end
 
 def calculate_points
