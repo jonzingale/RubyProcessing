@@ -2,73 +2,58 @@ class Mandelbrot
 	Escape = 10**30.freeze
 	Limit = 255.freeze
 
-	def escape? ; Escape < @z.abs || Limit < @step ; end
-	def produce ; blink until escape? ; end
-
 	def initialize(width, height)
-		@width, @height = 4.2 / width, 3.0 / height
+		@width, @height = 4.2 / width, -2.5 / height
+		@scale = 1 # scaling correctly requires a center.
 	end
 
-	def to_scaled_complex x, y
-		Complex(2 - y * @height, x * @width - 1.2)
+	def produce
+		while @z.abs < Escape && @step < Limit 
+			@z = @z * @z + @point
+			@step += 1
+		end
+	end
+
+	def to_complex x, y
+		Complex(x * @width, y * @height) * Complex(@scale) + Complex(-2.8, 1.2)
 	end
 
 	def get_color(w, h)
-		@point = to_scaled_complex w, h
+		@point = to_complex w, h
 		@z, @step = 0, 0
-		produce
-		set_color
+		produce ; set_color
 	end
 
 	def set_color
-		tuned_hue = Math.log(@step) * 50 + 10
-		brightness = @step < 1 ? 0 : 100 #  < 15
-		[tuned_hue, 100, brightness]
-	end
-
-	def blink
-		@z = @z * @z + @point
-		@step += 1
+		tuned_hue = Math.log(@step) * 50 + 15
+		brightness = @step < 15 ? 0 : 100
+		[tuned_hue.to_i, 100, brightness]
 	end
 end
 
 CORES = 8.freeze
 
 def setup
-	text_font create_font("SanSerif",10)
-	# size(displayWidth, displayHeight)
-	size(displayWidth/3, displayHeight/3)
+	size(displayWidth, displayHeight)
 	colorMode(HSB,360,100,100)
-  @size = width * height
-	frame_rate 10 ; @t = 0
-	background(0)
+	frame_rate 10
+	background 0
   load_pixels
 
-  @mandelbrot = Mandelbrot.new(width, height)
-
-  @threads = []
-  (0...CORES).each{|i| @threads << Thread.new { calculate i } }
+  CORES.times do |i| 
+  	Thread.new { calculate i }
+  end
 end
 
-def limit? ; @t < @size ; end
-
 def calculate t
-	while limit?
-		x, y = (t+1) % width, width / (t+1)
+	m = Mandelbrot.new(width, height)
 
-		hsb = @mandelbrot.get_color x, y
+	while t < width * height
+		x, y = t % width, t / width
+		hsb = m.get_color(x, y)
 		pixels[t] = color(*hsb)
-
 		t += CORES
-		@t = t
-	  
-	  begin
-	  	calculate t
-	  rescue
-	  	calculate t
-	  end
 	end
-
 end
 
 def draw
