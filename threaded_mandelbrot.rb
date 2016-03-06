@@ -8,14 +8,15 @@ class Mandelbrot
 	end
 
 	def produce
-		while @z.abs < Escape && @step < Limit 
+		while @z.abs < Escape && @step < Limit
 			@z = @z * @z + @point
 			@step += 1
 		end
 	end
 
 	def to_complex x, y
-		Complex(x * @width, y * @height) * Complex(@scale) + Complex(-2.8, 1.2)
+		z = Complex(x * @width, y * @height)
+		z * @scale + Complex(-2.8, 1.2)
 	end
 
 	def get_color(w, h)

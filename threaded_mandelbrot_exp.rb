@@ -3,19 +3,22 @@ class Mandelbrot
 	Limit = 255.freeze
 
 	def initialize(width, height)
-		@width, @height = 4.2 / width, -2.5 / height
-		@scale = 1 # scaling correctly requires a center.
-	end
-
-	def produce
-		while @z.abs < Escape && @step < Limit 
-			@z = @z * @z + @point
-			@step += 1
-		end
+		@width, @height = width.to_f, height.to_f
+		@scale = [4, 2.3].map{|t| t * 1.0} #<--- scaling, how about centering?
 	end
 
 	def to_complex x, y
-		Complex(x * @width, y * @height) * Complex(@scale) + Complex(-2.8, 1.2)
+		s, r = @scale
+		x = s * x / @width - s/2.0
+		y = r/2.0 - r * y / @height
+		z = Complex(x,y)
+	end
+
+	def produce
+		while @z.abs < Escape && @step < Limit
+			@z = @z * @z + @point
+			@step += 1
+		end
 	end
 
 	def get_color(w, h)
@@ -34,7 +37,7 @@ end
 CORES = 8.freeze
 
 def setup
-	size(displayWidth, displayHeight)
+	size(displayWidth/2, displayHeight/2)
 	colorMode(HSB,360,100,100)
 	frame_rate 10
 	background 0
