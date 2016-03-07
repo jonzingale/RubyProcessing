@@ -1,13 +1,12 @@
-# try plotting via a knights tour.
-# Can i over two different fields?
-
 class Mandelbrot
 	Escape = 10**30.freeze
 	Limit = 255.freeze
+	PHI = (1+5**0.5)/2.0
+	PHA = (1-5**0.5)/2.0
 
 	def initialize(width, height)
 		@width, @height = width.to_f, height.to_f
-		@scale = [4, 2.3].map{|t| t * 1 }
+		@scale = [4, 2.3].map{|t| t * 1} # 0.1**3 <-- smaller to zoom
 	end
 
 	def to_complex x, y
@@ -17,10 +16,11 @@ class Mandelbrot
 		z = Complex(x,y)
 	end
 
+	def fibs(n) ; PHI**n - PHA**n ; end
+
 	def produce
 		while @z.abs < Escape && @step < Limit
-			@z = @z * @z + @point
-			# @z = 2**@z + @point
+			@z = fibs(@z) + @point
 			@step += 1
 		end
 	end
@@ -57,7 +57,7 @@ def calculate t
 
 	while t < width * height
 		x, y = t % width, t / width
-		hsb = m.get_color x, y
+		hsb = m.get_color(x, y)
 		pixels[t] = color(*hsb)
 		t += CORES
 	end
