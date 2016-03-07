@@ -3,6 +3,7 @@ class Mandelbrot
 	Limit = 255.freeze
 	PHI = (1+5**0.5)/2.0
 	PHA = (1-5**0.5)/2.0
+	C = 5**-0.5
 
 	def initialize(width, height)
 		@width, @height = width.to_f, height.to_f
@@ -16,7 +17,7 @@ class Mandelbrot
 		z = Complex(x,y)
 	end
 
-	def fibs(n) ; PHI**n - PHA**n ; end
+	def fibs(n) ; C * (PHI**n - PHA**n) ; end
 
 	def produce
 		while @z.abs < Escape && @step < Limit
@@ -41,7 +42,7 @@ end
 CORES = 8.freeze
 
 def setup
-	size(displayWidth, displayHeight)
+	size displayWidth, displayHeight
 	colorMode(HSB,360,100,100)
 	frame_rate 10
 	background 0
