@@ -6,7 +6,6 @@ def setup
 	frame_rate 10
 	background 0
   # load_pixels
-
 end
 
 def draw
