@@ -7,7 +7,7 @@ class Mandelbrot
 
 	def initialize(width, height)
 		@width, @height = width.to_f, height.to_f
-		@scale = [4, 2.3].map{|t| t * 1} # 0.1**3 <-- smaller to zoom
+		@scale = [4, 2.3].map{|t| t * 0.1**1 } # <-- smaller to zoom
 	end
 
 	def to_complex x, y
@@ -34,7 +34,10 @@ class Mandelbrot
 	end
 
 	def set_color
-		tuned_hue = Math.log(@step) * 70 - 170
+		tuned_hue = Math.log(@step) * 70 - 90 # miami vice
+		# tuned_hue = Math.log(@step) * 70 - 170 # rising sun
+		# tuned_hue = Math.log(@step) * 70 - 10 # wicked 3d glasses
+
 		brightness = @step < 15 ? 0 : 100
 		[tuned_hue.to_i, 100, brightness]
 	end
@@ -43,7 +46,7 @@ end
 CORES = 8.freeze
 
 def setup
-	size displayWidth, displayHeight
+	size displayWidth/2, displayHeight/2
 	colorMode(HSB,360,100,100)
 	frame_rate 10
 	background 0
