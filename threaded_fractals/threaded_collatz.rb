@@ -16,6 +16,8 @@ class Collatz
 	end
 
 	def collatz
+		# trig = @z.rect.map{|t| Math.cos(PI*t)}
+		# 0.25*(1+4*@z-(1+2*@z)*Complex(*trig)) # this with *
 		@z.abs.round.even? ? @z/2 : @z*3+1
 	end
 
