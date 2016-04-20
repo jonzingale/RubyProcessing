@@ -1,11 +1,11 @@
 class Collatz
 	PI = 3.1415926.freeze
-	Escape = 10**3.freeze
+	Escape = 10**3.5.freeze
 	Limit = 255.freeze
 
 	def initialize(width, height)
 		@width, @height = width.to_f, height.to_f
-		@scale = [20, 20].map{|t| t * 0.1**1 } # zoom
+		@scale = [15, 15].map{|t| t * 0.1**1 } # zoom
 	end
 
 	def to_complex x, y
@@ -16,15 +16,16 @@ class Collatz
 	end
 
 	def collatz
-		# trig = @z.rect.map{|t| Math.cos(PI*t)}
+		trig = @z.rect.map{|t| Math.cos(PI*t)}
 		# 0.25*(1+4*@z-(1+2*@z)*Complex(*trig)) # this with *
-		@z.abs.round.even? ? @z/2 : @z*3+1
+		 0.25*(2+7*@z-(2+5*@z)*Complex(*trig))
+		# @z.abs.round.even? ? @z/2 : @z*3+1
 	end
 
 	def produce
 		while @z.abs < Escape && @step < Limit
 			@z = collatz + @point
-			@step += 1
+			@step += 0.2
 		end
 	end
 
@@ -35,13 +36,13 @@ class Collatz
 	end
 
 	def set_color
+		tuned_hue = Math.log(@step*4) * 70 + 70 # experiment
 		# tuned_hue = Math.log(@step) * 70 - 70 # rising sun
-		tuned_hue = Math.log(@step) * 70 + 70 # ocean
+		# tuned_hue = Math.log(@step) * 70 + 70 # ocean
 		# tuned_hue = Math.log(@step) * 70 - 90 # miami vice
 		# tuned_hue = Math.log(@step) * 70 - 10 # wicked 3d glasses
 
-		# brightness = @step < 4 ? 0 : 100
-		brightness = @step < 4 ? 0 : 100
+		brightness = @step < 1 ? 0 : 100
 		[tuned_hue.to_i, 100, brightness]
 	end
 end
