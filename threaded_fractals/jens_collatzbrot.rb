@@ -1,5 +1,7 @@
+require 'cmath'
 class JensCollatz
-	Escape = 10**10.freeze
+	PI = 3.1415926.freeze
+	Escape = 10**3.freeze
 	Limit = 255.freeze
 
 	attr_reader :point, :iterate, :z
@@ -12,24 +14,25 @@ class JensCollatz
 	end
 
 	def blink(c=1)
-		# @z = @z ** 2 + @point
 		@z = function + @point
 		@iterate += 1
 	end
 
 	def function
-		trig = Complex(Math.cos(PI*@z.real),
-									 Math.cos(PI*@z.imag))
-		0.25*(1+4*@z-(1+2*@z)*trig)
+		x, y = @z.rect.map{|t|t * PI}
+		cosp = Math.cos(x)*CMath.cosh(y)
+		sinp = Math.sin(x)*CMath.sinh(y)
+		trig = Complex(cosp,-sinp)
+		(2+7*@z-(2+5*@z)* trig)/4.0
 	end
 end
 
 def setup
-	size(displayWidth, displayHeight)
+	size displayWidth/4, displayHeight/4
 	@w, @h = width/2.0, height/2.0
 	colorMode(HSB,360,100,100,100)
 	background(0); @y = 0
-  frame_rate 1
+  frame_rate 10
 
   @it = JensCollatz.new
   @unscalar = Complex(width / 7, height / 7)
@@ -47,7 +50,7 @@ def draw
 		z = Complex(*resized)
 		@it.set_point(z)
 
-		c = color(@it.iterate, 100, @it.iterate < 0 ? 0 : 100)	# < valid colors
+		c = color(@it.iterate+200, 100, @it.iterate < 2 ? 0 : 100)	# < valid colors
 		coords = @unscalar * @it.point + Complex(@w+100, @h+20)
 		x, y = coords.rect.map(&:to_i)
 		set(*coords.rect, c)
