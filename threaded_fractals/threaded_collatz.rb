@@ -1,3 +1,5 @@
+require 'cmath'
+
 class Collatz
 	PI = 3.1415926.freeze
 	Escape = 10**3.5.freeze
@@ -5,7 +7,7 @@ class Collatz
 
 	def initialize(width, height)
 		@width, @height = width.to_f, height.to_f
-		@scale = [15, 15].map{|t| t * 0.1**1 } # zoom
+		@scale = [7, 7].map{|t| t * 0.3**0 } # zoom
 	end
 
 	def to_complex x, y
@@ -16,9 +18,16 @@ class Collatz
 	end
 
 	def collatz
-		trig = @z.rect.map{|t| Math.cos(PI*t)}
+		x, y = @z.rect.map{|t|t *PI}
+		cosp = Math.cos(x)*CMath.cosh(y)
+		sinp = Math.sin(x)*CMath.sinh(y)
+		trig = Complex(cosp,-sinp)
+		0.25*(2+7*@z-(2+5*@z) * trig)
+
+		# ## an incorrect but beautiful use of cos
+		# trig = @z.rect.map{|t| Math.cos(PI*t)}
 		# 0.25*(1+4*@z-(1+2*@z)*Complex(*trig)) # this with *
-		 0.25*(2+7*@z-(2+5*@z)*Complex(*trig))
+		 # @z = 0.25*(2+7*@z-(2+5*@z)*Math.cos(PI*@z))
 		# @z.abs.round.even? ? @z/2 : @z*3+1
 	end
 
