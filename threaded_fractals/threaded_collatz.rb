@@ -23,12 +23,6 @@ class Collatz
 		sinp = Math.sin(x)*CMath.sinh(y)
 		trig = Complex(cosp,-sinp)
 		0.25*(2+7*@z-(2+5*@z) * trig)
-
-		# ## an incorrect but beautiful use of cos
-		# trig = @z.rect.map{|t| Math.cos(PI*t)}
-		# 0.25*(1+4*@z-(1+2*@z)*Complex(*trig)) # this with *
-		 # @z = 0.25*(2+7*@z-(2+5*@z)*Math.cos(PI*@z))
-		# @z.abs.round.even? ? @z/2 : @z*3+1
 	end
 
 	def produce
