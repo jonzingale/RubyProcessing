@@ -28,7 +28,7 @@ class JensCollatz
 end
 
 def setup
-	size displayWidth/4, displayHeight/4
+	size displayWidth, displayHeight
 	@w, @h = width/2.0, height/2.0
 	colorMode(HSB,360,100,100,100)
 	background(0); @y = 0

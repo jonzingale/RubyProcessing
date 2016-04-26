@@ -7,7 +7,7 @@ class Collatz
 
 	def initialize(width, height)
 		@width, @height = width.to_f, height.to_f
-		@scale = [7, 7].map{|t| t * 0.1**0 } # zoom
+		@scale = [15, 15].map{|t| t * 0.1**1 } # zoom
 	end
 
 	def to_complex x, y
