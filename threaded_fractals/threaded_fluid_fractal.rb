@@ -36,12 +36,7 @@ class Collatz
 	end
 
 	def set_color
-		tuned_hue = Math.log(@step*4) * 70 + 70 # experiment
-		# tuned_hue = Math.log(@step) * 70 - 70 # rising sun
-		# tuned_hue = Math.log(@step) * 70 + 70 # ocean
-		# tuned_hue = Math.log(@step) * 70 - 90 # miami vice
-		# tuned_hue = Math.log(@step) * 70 - 10 # wicked 3d glasses
-
+		tuned_hue = Math.log(@step*4) * 70 + 70 # colors
 		brightness = @step < 1 ? 0 : 100
 		[tuned_hue.to_i, 100, brightness]
 	end
