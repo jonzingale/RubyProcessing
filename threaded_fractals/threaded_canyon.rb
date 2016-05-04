@@ -2,7 +2,9 @@ require 'cmath'
 
 class Collatz
 	PI = 3.1415926.freeze
-	Escape = 10**1.2.freeze
+	# Escape = 10**1.2.freeze # nighttime
+	Escape = 10**3.freeze # canyon
+
 	Limit = 255.freeze
 
 	def initialize(width, height)
@@ -37,8 +39,10 @@ class Collatz
 
 	def set_color
 		tuned_hue = Math.log(@step) * 40 + 10 # canyon
+		# tuned_hue = Math.log(@step) * 50 + 10 # nighttime
 
-		brightness = @step < 1 ? 0 : 100
+		# brightness = @step < 2 ? 0 : 100
+		brightness = @step < 1 ? 0 : 100 # canyon
 		[tuned_hue.to_i, 100, brightness]
 	end
 end
