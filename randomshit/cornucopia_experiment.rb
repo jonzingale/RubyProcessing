@@ -99,19 +99,6 @@ walker_y(@t) ; walker_x(@t)
 	text('ZER0',width - (x/4),height - (y/4))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 	#########
 	wd,ht = [width/2,height/2]
 	fill(color(rand(@rex) % 255, @t ,rand(55)+100))
@@ -142,12 +129,4 @@ walker_y(@t) ; walker_x(@t)
 	[rand(255),0].map{|n| fill(n,n,n) ; text(@t,wd-100,ht-100)}
 
 end
-
-
-
-
-
-
-
-
 
