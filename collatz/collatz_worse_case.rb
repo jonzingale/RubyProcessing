@@ -14,9 +14,7 @@ def setup
 	to_points
 	to_lines
 	plot_points
-
 	zero_line
-
 	# phiMinusOne
 end
 
