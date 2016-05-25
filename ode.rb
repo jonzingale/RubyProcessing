@@ -7,7 +7,7 @@
 
 		background(0)
 		stroke(200,100,100,100)
-		stroke_width(10)
+		stroke_width 2
 		@pts = points 2000
 		@del_t = 0.3
 	end
@@ -25,9 +25,9 @@
 	end
 
 	def diff t
-		# (x**3 - 4 * x**2 + 7 * x)
-		Math.cos(t**2+1) - t
-		# 100 * Math.sin(Math.sin(3-x**2)	)
+		Math.cos(t**2+1) + t
+		# 2-Math.exp(0)-2*t
+		# Math.tan(t)
 	end
 
 	def euler
@@ -36,17 +36,22 @@
 		end
 	end
 
-	def mouseMoved ; @i, @j = [mouseX,mouseY] ; end
-	def text_block(string='')
-		fill(0,0,0)
-		rect(90,80,200,40)
-		fill(200, 140, 100)
-		text(string,100,100)
+	def improved_euler
+		@next_pts = @pts.map do |x,y|
+			dx = x + diff(x) * @del_t
+			dy = y + diff(y) * @del_t
+
+			ddx = dx + diff(dx) * @del_t
+			ddy = dy + diff(dy) * @del_t
+
+			[(dx + ddx) /2.0, (dy + ddy) /2.0]
+		end
 	end
 
 	def draw
 		clear
-		euler
+		# euler
+		improved_euler
 		@pts.zip(@next_pts).each do |(x,y),(s,t)|
 			stroke rand(360), 100, 100, 20
 			line x+@w, y+@h, s+@w, t+@h
