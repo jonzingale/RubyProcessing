@@ -54,12 +54,9 @@
 		clear
 		euler
 		# improved_euler
-		@pts.zip(@next_pts).each do |(x,y),(s,t)|
+		@pts.zip(@next_pts).map! do |(x,y),(s,t)|
 			stroke rand(360), 100, 100, 20
 			line x+@w, y+@h, s+@w, t+@h
-		end
-
-		@pts = @next_pts.map do |x,y|
 			[rand(width)-@w,rand(height)-@h]
 		end
 
