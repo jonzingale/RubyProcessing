@@ -1,5 +1,7 @@
+require 'matrix'
+
 	def setup
-		size(displayWidth, displayHeight)
+		size(displayWidth/4, displayHeight/4)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2.0, height/2.0]
 		@i, @j = 1,1 ; @t = 0
