@@ -10,7 +10,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		colorMode(HSB,360,100,100,60)
 		@w, @h = [width/2.0, height/2.0]
 		@i = 0 ; @t = 0 ; background(0)
-    frame_rate 12
+    frame_rate 10
 
     @flakes = create_flakes 3000
 		@monsters = create_monsters 1
@@ -39,7 +39,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		ellipse(x, y, flake.size, flake.size)
 	end
 
-	SCALAR = 1.2 # see here
+	SCALAR = 1.3 # see here
 	TRANSLATE = -70
 	def render monster
 		# body
@@ -63,17 +63,10 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 	end
 
 	def draw ; clear
-
-		# snow clumps
-		# fill(0,0,100,100) ; 
-		# 5.times do
-		# 	ellipse(rand(width), @h+@h/2, 300, 500)
-		# end
-
 		# rainbows
 		euler ; stroke_width(5)
 		@pts.zip(@next_pts).map! do |(x,y),(s,t)|
-			stroke rand(360), 100, 100, 6
+			stroke rand(360), 100, 100, 8
 			line x+@w, y+@h, s+@w, t+@h
 			[rand(width)-@w,rand(height)-@h]
 		end
@@ -96,8 +89,6 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		end
 	end
 
-
-#######
 	def points num
 		(0...num).map do
 			[rand(width)-@w, rand(height)-@h]
