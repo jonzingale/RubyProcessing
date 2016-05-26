@@ -10,7 +10,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		colorMode(HSB,360,100,100,60)
 		@w, @h = [width/2.0, height/2.0]
 		@i = 0 ; @t = 0 ; background(0)
-    frame_rate 10
+    frame_rate 12
 
     @flakes = create_flakes 3000
 		@monsters = create_monsters 1
@@ -18,11 +18,11 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		# stroke(200,100,100,100)
 		# stroke_width 10
 		@pts = points 1000
-		@del_t = 0.3
+		@del_t = 0.2
 	end
 
 	def create_monsters num # 		legs, thickness
-		(1..num).map{|i| Monster.new(@w, @h, 5, 15)}
+		(1..num).map{|i| Monster.new(@w, @h, 5, 150)}
 		# (1..num).map{|i| Monster.new(@w, @h, 5, 20)}
 	end
 
@@ -39,8 +39,8 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		ellipse(x, y, flake.size, flake.size)
 	end
 
-	SCALAR = 0.2 # see here
-	TRANSLATE = 610
+	SCALAR = 1.2 # see here
+	TRANSLATE = -70
 	def render monster
 		# body
 		monster.beziers.each do |bezier|
@@ -73,7 +73,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		# rainbows
 		euler ; stroke_width(5)
 		@pts.zip(@next_pts).map! do |(x,y),(s,t)|
-			stroke rand(360), 100, 100, 20
+			stroke rand(360), 100, 100, 6
 			line x+@w, y+@h, s+@w, t+@h
 			[rand(width)-@w,rand(height)-@h]
 		end
