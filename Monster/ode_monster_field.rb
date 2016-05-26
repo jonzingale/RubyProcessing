@@ -14,16 +14,12 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 
     @flakes = create_flakes 3000
 		@monsters = create_monsters 1
-
-		# stroke(200,100,100,100)
-		# stroke_width 10
 		@pts = points 1000
 		@del_t = 0.2
 	end
 
 	def create_monsters num # 		legs, thickness
 		(1..num).map{|i| Monster.new(@w, @h, 5, 150)}
-		# (1..num).map{|i| Monster.new(@w, @h, 5, 20)}
 	end
 
 	def create_flakes num, density=3
@@ -39,7 +35,7 @@ require (File.expand_path('./snow', File.dirname(__FILE__)))
 		ellipse(x, y, flake.size, flake.size)
 	end
 
-	SCALAR = 1.3 # see here
+	SCALAR = 1.3
 	TRANSLATE = -70
 	def render monster
 		# body
