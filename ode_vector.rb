@@ -2,26 +2,21 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2.0, height/2.0]
-		@i, @j = 1,1 ; @t = 0
     frame_rate 10
 
 		background(0)
 		stroke(200,100,100,100)
-		stroke_width 3
-		@pts = points 1000
+		stroke_width 1
+		@pts = points 1700
 		@del_t = 0.01
 	end
 
 	def points num
-		(1..num).map do
-			[rand(width)-@w ,rand(height)-@h]
-		end
+		(1..num).map {[rand(width)-@w ,rand(height)-@h]}
 	end
 
 	def diff(x,y)
 		[-y,-x+y]
-
-		# [y-x,-1*x]
 	end
 
 	def euler
@@ -59,5 +54,4 @@
 			[x,y]
 			# [rand(width)-@w,rand(height)-@h]
 		end
-
 	end
