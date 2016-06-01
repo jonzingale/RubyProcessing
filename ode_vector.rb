@@ -2,72 +2,76 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2.0, height/2.0]
-    frame_rate 20
+    frame_rate 5
 
 		background(0)
 		stroke(200,0,100,30)
 		stroke_width 0.1
 		@pts = points 12000
-		@del_t = 0.009
-		# @del_t = 1
+		@del_t = 0.003
 	end
 
 	def points num
 		(1..num).map do
-			# [(rand(width)-@w)/10.0 ,(rand(height)-@h)/400.0]
-			[(rand(width)-@w)/5.0 ,(rand(height)-@h)/2.0]
-
+			[(rand(width)-@w)/1.1,
+			 (rand(height)-@h)/10000.0,
+			 rand(360)]
 		end
 	end
 
-	def diff(x,y)
-		# [-y,-x+y]
+	def abs(n) ; (n**2)**0.5 ; end
+
+	def diff(x,y,z)
+		# [-y,-x+y, x*y/30.0]
 		# [-y,x]
 		# [y-x, -x]
-		# [x % 2 < 1 ? x*1.3 : -y, x]
-		[x % 2 < 0.5 ? x+y*3 : -y, x - y]
-		# [x % 2 < 0.5 ? x+1+y*3 : 2-y, y % 3 < 0.5 ? 3*(y+1.5) : - x]
-		# it = [y % 3 < 0.5 ? 3*(y+1.5) : - x, x % 2 < 0.5 ? x+2+y*3 : 2-y]
-		# it[1] % 5 < 4.8 ? it.reverse : it
- 		# [x/2, 3]
+
+		x = x % 2 < 0.5 ? -y*2 : -x*3
+		x = abs(y) < 100 ? 20*(x+1) : x
+		y = x % 3 < 1.3 ? x : x**2 % 100 > 55 ? x*2 : -y*4
+		x**2 % 200 < 90 ? [abs(x)+z,-y,-x] : [y,x,y-x%360]
+
+		# x+y % 2 < 0.5 ? [x,y] : [y,x]
 	end
 
 	def euler
-		@next_pts = @pts.map do |x, y|
-			s, t = diff x, y
+		@next_pts = @pts.map do |x, y, z|
+			s, t, r = diff x, y, z
 			dx = x + s * @del_t
 			dy = y + t * @del_t
-			[dx, dy]
+			dz = z + r * @del_t
+			[dx, dy, dz]
 		end
 	end
 
 	def improved_euler
-		@next_pts = @pts.map do |x, y|
-			s, t = diff x, y
+		@next_pts = @pts.map do |x, y,z|
+			s, t, r = diff x, y, z
 			dx = x + s * @del_t
 			dy = y + t * @del_t
+			dz = z + r * @del_t
 
-			s, t = diff dx, dy
+			s, t, r = diff dx, dy, dz
 			ddx = dx + s * @del_t
 			ddy = dy + t * @del_t
+			ddz = dz + r * @del_t
 
-			[(dx + ddx) /2.0, (dy + ddy) /2.0]
+			[(dx + ddx) /2.0, (dy + ddy) /2.0,  (dz + ddz) /2.0]
 		end
 	end
 
 	def draw
 		# clear
 		improved_euler
-		@pts.zip(@next_pts).each do |(x,y),(s,t)|
-			# stroke rand(360), 70, 100, 50
+		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
+			stroke r, 70, 100, 100
 
 			# line x+@w, y+@h, s+@w, t+@h
 			line (x+@w)/1.0, (y+@h)/1.0, (s+@w)/1.0, (t+@h)/1.0
-
 		end
 
-		@pts = @next_pts.map do |x,y|
-			[x,y]
+		@pts = @next_pts.map do |x,y,z|
+			[x,y,z]
 			# [rand(width)-@w,rand(height)-@h]
 		end
 	end
