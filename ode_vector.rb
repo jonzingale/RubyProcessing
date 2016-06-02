@@ -5,16 +5,16 @@
     frame_rate 5
 
 		background(0)
-		stroke(200,0,100,30)
+		stroke(200,0,100,100)
 		stroke_width 0.1
 		@pts = points 12000
-		@del_t = 0.003
+		@del_t = 0.002
 	end
 
 	def points num
 		(1..num).map do
-			[(rand(width)-@w)/1.1,
-			 (rand(height)-@h)/10000.0,
+			[(rand(width)-@w)/1.0,
+			 (rand(height)-@h)/1.0,
 			 rand(360)]
 		end
 	end
@@ -22,16 +22,17 @@
 	def abs(n) ; (n**2)**0.5 ; end
 
 	def diff(x,y,z)
-		# [-y,-x+y, x*y/30.0]
-		# [-y,x]
+		# [-y,-x+y, x+y % 360]
+		# [-y,x, x % 360]
 		# [y-x, -x]
 
-		x = x % 2 < 0.5 ? -y*2 : -x*3
-		x = abs(y) < 100 ? 20*(x+1) : x
-		y = x % 3 < 1.3 ? x : x**2 % 100 > 55 ? x*2 : -y*4
-		x**2 % 200 < 90 ? [abs(x)+z,-y,-x] : [y,x,y-x%360]
-
-		# x+y % 2 < 0.5 ? [x,y] : [y,x]
+		x = x % 2 < 0.5 ? y*2 : -x*3
+		x = abs(z) < 100 ? (x+1) : y + 100 * Math.sin(y)
+		y = x % 3 < 1.3 ? x : -x**2 % 100 > 55 ? x*2 : -y*4
+		z = x-y % 360
+		[x,y,z]
+		# v = x**2 % 200 < 90 ? [abs(x)+z,-y,-x] : [y,x,y-x%360]
+		# x+y % 2 < 0.5 ? v : v.reverse
 	end
 
 	def euler
