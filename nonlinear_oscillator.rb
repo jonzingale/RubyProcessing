@@ -29,7 +29,7 @@
 		# b = 1 ; [	y, -b*y - Math.sin(x), z]
 
 		# b= 3 ; k=Math.cos(x*y) # x, y, z all good!
-		# [y, -x*k -b*y + PI*Math.sin(z), 1]
+		# [y, -x*k -b*y + PI*Math.sin(y), 1]
 
 		# pendulum
 		# b = 0 ; [y, -Math.sin(x),1]
@@ -40,7 +40,7 @@
 
 		# split up
 		b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
-		[y, -x*k -b*y + PI*Math.sin(z), 1]
+		[y, -x*k -b*y + PI*Math.sin(y), 1]
 	end
 
 	def euler
