@@ -31,7 +31,7 @@
 		# b= 3 ; k=Math.sin(x*y) # x, y, z all good!
 		# [y, -x*k -b*y + PI*Math.cos(z), 1]
 
-		b= 3 ; k=Math.tan(z) # x, y, z all good!
+		b= 3 ; k=Math.tan(x) # x, y, z all good!
 		[y, -x*k -b*y + PI*Math.cos(z), 1]
 	end
 
