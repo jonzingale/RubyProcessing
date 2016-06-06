@@ -2,13 +2,13 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 15
 
 		background(0)
 		stroke(210,100,100,100)
 		stroke_width 1
-		@pts = points 9000
-		@del_t = 0.03
+		@pts = points 12000
+		@del_t = 0.003
 	end
 
 	PI = 3.1415926
@@ -16,9 +16,9 @@
 		(1..num).map do
 
 			[6 * ((rand * 2 * PI)- PI),
-			 # 3 * rand * PI, # HALF
-			 2 * ((rand * 2 * PI)- PI), # FULL
-			 rand(100)]
+			 3 * rand * PI, # HALF
+			 # 2 * ((rand * 2 * PI)- PI), # FULL
+			 rand(300)]
 		end
 	end
 
@@ -28,19 +28,11 @@
 		# nonlinear oscillator
 		# b = 1 ; [	y, -b*y - Math.sin(x), z]
 
-		# b= 3 ; k=Math.cos(x*y) # x, y, z all good!
-		# [y, -x*k -b*y + PI*Math.sin(z), 1]
+		# b= 3 ; k=Math.sin(x*y) # x, y, z all good!
+		# [y, -x*k -b*y + PI*Math.cos(z), 1]
 
-		# pendulum
-		# b = 0 ; [y, -Math.sin(x),1]
-
-		# huygens clocks 
-		# b = 2 ; k = 1 # x, y, z all good!
-		# [y, -x*k -b*y + 6*Math.cos(z), 1]
-
-		# split up
-		b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
-		[y, -x*k -b*y + PI*Math.sin(z), 1]
+		b= 3 ; k=Math.tan(z) # x, y, z all good!
+		[y, -x*k -b*y + PI*Math.cos(z), 1]
 	end
 
 	def euler
@@ -74,10 +66,10 @@
 		clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke 200+r, 100, 100, 100
+			# stroke 200+r, 100, 100, 100
 
-			line ((x+@w)*MU-@w*MU+@w*2)/2.5, ((y+@h)*MU-@h*MU/1.01)/1.0,
-					 ((s+@w)*MU-@w*MU+@w*2)/2.5, ((t+@h)*MU-@h*MU/1.01)/1.0
+			line ((x+@w)*MU-@w*MU+@w+360)/2.5, ((y+@h)*MU-@h*MU/1.01)/1.0,
+					 ((s+@w)*MU-@w*MU+@w+360)/2.5, ((t+@h)*MU-@h*MU/1.01)/1.0
 		end
 
 		@pts = @next_pts.map do |x,y,z|
