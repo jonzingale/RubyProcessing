@@ -1,19 +1,19 @@
 	def setup
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
-		@w, @h = [width/2.0, height/2]
-    frame_rate 15
+		@w, @h = [width/2.0, height/2.0]
+    frame_rate 10
 
 		background(0)
-		stroke(210,100,100,10)
-		stroke_width 1
-		@pts = points 12000
-		@del_t = 0.0007
+		stroke(210,100,100,100)
+		stroke_width 0.1
+		@pts = points 9000
+		@del_t = 0.007
 	end
 
 	def points num
 		(1..num).map do
-			[rand * 9,-rand * 4, rand(100)]
+			[rand * 6, rand * (-2)**rand(2), rand(100)]
 		end
 	end
 
@@ -27,10 +27,11 @@
 		# y = d*x*y - c*y
 
 		# harvested Volterra-Lotka
-		a, b, h = [0.5] * 3
+		a,b,h = 2/3.0, 4/3.0, 0.3
 		x = x*(1-a*x-y)
 		y = y*(b-x-y)+h
 
+		# z = y
 		[x,y,z]
 	end
 
@@ -60,7 +61,8 @@
 		end
 	end
 
-	MU = 200
+	Xu, Yu = 160, 90
+
 	def draw
 		# fill 0,0,0,1
 		# rect(0,0,width,height)
@@ -68,13 +70,10 @@
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			# stroke 210, 100+z, 100, 20
-			# line(MU*x,MU*y,MU*s/1.01,MU*t/1.01)
+			stroke z, 100, 100, 80
 
-			line MU*x, ((y+@h)*MU-(@h+1)*MU/1.01),
-					 MU*s, ((t+@h)*MU-(@h+1)*MU/1.01)
-
-			# line(x+@w,y+@w,s+@h,t+@h)
+			line Xu*x+20, Yu*y+@h,
+					 Xu*s+20, Yu*t+@h
 		end
 
 		@pts = @next_pts
