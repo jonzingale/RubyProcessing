@@ -6,14 +6,14 @@
 
 		background(0)
 		stroke(210,100,100,100)
-		stroke_width 0.1
-		@pts = points 9000
+		stroke_width 0.3
+		@pts = points 12000
 		@del_t = 0.007
 	end
 
 	def points num
 		(1..num).map do
-			[rand * 6, rand * (-2)**rand(2), rand(100)]
+			[rand * 2, 9 * rand * (-1)**rand(2), rand(100)]
 		end
 	end
 
@@ -27,11 +27,11 @@
 		# y = d*x*y - c*y
 
 		# harvested Volterra-Lotka
-		a,b,h = 2/3.0, 4/3.0, 0.3
+		# a,b,h = 2/3.0, 4/3.0, 1
+		a,b,h = 5, 4/1.5, 1
 		x = x*(1-a*x-y)
 		y = y*(b-x-y)+h
-
-		# z = y
+		z = y+x
 		[x,y,z]
 	end
 
@@ -61,19 +61,20 @@
 		end
 	end
 
-	Xu, Yu = 160, 90
+	Xu, Yu = 1500, 60
 
 	def draw
-		# fill 0,0,0,1
+		# fill 0,0,0,10
 		# rect(0,0,width,height)
 
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z, 100, 100, 80
-
-			line Xu*x+20, Yu*y+@h,
-					 Xu*s+20, Yu*t+@h
+			stroke z, 100, 100, 100
+			if y**2+t**2 < 10000
+				line Xu*x+40, Yu*y+@h,
+						 Xu*s+40, Yu*t+@h
+			end
 		end
 
 		@pts = @next_pts
