@@ -30,7 +30,7 @@
 		a,b,h = 5, 2, 7
 		x = x*(1-a*x-y)
 		y = y*(b-x-y)+h
-		z = y+x
+		# z = abs(y*x)
 		[x,y,z]
 	end
 
@@ -58,7 +58,7 @@
 		euler
 		# fill(0,0,0,10) ; rect(0,0,width,height)
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z, 100, 100, 100
+			stroke z, 100, 100, 80
 			if y**2+t**2 < 150
 				line Xu*x+40, Yu*y+@h, Xu*s+40, Yu*t+@h
 			end
