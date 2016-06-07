@@ -7,7 +7,7 @@
 		background(0)
 		stroke(210,100,100,100)
 		stroke_width 0.3
-		@pts = points 12000
+		@pts = points 9000
 		@del_t = 0.007
 	end
 
@@ -27,8 +27,7 @@
 		# y = d*x*y - c*y
 
 		# harvested Volterra-Lotka
-		# a,b,h = 2/3.0, 4/3.0, 1
-		a,b,h = 5, 4/1.5, 1
+		a,b,h = 5, 2, 7
 		x = x*(1-a*x-y)
 		y = y*(b-x-y)+h
 		z = y+x
@@ -36,16 +35,6 @@
 	end
 
 	def euler
-		@next_pts = @pts.map do |x, y, z|
-			s, t, r = diff x, y, z
-			dx = x + s * @del_t
-			dy = y + t * @del_t
-			dz = z + r * @del_t
-			[dx, dy, dz]
-		end
-	end
-
-	def improved_euler
 		@next_pts = @pts.map do |x,y,z|
 			s, t, r = diff x, y, z
 			dx = x + s * @del_t
@@ -57,23 +46,21 @@
 			ddy = dy + t * @del_t
 			ddz = dz + r * @del_t
 
-			[(dx + ddx) /2.0, (dy + ddy) /2.0,  (dz + ddz) /2.0]
+			[(dx + ddx) /2.0, 
+			 (dy + ddy) /2.0,
+			 (dz + ddz) /2.0]
 		end
 	end
 
 	Xu, Yu = 1500, 60
 
 	def draw
-		# fill 0,0,0,10
-		# rect(0,0,width,height)
-
-		# clear
-		improved_euler
+		euler
+		# fill(0,0,0,10) ; rect(0,0,width,height)
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
 			stroke z, 100, 100, 100
-			if y**2+t**2 < 10000
-				line Xu*x+40, Yu*y+@h,
-						 Xu*s+40, Yu*t+@h
+			if y**2+t**2 < 150
+				line Xu*x+40, Yu*y+@h, Xu*s+40, Yu*t+@h
 			end
 		end
 
