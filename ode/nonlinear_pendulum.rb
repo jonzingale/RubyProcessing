@@ -33,15 +33,16 @@
 		# [y, -x*k -b*y + PI*Math.sin(z), 1]
 
 		# pendulum
-		# b = 0 ; [y, -Math.sin(x),1]
+		# b = 1; [y, -b*y+Math.cos(x),1]
+		b = 1; [y, -b*Math.cos(x),1]
 
 		# huygens clocks 
 		# b = 2 ; k = 1 # x, y, z all good!
 		# [y, -x*k -b*y + 6*Math.cos(z), 1]
 
 		# split up
-		b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
-		[y, -x*k -b*y + PI*Math.sin(z), 1]
+		# b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
+		# [y, -x*k -b*y + PI*Math.sin(z), 1]
 	end
 
 	def euler
@@ -72,7 +73,7 @@
 
 	MU = 100
 	def draw
-		clear
+		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
 			stroke 200+r, 100, 100, 100
