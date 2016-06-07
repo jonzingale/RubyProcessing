@@ -13,7 +13,7 @@
 
 	def points num
 		(1..num).map do
-			[rand * 2, 9 * rand * (-1)**rand(2), rand(100)]
+			[rand * 2, 1 * rand * (-1)**rand(2), rand(100)]
 		end
 	end
 
@@ -26,16 +26,11 @@
 		# x = a*x - b*x*y
 		# y = d*x*y - c*y
 
-		# limited growth
-		a, b, c, d, lam, mu = [2/3.0, 4/3.0, 2, 10, 5, 5]
-		x = x * (a - b*y - lam * x)
-		y = y * (-c + d*x - mu * y)
-
-		# with harvesting
-		# a,b,h = 5, 2, 7
-		# x = x*(1-a*x-y)
-		# y = y*(b-x-y)+h
-		# z = abs(y*x)
+		# harvested Volterra-Lotka
+		a,b,c,h = 5, 5, 1.7, 10
+		x = x*(1-a*y*z)
+		z = z*(1-c*z*y)
+		y = y*(b-x*z)+h
 		[x,y,z]
 	end
 
@@ -63,9 +58,10 @@
 		euler
 		# fill(0,0,0,10) ; rect(0,0,width,height)
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z, 100, 100, 80
-			if y**2+t**2 < 150
-				line Xu*x+40, Yu*y+@h, Xu*s+40, Yu*t+@h
+			stroke 210, 100, 100, 80
+			if y**2+t**2 < 1500
+				line Xu*x+40, Yu*z+@h, Xu*s+40, Yu*r+@h
+				# line Xu*x+40, Yu*y+@h, Xu*s+40, Yu*t+@h
 			end
 		end
 
