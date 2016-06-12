@@ -3,12 +3,12 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 40
 
 		background(0)
 		stroke(210,100,100,100)
-		stroke_width 1
-		@pts = points 9000
+		stroke_width 40
+		@pts = points 30#9000
 		@del_t = 0.03
 	end
 
@@ -76,7 +76,7 @@
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke 200+r, 100, 100, 100
+			stroke 200+r, 100, 100, 10
 
 			line ((x+@w)*MU-@w*MU+@w*2)/2.5, ((y+@h)*MU-@h*MU/1.01)/1.0,
 					 ((s+@w)*MU-@w*MU+@w*2)/2.5, ((t+@h)*MU-@h*MU/1.01)/1.0
