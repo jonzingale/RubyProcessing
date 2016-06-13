@@ -2,29 +2,28 @@
 	def setup
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
-		@w, @h = [width/2.0, height/2.0]
-    frame_rate 10
-
-		background(0)
 		stroke(210,100,100,100)
+		@w, @h = width, height
 		stroke_width 1
+    frame_rate 20
+		background(0)
+
 		@pts = points 3000
 		@del_t = 0.003
-		@cds = 0, 0
 	end
 
 	def points num
-		(1..num).map { [20*rand, 10*rand, rand(210)] }
+		(1..num).map { [20*rand, 10*rand, rand(80)] }
 	end
 
 	def diff(x,y,z)
 		# lotka-volterra
 		a,b,c,d = [6, 2, 10, 2]
-		[a*x - b*x*y, -c*y + d*x*y, z]
+		[a*x - b*x*y, -c*y + d*x*y, 1]
 
 		# with harvesting
 		# a, b, h = 0.005, 6, -2
-		# [x*(1-a*x-y), y*(b-x-y)+h, z]
+		# [x*(1-a*x-y), y*(b-x-y)+h, 1]
 	end
 
 	def euler
@@ -50,7 +49,7 @@
 	def draw
 		euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z/3, 100, 100, 40
+			stroke z, 100, 100, 20
 			line Xu*x, Yu*y, Xu*s, Yu*t
 		end
 
