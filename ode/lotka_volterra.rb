@@ -1,3 +1,4 @@
+# an attempt to see the bigger picture.
 	def setup
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
@@ -6,38 +7,24 @@
 
 		background(0)
 		stroke(210,100,100,100)
-		stroke_width 0.9
-		# stroke_width 10
+		stroke_width 1
 		@pts = points 3000
-		@del_t = 0.03
+		@del_t = 0.003
 		@cds = 0, 0
 	end
 
 	def points num
-		(1..num).map do
-			[rand, rand, rand(210)]
-		end
+		(1..num).map { [14*rand, 10*rand, rand(210)] }
 	end
 
 	def diff(x,y,z)
-		# volterra-lotka
-		a,b,c,d = [1, 2, # prey: birth/death
-							 0.5, 5] # predator : death/birth
-		x = a*x - b*x*y
-		y = d*b*x*y - c*y
-
-		# limited growth
-		# a, b, c, d, lam, mu = [1.4, -0.5, -0.5, 2, 4, 1]
-		# x = x * (a - b*y - lam * x)
-		# y = y * (-c + d*x - mu * y)
+		# lotka-volterra
+		a,b,c,d = [6, 2, 10, 2]
+		[a*x - b*x*y, -c*y + d*x*y, z]
 
 		# with harvesting
-		# a,b,h = 2, 0.5, 0.1
-		# x = x*(1-a*x-y)
-		# y = y*(b-x-y)+h
-		# z = -0.3*z
-		# z = abs(y*x)
-		[x,y,z]
+		# a, b, h = 0.005, 6, 1
+		# [x*(1-a*x-y), y*(b-x-y)+h, z]
 	end
 
 	def euler
@@ -58,17 +45,14 @@
 		end
 	end
 
-	Xu, Yu = 1900, 1200
+	Xu, Yu = 100, 100
 
 	def draw
 		euler
-		# fill(0,0,0,10) ; rect(0,0,width,height)
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z/3, 100, 100, 90
+			stroke z/3, 100, 100, 100
 			line Xu*x, Yu*y, Xu*s, Yu*t
 		end
-
-		# no_fill ; ellipse(10,10,10,10)
 
 		@pts = @next_pts
 	end
