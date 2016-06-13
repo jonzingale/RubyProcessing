@@ -14,7 +14,7 @@
 	end
 
 	def points num
-		(1..num).map { [14*rand, 10*rand, rand(210)] }
+		(1..num).map { [20*rand, 10*rand, rand(210)] }
 	end
 
 	def diff(x,y,z)
@@ -23,7 +23,7 @@
 		[a*x - b*x*y, -c*y + d*x*y, z]
 
 		# with harvesting
-		# a, b, h = 0.005, 6, 1
+		# a, b, h = 0.005, 6, -2
 		# [x*(1-a*x-y), y*(b-x-y)+h, z]
 	end
 
@@ -50,7 +50,7 @@
 	def draw
 		euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z/3, 100, 100, 100
+			stroke z/3, 100, 100, 40
 			line Xu*x, Yu*y, Xu*s, Yu*t
 		end
 
