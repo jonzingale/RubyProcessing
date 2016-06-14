@@ -3,14 +3,14 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 40
+    frame_rate 12
 
 		background(0)
 		stroke(210,100,100,100)
-		stroke_width 40
-		@pts = points 40
-		# stroke_width 1
-		# @pts = points 9000
+		# stroke_width 40
+		# @pts = points 40
+		stroke_width 0.2
+		@pts = points 12000
 		@del_t = 0.03
 	end
 
@@ -35,8 +35,8 @@
 		# [y, -x*k -b*y + PI*Math.sin(z), 1]
 
 		# pendulum
-		# b = 1; [y, -b*y+Math.cos(x),1]
-		b = 1; [y, -b*Math.cos(x),1]
+		b = 0.7; [y, -b*y+Math.cos(x),-x*y]
+		# b = 1; [y, -b*Math.cos(x), -x]
 
 		# huygens clocks 
 		# b = 2 ; k = 1 # x, y, z all good!
@@ -78,7 +78,7 @@
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke 200+r, 100, 100, 10
+			stroke 200+r, 100, 100, 90
 
 			line ((x+@w)*MU-@w*MU+@w*2)/2.5, ((y+@h)*MU-@h*MU/1.01)/1.0,
 					 ((s+@w)*MU-@w*MU+@w*2)/2.5, ((t+@h)*MU-@h*MU/1.01)/1.0
