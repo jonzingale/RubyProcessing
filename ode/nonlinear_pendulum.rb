@@ -8,7 +8,9 @@
 		background(0)
 		stroke(210,100,100,100)
 		stroke_width 40
-		@pts = points 30#9000
+		@pts = points 40
+		# stroke_width 1
+		# @pts = points 9000
 		@del_t = 0.03
 	end
 

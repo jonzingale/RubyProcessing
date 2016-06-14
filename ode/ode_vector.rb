@@ -22,17 +22,10 @@
 	def abs(n) ; (n**2)**0.5 ; end
 
 	def diff(x,y,z)
-		# [-y,-x+y, x+y % 360]
-		# [-y,x, x % 360]
-		# [y-x, -x]
-
 		x = x % 2 < 0.5 ? y*2 : -x*3
-		x = abs(z) < 100 ? (x+1) : y + 100 * Math.sin(y)
-		y = x % 3 < 1.3 ? x : -x**2 % 100 > 55 ? x*2 : -y*4
-		z = x-y % 360
-		[x,y,z]
-		# v = x**2 % 200 < 90 ? [abs(x)+z,-y,-x] : [y,x,y-x%360]
-		# x+y % 2 < 0.5 ? v : v.reverse
+		[abs(z) < 100 ? (x+1) : y + 100 * Math.sin(y),
+		 x % 3 < 1.3 ? x : -x**2 % 100 > 55 ? x*2 : -y*4,
+		 x-y % 360]
 	end
 
 	def euler

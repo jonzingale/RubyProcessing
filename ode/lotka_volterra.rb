@@ -18,12 +18,12 @@
 
 	def diff(x,y,z)
 		# lotka-volterra
-		a,b,c,d = [6, 2, 10, 2]
-		[a*x - b*x*y, -c*y + d*x*y, 1]
+		# a, b, c, d = 6, 2, 10, 2
+		# [a*x - b*x*y, -c*y + d*x*y, 1]
 
 		# with harvesting
-		# a, b, h = 0.005, 6, -2
-		# [x*(1-a*x-y), y*(b-x-y)+h, 1]
+		a, b, h = 1.5, 8, -2
+		[x*(1-a+x-y), y*(b-x-y)+h, 1]
 	end
 
 	def euler
@@ -49,7 +49,7 @@
 	def draw
 		euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z, 100, 100, 20
+			stroke z, 100, 100, 70
 			line Xu*x, Yu*y, Xu*s, Yu*t
 		end
 
