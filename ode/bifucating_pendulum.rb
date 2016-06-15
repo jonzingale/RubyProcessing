@@ -16,8 +16,8 @@
 		(1..num).map do
 
 			[6 * ((rand * 2 * PI)- PI),
-			 # 3 * rand * PI, # HALF
-			 2 * ((rand * 2 * PI)- PI), # FULL
+			 3 * rand * PI, # HALF
+			 # 2 * ((rand * 2 * PI)- PI), # FULL
 			 rand(100)]
 		end
 	end
