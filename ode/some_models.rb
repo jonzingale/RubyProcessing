@@ -26,7 +26,12 @@
 		# van der pol
 		# [ y - x**3 + x, -x , x]
 
-		[ y**2 - x**3 * Math.sin(x), -x , 1]
+		# SIR
+		b, v = 12, 21
+		[-b*x*y,
+		 b*x*y-v*y,
+		 v*y]
+		# [ y**2 - x**3 * Math.sin(x), -x , 1]
 	end
 
 	def euler
