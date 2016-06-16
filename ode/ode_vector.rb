@@ -1,31 +1,25 @@
 	def setup
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
-		@w, @h = [width/2.0, height/2.0]
-    frame_rate 5
-
-		background(0)
-		stroke(200,0,100,100)
-		stroke_width 0.1
+		@w, @h = width/2, height/2
+    frame_rate 10 ; background 0
+		stroke_width 0.3
 		@pts = points 12000
 		@del_t = 0.002
 	end
 
 	def points num
-		(1..num).map do
-			[(rand(width)-@w)/1.0,
-			 (rand(height)-@h)/1.0,
-			 rand(360)]
-		end
+		(1..num).map { [1*rand,6*rand,rand] }
 	end
 
 	def abs(n) ; (n**2)**0.5 ; end
 
 	def diff(x,y,z)
-		x = x % 2 < 0.5 ? y*2 : -x*3
-		[abs(z) < 100 ? (x+1) : y + 100 * Math.sin(y),
-		 x % 3 < 1.3 ? x : -x**2 % 100 > 55 ? x*2 : -y*4,
-		 x-y % 360]
+		q = x % (rand(30)+1) < 4 ? y*2 :  y/2.0
+		r = y % 3 < 2.5 ? 10*Math.sin(x**2) + z : -Math.cos(x) + z
+		s = x % 2 < 1.5 ? x*3+1 : y/2
+
+		[q, r, s]
 	end
 
 	def euler
@@ -54,18 +48,16 @@
 		end
 	end
 
+	Xu, Yu = 200, 100
+
 	def draw
-		# clear
 		improved_euler
+		# clear
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke r, 70, 100, 100
-
-			# line x+@w, y+@h, s+@w, t+@h
-			line (x+@w)/1.0, (y+@h)/1.0, (s+@w)/1.0, (t+@h)/1.0
+			stroke z*100%360, z*100, 100, 80
+			# line Xu*x, Yu*z, Xu*s, Yu*r
+			line Xu*x, Yu*y, Xu*s, Yu*t
 		end
 
-		@pts = @next_pts.map do |x,y,z|
-			[x,y,z]
-			# [rand(width)-@w,rand(height)-@h]
-		end
+		@pts = @next_pts
 	end
