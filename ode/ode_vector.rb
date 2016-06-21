@@ -1,62 +1,77 @@
+require 'matrix'
+
 	def setup
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
-		@w, @h = width/2, height/2
-    frame_rate 10 ; background 0
-		stroke_width 0.3
-		@pts = points 12000
-		@del_t = 0.002
+		@w, @h = width/2.0, height/2.0
+    frame_rate 20 ; background 0
+		stroke_width 1
+		@pts = points 12
+		@del_t = 0.2
+	end
+
+	# def trigs(theta)#:: Theta -> R2
+	#   %w(cos sin).map{|s| eval("Math.#{s} #{theta}")}
+	# end
+
+	# def rootsUnity(numbre)#::Int -> [trivalStar]
+	# 	(0...numbre).map{|i|trigs(i*2*PI/numbre)}
+	# end
+
+	def cent_rand
+		10 * (rand - 1 * rand)
 	end
 
 	def points num
-		(1..num).map { [1*rand,6*rand,rand] }
+		Matrix.build(num, 3) {|row, col| cent_rand }
 	end
 
 	def abs(n) ; (n**2)**0.5 ; end
 
-	def diff(x,y,z)
-		q = x % (rand(30)+1) < 4 ? y*2 :  y/2.0
-		r = y % 3 < 2.5 ? 10*Math.sin(x**2) + z : -Math.cos(x) + z
-		s = x % 2 < 1.5 ? x*3+1 : y/2
+	def diff(vect)
+		m = Matrix.columns([
+			[0,-1 ,0],
+			[1, 0, 0],
+			[0,1,0],
+		])
 
-		[q, r, s]
+		vect * m
 	end
 
 	def euler
-		@next_pts = @pts.map do |x, y, z|
-			s, t, r = diff x, y, z
-			dx = x + s * @del_t
-			dy = y + t * @del_t
-			dz = z + r * @del_t
-			[dx, dy, dz]
-		end
+		@next_pts = @pts + diff(@pts) * @del_t
 	end
 
-	def improved_euler
-		@next_pts = @pts.map do |x, y,z|
-			s, t, r = diff x, y, z
-			dx = x + s * @del_t
-			dy = y + t * @del_t
-			dz = z + r * @del_t
+	# def improved_euler
+		# @next_pts = @pts.map do |v|
 
-			s, t, r = diff dx, dy, dz
-			ddx = dx + s * @del_t
-			ddy = dy + t * @del_t
-			ddz = dz + r * @del_t
+			# v + diff(v)
+	# 		s, t, r = diff(v).to_a
+	# 		dx = x + s * @del_t
+	# 		dy = y + t * @del_t
+	# 		dz = z + r * @del_t
 
-			[(dx + ddx) /2.0, (dy + ddy) /2.0,  (dz + ddz) /2.0]
-		end
-	end
+	# 		s, t, r = diff dx, dy, dz
+	# 		ddx = dx + s * @del_t
+	# 		ddy = dy + t * @del_t
+	# 		ddz = dz + r * @del_t
 
-	Xu, Yu = 200, 100
+	# 		[(dx + ddx) /2.0,
+	# 		 (dy + ddy) /2.0,
+	# 		 (dz + ddz) /2.0]
+	# 	end
+	# end
+
+	Xu, Yu = 1, 1
 
 	def draw
-		improved_euler
 		# clear
-		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z*100%360, z*100, 100, 80
-			# line Xu*x, Yu*z, Xu*s, Yu*r
-			line Xu*x, Yu*y, Xu*s, Yu*t
+		# improved_euler
+		euler
+		@pts.to_a.zip(@next_pts.to_a).each do |(x,y,z),(s,t,r)|
+			stroke y%360, 100, 100, 70
+			# line (Xu*x)+@w, (Yu*z)+@h, (Xu*s)+@w, (Yu*r)+@h
+			line (Xu*x)+@w, (Yu*y)+@h, (Xu*s)+@w, (Yu*t)+@h
 		end
 
 		@pts = @next_pts
