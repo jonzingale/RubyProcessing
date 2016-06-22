@@ -8,7 +8,7 @@
 		stroke(210,100,100,30)
 		stroke_width 1
 		@pts = points 6000
-		@del_t = 0.0007
+		@del_t = 0.007
 	end
 
 	PI = 3.1415926
@@ -23,14 +23,22 @@
 	def abs(n) ; (n**2)**0.5 ; end
 
 	def diff(x,y,z)
+		# a hamiltonian situation
+		# [y, -x**3 + x, 1]
+
+		# coupled oscillators
+		k, l = -0.5, 0.2
+		[-(k+l)*x + l*y,
+		 k*x - (k+l)*y, 1 ]
+
 		# van der pol
 		# [ y - x**3 + x, -x , x]
 
 		# SIR
-		b, v = 12, 21
-		[-b*x*y,
-		 b*x*y-v*y,
-		 v*y]
+		# b, v = 12, 21
+		# [-b*x*y,
+		#  b*x*y-v*y,
+		#  v*y]
 		# [ y**2 - x**3 * Math.sin(x), -x , 1]
 	end
 
