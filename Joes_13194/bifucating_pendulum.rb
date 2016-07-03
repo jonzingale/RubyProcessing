@@ -5,17 +5,19 @@
     frame_rate 10
 
 		background(0)
-		stroke(210,100,100,30)
+		stroke(210,100,100,100)
 		stroke_width 1
 		@pts = points 9000
-		@del_t = 0.007
+		@del_t = 0.03
 	end
 
 	PI = 3.1415926
 	def points num
 		(1..num).map do
-			[2 * ((rand * 2 * PI)- PI),
-			 2 * ((rand * 2 * PI)- PI),
+
+			[6 * ((rand * 2 * PI)- PI),
+			 3 * rand * PI, # HALF
+			 # 2 * ((rand * 2 * PI)- PI), # FULL
 			 rand(100)]
 		end
 	end
@@ -23,28 +25,22 @@
 	def abs(n) ; (n**2)**0.5 ; end
 
 	def diff(x,y,z)
-		# a hamiltonian situation
-		# [y, -x**3 + x, 1]
+		# nonlinear oscillator
+		# b = 1 ; [	y, -b*y - Math.sin(x), z]
 
-		# coupled oscillators
-		# k, l = -0.5, 0.2
-		# [-(k+l)*x + l*y,
-		 # k*x - (k+l)*y, 1 ]
+		# b= 3 ; k=Math.cos(x*y) # x, y, z all good!
+		# [y, -x*k -b*y + PI*Math.sin(y), 1]
 
-		# van der pol
-		# [ y - x**3 + x, -x , x]
+		# pendulum
+		# b = 0 ; [y, -Math.sin(x),1]
 
-		# chua
-		a, b = 1, 10
-		phi = 1/16.0*x**3-1/6.0*x
-		[a*(y-phi), x-y+z,-b*z]
+		# huygens clocks 
+		# b = 2 ; k = 1 # x, y, z all good!
+		# [y, -x*k -b*y + 6*Math.cos(z), 1]
 
-		# SIR
-		# b, v = 12, 21
-		# [-b*x*y,
-		#  b*x*y-v*y,
-		#  v*y]
-		# [ y**2 - x**3 * Math.sin(x), -x , 1]
+		# split up
+		b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
+		[y, -x*k -b*y + PI*Math.sin(y), 1]
 	end
 
 	def euler
@@ -75,16 +71,17 @@
 
 	MU = 100
 	def draw
-		# fill 0,0,0,1
-		# rect(0,0,width,height)
-
-		# clear
+		clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z, 100, 100, 10
-			line ((x+@w)*MU-@w*MU+@w), ((y+@h)*MU-@h*MU/1.01),
-					 ((s+@w)*MU-@w*MU+@w), ((t+@h)*MU-@h*MU/1.01)
+			stroke 200+r, 100, 100, 100
+
+			line ((x+@w)*MU-@w*MU+@w*2)/2.5, ((y+@h)*MU-@h*MU/1.01)/1.0,
+					 ((s+@w)*MU-@w*MU+@w*2)/2.5, ((t+@h)*MU-@h*MU/1.01)/1.0
 		end
 
-		@pts = @next_pts
+		@pts = @next_pts.map do |x,y,z|
+			[x,y,z]
+			# [rand(width)-@w,rand(height)-@h,z]
+		end
 	end

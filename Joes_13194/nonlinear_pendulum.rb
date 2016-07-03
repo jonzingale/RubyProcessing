@@ -3,14 +3,14 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 12
 
 		background(0)
 		stroke(210,100,100,100)
 		# stroke_width 40
 		# @pts = points 40
-		stroke_width 1
-		@pts = points 10000
+		stroke_width 0.2
+		@pts = points 12000
 		@del_t = 0.03
 	end
 
@@ -32,19 +32,19 @@
 		# b = 1 ; [	y, -b*y - Math.sin(x), z]
 
 		# b= 3 ; k=Math.cos(x*y) # x, y, z all good!
-		# [y, -x*k -b*y + 1*PI*Math.sin(z), 0.5]
+		# [y, -x*k -b*y + PI*Math.sin(z), 1]
 
 		# pendulum
-		# b = 0.7; [y, -b*y+Math.cos(x),-x*y]
+		b = 0.7; [y, -b*y+Math.cos(x),-x*y]
 		# b = 1; [y, -b*Math.cos(x), -x]
 
 		# huygens clocks 
 		# b = 2 ; k = 1 # x, y, z all good!
 		# [y, -x*k -b*y + 6*Math.cos(z), 1]
-# 
+
 		# split up
-		b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
-		[y, -x*k -b*y + PI*Math.sin(z), 1]
+		# b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
+		# [y, -x*k -b*y + PI*Math.sin(z), 1]
 	end
 
 	def euler
@@ -75,7 +75,7 @@
 
 	MU = 100
 	def draw
-		clear
+		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
 			stroke 200+r, 100, 100, 90

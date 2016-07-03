@@ -1,6 +1,6 @@
 class Bubbles
-	def initialize(num)
-  	@coords = (0..num).map { [rand(800), rand(800), 0, 0,
+	def initialize(num, width, height)
+  	@coords = (0..num).map { [rand(width), rand(height), 0, 0,
 															rand(300)+100,		 		# hue
 															rand(100), 						# sat
 															rand(100), 						# bright
@@ -28,12 +28,13 @@ class RainyWindowWithVideo < Processing::App
 	  
 	def setup
 		colorMode(HSB,360,100,100,100)
-		size(800,800)
+		size(displayWidth, displayHeight)
 		@w, @h = [width/2.0, 0]
 		@i = 0 ; @t = 0
-	  frame_rate 80 #60 # can be higher.
-	  text_font create_font("SanSerif",50)
-	  @coords = Bubbles.new(60)
+	  frame_rate 60 #60 # can be higher.
+	  text_font create_font("SanSerif",100)
+	  no_stroke
+	  @coords = Bubbles.new(20, width, height)
 	  @sample_rate = 10
 	  @capture = Capture.new(self, width, height, 30)
 	  @capture.start
@@ -48,21 +49,15 @@ class RainyWindowWithVideo < Processing::App
 	 	end
 
 		@coords.walk.each do |x, y, s, t, hue, sat, bri, opac, r|
-			stroke(hue,sat,bri,Math.sin(@i)*opac)
 			fill(hue,sat,bri,Math.sin(@i)*opac)
 			ellipse(x, y, 12+ r, 12+ r)
 			[x,y,s,t,hue,sat,bri,opac,r]
 		end
 	end
 
-  def clear
-  	background(100,0,0,0)
-    no_stroke
-    ellipse_mode(CORNER)
-  end
-  
   def convert_pixels
-    clear
+  	flip = rand 100
+
     (1...height).step(sample_rate) do |y|
       (1...width).step(sample_rate) do |x|        
         pixel = y * capture.width + x
@@ -71,13 +66,16 @@ class RainyWindowWithVideo < Processing::App
         sat = saturation(capture.pixels[pixel])
         bri = brightness(capture.pixels[pixel])
 
-        e_width = map(saturation(capture.pixels[pixel]), 0, 200, 0, 100)#100)
+      	if flip == 1 
+	        e_width = map(hue(capture.pixels[pixel]), 0, 200, 0, 100)#100)
+				else
+					e_width = map(saturation(capture.pixels[pixel]), 0, 100, 0, 100)#100)
+				end
 
-        fill(hue, sat, bri, 255)
-        ellipse(x, y, e_width, e_width)        
+        fill(hue, sat, bri, 40)
+        ellipse(x, y, e_width, e_width)     
       end
     end
-
     capture.update_pixels
   end
 end

@@ -4,10 +4,10 @@ require 'matrix'
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = width/2.0, height/2.0
-    frame_rate 6 ; background 0
-		stroke_width 7
-		@pts = points 40#000
-		@del_t = 0.07
+    frame_rate 5 ; background 0
+		stroke_width 1
+		@pts = points 20
+		@del_t = 0.007
 		@t = 1
 	end
 
@@ -20,8 +20,7 @@ require 'matrix'
 	# end
 
 	def cent_rand
-		# 100 * (rand - 1 * rand)
-		-150 * rand 
+		100 * (rand - 1 * rand)
 	end
 
 	def points num
@@ -34,7 +33,7 @@ require 'matrix'
 		m = Matrix.columns([
 			[-0.3,-1 ,0],
 			[0.7, 0.3, 0],
-			[-1,1,0],
+			[0,0,5],
 		])
 
 		vect * m
@@ -56,10 +55,11 @@ require 'matrix'
 		# clear
 		improved_euler
 		@pts.to_a.zip(@next_pts.to_a).each do |(x,y,z),(s,t,r)|
-			stroke (x*y*4)%360, (200*x*y)%100, 100, 40
-			stroke_width(abs(x/y))
+			stroke (x*y)%360, 100, 100, 20
+			stroke_width(-y%200)
 			# line (Xu*x)+@w, (Yu*z)+@h, (Xu*s)+@w, (Yu*r)+@h
 			line (Xu*x)+@w, (Yu*y)+@h, (Xu*s)+@w, (Yu*t)+@h
 		end
+		@t += 1
 		@pts = @next_pts
 	end
