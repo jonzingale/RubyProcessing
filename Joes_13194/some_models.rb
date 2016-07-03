@@ -2,12 +2,12 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 20
 
 		background(0)
 		stroke(210,100,100,30)
 		stroke_width 1
-		@pts = points 9000
+		@pts = points 6000
 		@del_t = 0.007
 	end
 
@@ -27,17 +27,12 @@
 		# [y, -x**3 + x, 1]
 
 		# coupled oscillators
-		# k, l = -0.5, 0.2
-		# [-(k+l)*x + l*y,
-		 # k*x - (k+l)*y, 1 ]
+		k, l = -0.5, 0.2
+		[-(k+l)*x + l*y,
+		 k*x - (k+l)*y, 1 ]
 
 		# van der pol
 		# [ y - x**3 + x, -x , x]
-
-		# chua
-		a, b = 1, 10
-		phi = 1/16.0*x**3-1/6.0*x
-		[a*(y-phi), x-y+z,-b*z]
 
 		# SIR
 		# b, v = 12, 21
@@ -81,7 +76,7 @@
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z, 100, 100, 10
+			stroke z, 100, 100, 20
 			line ((x+@w)*MU-@w*MU+@w), ((y+@h)*MU-@h*MU/1.01),
 					 ((s+@w)*MU-@w*MU+@w), ((t+@h)*MU-@h*MU/1.01)
 		end

@@ -18,14 +18,14 @@ def setup
   @mandelbrot = Fractal.new do |n, c|
 
     # fibs
-    # PHI**n - PHA**n + c
+    PHI**n - PHA**n + c
 
     # collatz
-    x, y = n.rect.map{|t|t *PI}
-    cosp = Math.cos(x)*CMath.cosh(y)
-    sinp = Math.sin(x)*CMath.sinh(y)
-    trig = Complex(cosp,-sinp)
-    0.25*(2+7*n-(2+5*n) * trig) + c
+    # x, y = n.rect.map{|t|t *PI}
+    # cosp = Math.cos(x)*CMath.cosh(y)
+    # sinp = Math.sin(x)*CMath.sinh(y)
+    # trig = Complex(cosp,-sinp)
+    # 0.25*(2+7*n-(2+5*n) * trig) + c
 
     # mandelbrot 
     # n ** 2 + c
