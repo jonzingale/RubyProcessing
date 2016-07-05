@@ -24,20 +24,20 @@
 
 	def diff(x,y,z)
 		# a hamiltonian situation
-		# [y, -x**3 + x, 1]
+		[y, -x**3 + x, 1]
 
 		# coupled oscillators
 		# k, l = -0.5, 0.2
 		# [-(k+l)*x + l*y,
-		 # k*x - (k+l)*y, 1 ]
+		#  k*x - (k+l)*y, 1 ]
 
 		# van der pol
 		# [ y - x**3 + x, -x , x]
 
 		# chua
-		a, b = 1, 10
-		phi = 1/16.0*x**3-1/6.0*x
-		[a*(y-phi), x-y+z,-b*z]
+		# a, b = 1, 10
+		# phi = 1/16.0*x**3-1/6.0*x
+		# [a*(y-phi), x-y+z,-b*z]
 
 		# SIR
 		# b, v = 12, 21
