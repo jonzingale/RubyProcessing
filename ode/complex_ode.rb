@@ -7,7 +7,7 @@ include Math
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 15
 		background(0)
 
 		stroke(210,100,100,100)
@@ -16,7 +16,7 @@ include Math
 		@del_t = 0.03
 	end
 
-	def cent_rand ; 10 * (rand - 1 * rand) ; end
+	def cent_rand ; 30 * (rand - 1 * rand) ; end
 
 	def points num
 		(1..num).map do	
@@ -26,9 +26,9 @@ include Math
 		end
 	end
 
-	def abs(n) ; (n**2)**0.5 ; end
-
 	def diff(x,y,z)
+		# test
+		# [(y/2).real, (x**2).imag, y-x]
 
 		# lattice of pendula
 		[cos(y), sin(x/2.0), 1]
@@ -67,7 +67,7 @@ include Math
 		end
 	end
 
-	Xu, Yu = 100, 100
+	Xu, Yu = 20, 20
 
 	def draw
 		# clear
