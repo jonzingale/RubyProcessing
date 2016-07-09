@@ -8,11 +8,11 @@ include Math
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
     frame_rate 10
-
 		background(0)
+
 		stroke(210,100,100,100)
 		stroke_width 1
-		@pts = points 2000
+		@pts = points 5000
 		@del_t = 0.03
 	end
 
@@ -29,11 +29,15 @@ include Math
 	def abs(n) ; (n**2)**0.5 ; end
 
 	def diff(x,y,z)
+
+		# lattice of pendula
+		[cos(y), sin(x/2.0), 1]
+
 		# nonlinear oscillator
 		# b = 1 ; [	y, -b*y - sin(x), z]
 
-		b= 3 ; k=cos(x*y) # x, y, z all good!
-		[y, -x*k -b*y + PI*sin(y), 1]
+		# b= 3 ; k=cos(x*y) # x, y, z all good!
+		# [y, -x*k -b*y + PI*sin(y), 1]
 
 		# pendulum
 		# b = 0 ; [y, -sin(x),1]
@@ -43,18 +47,8 @@ include Math
 		# [y, -x*k -b*y + cos(z)*4, 1]
 
 		# split up
-		# b = 1 ; k = 1.2*sin(-x**2) # x, y, z all good!
+		# b = 1 ; k = 1.2*sin(x) # x, y, z all good!
 		# [y, -x*k -b*y + PI*cos(y), 1]
-	end
-
-	def euler
-		@next_pts = @pts.map do |x, y, z|
-			s, t, r = diff x, y, z
-			dx = x + s * @del_t
-			dy = y + t * @del_t
-			dz = z + r * @del_t
-			[dx, dy, dz]
-		end
 	end
 
 	def improved_euler
@@ -73,16 +67,22 @@ include Math
 		end
 	end
 
-	Xu, Yu = 60, 100
+	Xu, Yu = 100, 100
 
 	def draw
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |v,u|
-			x, y, z = v.map(&:real)
+
+			# a, b, c = v
+			# d, e, f = u
+			# x, y, z = a.real, a.imag, c.real
+			# s, t, r = d.real, d.imag, f.real
+
+			x, y, z = v.map(&:real) #:imag
 			s, t, r = u.map(&:real)
 
-			stroke r*30+80, 100*z, 100, 40
+			stroke r*10+180, 100, 100, 50
 
 			# line (Xu*x)+@w, (Yu*z)+@h, (Xu*s)+@w, (Yu*r)+@h
 			line (Xu*x)+@w, (Yu*y)+@h, (Xu*s)+@w, (Yu*t)+@h
