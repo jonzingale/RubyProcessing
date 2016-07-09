@@ -76,17 +76,17 @@ require 'cmath'
 	Xu, Yu = 70, 70
 
 	def draw
-		clear
+		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke 200+r, 100, 100, 80
+			stroke 200+r, 100, 100, 5
 
 			# line (Xu*x)+@w, (Yu*z)+@h, (Xu*s)+@w, (Yu*r)+@h
 			line (Xu*x)+@w, (Yu*y)+@h, (Xu*s)+@w, (Yu*t)+@h
 		end
 
 		@pts = @next_pts.map do |x,y,z|
-			[x,y,z]
-			# [cent_rand,cent_rand,cent_rand]
+			# [x,y,z]
+			[cent_rand,cent_rand,cent_rand]
 		end
 	end
