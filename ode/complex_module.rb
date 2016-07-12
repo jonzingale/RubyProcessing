@@ -13,7 +13,4 @@ it = points(3)
 that = Complex(23,2)
 
 
-
-
-
 byebug ; 32
