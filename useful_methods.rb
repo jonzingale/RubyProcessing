@@ -10,6 +10,9 @@ require 'mechanize'
   # We need the video classes to be included here.
   # include_package "processing.video"
 
+# gets the good ones!!!!
+# (row.methods - Object.methods).sort
+
 	def setup
 		size(displayWidth, displayHeight)
 		@w, @h = [width/2.0, 0]

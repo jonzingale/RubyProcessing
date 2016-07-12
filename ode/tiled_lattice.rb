@@ -7,7 +7,7 @@ include Math
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 15
 		background(0)
 
 		stroke(210,100,100,100)
@@ -31,8 +31,7 @@ include Math
 		# [(y/2).real, (x**2).imag, y-x]
 
 		# lattice of pendula
-		[-exp(y)-(x/2.0), sin(x/1.2), x]
-		# [sin(y/2.0), exp(x)-(y/5.0), x]
+		[cos(y), sin(x/2.0), 1]
 
 		# nonlinear oscillator
 		# b = 1 ; [	y, -b*y - sin(x), z]
@@ -68,7 +67,7 @@ include Math
 		end
 	end
 
-	Xu, Yu = 30, 40
+	Xu, Yu = 20, 20
 
 	def draw
 		# clear
@@ -83,7 +82,7 @@ include Math
 			x, y, z = v.map(&:real) #:imag
 			s, t, r = u.map(&:real)
 
-			stroke r*2+180, 100, 100, 20
+			stroke r*10+180, 100, 100, 50
 
 			# line (Xu*x)+@w, (Yu*z)+@h, (Xu*s)+@w, (Yu*r)+@h
 			line (Xu*x)+@w, (Yu*y)+@h, (Xu*s)+@w, (Yu*t)+@h
