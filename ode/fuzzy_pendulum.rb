@@ -1,23 +1,18 @@
-require 'matrix'
-require 'cmath'
-
-# I suspect I will want to try this without the matrices at first.
 	def setup
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
-		@w, @h = [width/2, height/2]
+		@w, @h = [width/2.0, height/2.0]
+		stroke_width 1
+		background 0
     frame_rate 10
 
-		background(0)
-		stroke(210,100,100,100)
-		stroke_width 1
-		@pts = points 9000
+		stroke 200, 100, 100, 5
+		@pts = points 12000
 		@del_t = 0.03
 	end
 
 	def cent_rand
 		10 * (rand - 1 * rand)
-		# -10 * rand
 	end
 
 	def points num
@@ -26,35 +21,9 @@ require 'cmath'
 		end
 	end
 
-	def abs(n) ; (n**2)**0.5 ; end
-
 	def diff(x,y,z)
-		# nonlinear oscillator
-		# b = 1 ; [	y, -b*y - Math.sin(x), z]
-
-		# b= 3 ; k=Math.cos(x*y) # x, y, z all good!
-		# [y, -x*k -b*y + PI*Math.sin(y), 1]
-
-		# pendulum
-		# b = 0 ; [y, -Math.sin(x),1]
-
-		# huygens clocks 
-		# b = 2 ; k = 1 # x, y, z all good!
-		# [y, -x*k -b*y + 6*Math.cos(z), 1]
-
-		# split up
-		b = 1 ; k = 1.2*Math.cos(x) # x, y, z all good!
+		b = 1 ; k = 1.2*Math.cos(x) # fuzzy
 		[y, - x*k - b*y + PI*Math.sin(y), 1]
-	end
-
-	def euler
-		@next_pts = @pts.map do |x, y, z|
-			s, t, r = diff x, y, z
-			dx = x + s * @del_t
-			dy = y + t * @del_t
-			dz = z + r * @del_t
-			[dx, dy, dz]
-		end
 	end
 
 	def improved_euler
@@ -73,20 +42,16 @@ require 'cmath'
 		end
 	end
 
-	Xu, Yu = 70, 70
+	Xu, Yu = 100, 90
 
 	def draw
-		# clear
 		improved_euler
-		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke 200+r, 100, 100, 5
-
-			# line (Xu*x)+@w, (Yu*z)+@h, (Xu*s)+@w, (Yu*r)+@h
+		@pts.zip(@next_pts).map! do |(x,y,z),(s,t,r)|
 			line (Xu*x)+@w, (Yu*y)+@h, (Xu*s)+@w, (Yu*t)+@h
 		end
 
 		@pts = @next_pts.map do |x,y,z|
 			# [x,y,z]
-			[cent_rand,cent_rand,cent_rand]
+			[cent_rand, cent_rand, cent_rand]
 		end
 	end

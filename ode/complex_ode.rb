@@ -12,8 +12,8 @@ include Math
 
 		stroke(210,100,100,100)
 		stroke_width 1
-		@pts = points 5000
-		@del_t = 0.03
+		@pts = points 8000
+		@del_t = 0.08
 	end
 
 	def cent_rand ; 30 * (rand - 1 * rand) ; end
@@ -28,16 +28,19 @@ include Math
 
 	def diff(x,y,z)
 		# test
-		# [(y/2).real, (x**2).imag, y-x]
+		# [y,cos(x.real)-sin(y.real), 10]
 
 		# lattice of pendula
+		# [cos(y), sin(x/2.0), 2]
+
+		# a nice image
 		[-exp(y)-(x/2.0), sin(x/1.2), x]
-		# [sin(y/2.0), exp(x)-(y/5.0), x]
 
 		# nonlinear oscillator
 		# b = 1 ; [	y, -b*y - sin(x), z]
 
-		# b= 3 ; k=cos(x*y) # x, y, z all good!
+		# big production
+		# b= 3 ; k=cos(x*y)
 		# [y, -x*k -b*y + PI*sin(y), 1]
 
 		# pendulum
