@@ -7,13 +7,13 @@ include Math
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 5
 		background(0)
 
 		stroke(210,100,100,100)
 		stroke_width 1
-		@pts = points 8000
-		@del_t = 0.08
+		@pts = points 7000
+		@del_t = 0.03
 	end
 
 	def cent_rand ; 30 * (rand - 1 * rand) ; end
@@ -28,13 +28,16 @@ include Math
 
 	def diff(x,y,z)
 		# test
+		[x*y,cos(x)-sin(y), 10]
+
+
 		# [y,cos(x.real)-sin(y.real), 10]
 
 		# lattice of pendula
 		# [cos(y), sin(x/2.0), 2]
 
 		# a nice image
-		[-exp(y)-(x/2.0), sin(x/1.2), x]
+		# [-exp(y)-(x/2.0), sin(x/1.2), x]
 
 		# nonlinear oscillator
 		# b = 1 ; [	y, -b*y - sin(x), z]
@@ -71,17 +74,17 @@ include Math
 		end
 	end
 
-	Xu, Yu = 30, 40
+	Xu, Yu = 70, 70
 
 	def draw
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |v,u|
 
-			# a, b, c = v
-			# d, e, f = u
-			# x, y, z = a.real, a.imag, c.real
-			# s, t, r = d.real, d.imag, f.real
+			a, b, c = v
+			d, e, f = u
+			x, y, z = a.real, a.imag, c.real
+			s, t, r = d.real, d.imag, f.real
 
 			x, y, z = v.map(&:real) #:imag
 			s, t, r = u.map(&:real)

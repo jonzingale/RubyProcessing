@@ -17,7 +17,7 @@
 
 	def points num
 		(1..num).map do
-			[cent_rand, 2*cent_rand, cent_rand]
+			[cent_rand, cent_rand, cent_rand]
 		end
 	end
 
