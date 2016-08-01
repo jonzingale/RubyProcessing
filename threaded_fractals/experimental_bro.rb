@@ -76,8 +76,6 @@ def modify_img
 	@loaded.pixels[rand_pixel] =  color(color_it,100,100)
 	@loaded.updatePixels
 	update_pixels
-
-	puts rand_pixel
 end
 
 
