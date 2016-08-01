@@ -11,8 +11,8 @@ include Math
 		background(0)
 
 		stroke(210,100,100,100)
-		stroke_width 1
-		@pts = points 7000
+		stroke_width 0.1
+		@pts = points 12000
 		@del_t = 0.03
 	end
 
@@ -28,8 +28,17 @@ include Math
 
 	def diff(x,y,z)
 		# test
-		[x*y,cos(x)-sin(y), 10]
+		it = [y,-x*(1-rand(2)), -10]
+		that = [(-x*(1-rand(2))).real%36,
+						-x*(1-rand(2))*tan(y)*(1-rand(2)),
+						10]
+		sol = rand(2)==0 ? it : that
 
+		# benny jets
+		# [-x-y,sin(x*y), 10]
+
+		# jet
+		# [x*y,cos(x)-sin(y), 10]
 
 		# [y,cos(x.real)-sin(y.real), 10]
 
@@ -74,7 +83,7 @@ include Math
 		end
 	end
 
-	Xu, Yu = 70, 70
+	Xu, Yu = 7, 7
 
 	def draw
 		# clear
@@ -89,7 +98,7 @@ include Math
 			x, y, z = v.map(&:real) #:imag
 			s, t, r = u.map(&:real)
 
-			stroke r*2+180, 100, 100, 20
+			stroke (x*y*1+50)%360, 20+z, 100, 100
 
 			# line (Xu*x)+@w, (Yu*z)+@h, (Xu*s)+@w, (Yu*r)+@h
 			line (Xu*x)+@w, (Yu*y)+@h, (Xu*s)+@w, (Yu*t)+@h
