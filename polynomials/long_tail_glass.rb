@@ -1,6 +1,8 @@
 # Torus Class, JUST THE INNER_PART
+include Math
 
 class Torus
+	include Math
 	require 'matrix'
 
 	def self.radius ; 0.6 ; end
@@ -10,7 +12,12 @@ class Torus
 	def self.abs(i) ; ((i**2)**0.5).to_f ; end
 
 	def self.sin_cos(var)
-		%w(sin cos).map {|s| Math.send(s, 2 * PI * var) }
+		# sin = Math.sin(2 * PI * var)
+		# cos = Math.cos(2 * PI * var)
+		# [sin, cos]
+
+		# why doesn't this inherit?
+		# [:sin, :cos].map {|s| send(s, 2 * PI * var) }
 	end
 
 	def self.coords(x,y)
@@ -90,9 +97,16 @@ require 'matrix'
 	end
 	#
 
+	def sin_cos(var)
+		sin = Math.sin(2 * PI * var)
+		cos = Math.cos(2 * PI * var)
+		[sin, cos]
+	end
+
 	def draw
 		clear
-		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*PI}")}
+		sin, cos = sin_cos(@i += 0.007)
+		# cos, sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*PI}")}
 		# rotation_y = Matrix.rows([[0,1,0],[cos,0,sin],[sin,0,cos]])
 		rotation_x = Matrix.rows([[1,0,0],[0,cos,sin],[0,sin,cos]])
 		rotation = rotation_x * ROTATION_Z

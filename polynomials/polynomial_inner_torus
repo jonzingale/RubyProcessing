@@ -5,7 +5,12 @@
 # and call it when mouse moves for mouse point
 
 require 'matrix'
-	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
+include Math
+
+	def sin_cos(var)
+		[:sin, :cos].map {|s| send(s, 2 * PI * var) }
+	end
+
 	def abs(i) ; ((i**2)**0.5).to_f ; end
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
