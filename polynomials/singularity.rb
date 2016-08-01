@@ -5,6 +5,11 @@
 # use pixels: length to resolve, matrix transformations
 # Load3DImg ?
 require 'matrix'
+include Math
+
+	def sin_cos(var)
+		[:sin, :cos].map {|s| send(s, 2 * PI * var) }
+	end
 
 	def setup
 		frame_rate 7
@@ -56,7 +61,6 @@ require 'matrix'
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
 	RAD = 1 ; SCALE = (800 / (1 + RAD).to_f).freeze
-	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
 
 	def draw
 		clear

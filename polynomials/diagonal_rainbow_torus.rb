@@ -6,6 +6,8 @@
 # Load3DImg ?
 
 require 'matrix'
+include Math
+
 	def setup
 		frame_rate 7
 		size(800,800)
@@ -56,7 +58,10 @@ require 'matrix'
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
 	RAD = 2 ; SCALE = (300 / (1 + RAD).to_f).freeze
-	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
+
+	def sin_cos(var)
+		[:sin, :cos].map {|s| send(s, 2 * PI * var) }
+	end
 
 	def draw
 		clear

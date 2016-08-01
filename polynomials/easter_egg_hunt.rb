@@ -2,6 +2,8 @@
 # random walk the radius R
 
 require 'matrix'
+include Math
+
 	def setup
 		frame_rate 8
 		size(1200,800)
@@ -78,7 +80,10 @@ require 'matrix'
 
 	RAD = PI
 	SCALE = (300 / (1 + RAD).to_f).freeze
-	def sin_cos(var) ; %w(sin cos).map {|s| Math.send(s, 2 * PI * var) } ; end
+
+	def sin_cos(var)
+		[:sin, :cos].map {|s| send(s, 2 * PI * var) }
+	end
 
 	def draw
 		# clear
