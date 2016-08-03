@@ -2,7 +2,7 @@ require 'matrix'
 include Math
 
 	def setup
-		size(displayWidth/2, displayHeight/2)
+		size(displayWidth, displayHeight)
 		@w, @h = width/2.0 , height/2.0
 		@i, @j = [0] * 2
 		frame_rate 8
@@ -52,7 +52,7 @@ include Math
 
 	# one can see that the whole inner core becomes a sphere.
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 1 ; SCALE = (200 / (1 + RAD).to_f).freeze
+	RAD = 2 ; SCALE = (400 / (1 + RAD).to_f).freeze
 	
 	def sin_cos(var)
 		[:sin, :cos].map {|s| send(s, 2 * PI * var) }
