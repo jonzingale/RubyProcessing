@@ -2,7 +2,7 @@
 include Math
 
 class Torus
-	include Math
+	# include Math
 	require 'matrix'
 
 	def self.radius ; 0.6 ; end
@@ -12,9 +12,9 @@ class Torus
 	def self.abs(i) ; ((i**2)**0.5).to_f ; end
 
 	def self.sin_cos(var)
-		# sin = Math.sin(2 * PI * var)
-		# cos = Math.cos(2 * PI * var)
-		# [sin, cos]
+		sin = Math.sin(2 * PI * var)
+		cos = Math.cos(2 * PI * var)
+		[sin, cos]
 
 		# why doesn't this inherit?
 		# [:sin, :cos].map {|s| send(s, 2 * PI * var) }
