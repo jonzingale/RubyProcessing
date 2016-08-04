@@ -12,14 +12,14 @@ include Math
 	end
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 0 ; SCALE = (300 / (1 + RAD).to_f).freeze
+	RAD = 0.5 ; SCALE = (300 / (1 + RAD).to_f).freeze
 
 	ROTATION_Z = Matrix.rows([[Math.cos(0.5*PI),Math.sin(0.5*PI),0],
 												   [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
 												   [0,0,1]]).freeze
 
-	POLYNOMIAL = [0,0.33333,0,0].freeze # [0,1] is diagonal
-	CURVE_RESOLUTION = 3000.freeze
+	POLYNOMIAL = [0,0.33333].freeze # [0,1] is diagonal
+	CURVE_RESOLUTION = 4000.freeze
 	BODY_RESOLUTION = 7200.freeze
 
 	def to_torus(x,y)
@@ -52,16 +52,14 @@ include Math
 	end
 
 	def setup
-		frame_rate 7
-		size(800,800)
-		@w,@h = [400] * 2
+		size(displayWidth, displayHeight)
+		@w,@h = width/2.0, height/2.0
 		@i = 0
 
+		frame_rate 7
 		colorMode(HSB,360,100,100)
 		@all_coords = body_points BODY_RESOLUTION
 		@all_diagonals = poly_points CURVE_RESOLUTION
-
-	  # text_font create_font("SanSerif",10)
 	end
 
 	# color setting:
@@ -74,21 +72,19 @@ include Math
 
 	def set_diag_color(x,y,z,matrix)
 		a = matrix.to_a.flatten.first
-		set(x+@w, z+@h, color( (a+2) * 100,100,100) )
+		set(x+@w, z+@h, color(0,0,100) )
 	end
-	#
 
 	def draw
 		clear
-
-		cos,sin = %w(cos sin).map{|s| eval("Math.#{s} #{(@i += 0.002)*PI}")}
+		sin, cos = sin_cos(@i += 0.007)
 		rotation_x = Matrix.rows([[1,0,0],[0,cos,sin],[0,sin,cos]])
 		rotation = rotation_x * ROTATION_Z
 
-		@all_coords.each do |mtrx|
-			x_y_z = (rotation * SCALE * mtrx).to_a.flatten
-			set_color(*x_y_z,mtrx)
-		end
+		# @all_coords.each do |mtrx|
+		# 	x_y_z = (rotation * SCALE * mtrx).to_a.flatten
+		# 	set_color(*x_y_z,mtrx)
+		# end
 
 		@all_diagonals.each do |mtrx|
 			x_y_z = (rotation * SCALE  * mtrx).to_a.flatten
