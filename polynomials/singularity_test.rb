@@ -1,9 +1,5 @@
 # sprinkle over torus
-# random walk the radius R
-# save as slow frames and edit out to make faster movies.
 
-# use pixels: length to resolve, matrix transformations
-# Load3DImg ?
 require 'matrix'
 include Math
 
@@ -26,14 +22,14 @@ include Math
 	end
 
 	def set_color(x,y,z,matrix)
-		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
+		a, b, c = matrix.to_a.flatten.map{|x| x/(2*PI)}
 		color = [(c * 1200) + 200, ((a+10) * 20), 100]
 		# color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
 		set(x+@w, z+@h, color(*color))
 	end
 
 	def set_diag_color(x,y,z,matrix)
-		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
+		a, b, c = matrix.to_a.flatten.map{|x| x/(2*PI)}
 		set(x+@w, z+@h, color(0,0,100))
 	end
 
@@ -59,7 +55,7 @@ include Math
 	end
 
 	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 1.0 ; SCALE = (600 / (1 + RAD).to_f).freeze
+	RAD = 1.0 ; SCALE = (400 / (1 + RAD)).freeze
 
 	def draw
 		clear
