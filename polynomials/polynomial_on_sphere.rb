@@ -1,24 +1,21 @@
 # Torus Curves
-# save as slow frames and edit out to make faster movies.
-
-# make a new def for all_coords all_diagonals
-# and call it when mouse moves for mouse point
 
 require 'matrix'
 include Math
 
 	def sin_cos(var)
-		[:sin, :cos].map {|s| send(s, 2 * PI * var) }
+		[:sin, :cos].map {|s| send(s, Tau * var) }
 	end
 
-	# RAD = 0 for circle, RAD 1 for apple, RAD = 2 for torus
-	RAD = 0.5 ; SCALE = (300 / (1 + RAD).to_f).freeze
+	# RAD = 0 for sphere, RAD 1 for apple, RAD = 2 for torus
+	RAD = 0.5 ; SCALE = (500 / (1 + RAD).to_f).freeze
+	Tau = 2 * PI 
 
-	ROTATION_Z = Matrix.rows([[Math.cos(0.5*PI),Math.sin(0.5*PI),0],
-												   [Math.sin(0.5*PI),Math.cos(0.5*PI),0],
-												   [0,0,1]]).freeze
+	ROTATION_Z = Matrix.rows([[cos(0.5*PI),sin(0.5*PI),0],
+												    [sin(0.5*PI),cos(0.5*PI),0],
+												    [0,0,1]]).freeze
 
-	POLYNOMIAL = [0,0.33333].freeze # [0,1] is diagonal
+	POLYNOMIAL = [0,1/6.0].freeze # [0,1] is diagonal
 	CURVE_RESOLUTION = 4000.freeze
 	BODY_RESOLUTION = 7200.freeze
 
@@ -35,7 +32,7 @@ include Math
 
 	def poly_points(integer)
 		(0..integer).map do |x|
-			x = x/(integer.to_f) * PI * 2
+			x = x/(integer.to_f) * Tau
 			y = POLYNOMIAL.map.with_index{|p,i| p * (x ** i)}.inject(0,:+)
 
 			to_torus x, y
@@ -64,22 +61,22 @@ include Math
 
 	# color setting:
 	def set_color(x,y,z,matrix)
-		a, b, c = matrix.to_a.flatten.map{|x| x/(2* PI.to_f)}
-		color = [(c * 1200) + 200, ((a+10) * 20), 100]
-		# color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
+		a, b, c = matrix.to_a.flatten.map{|x| x/Tau }
+		# color = [(c * 1200) + 200, ((a+10) * 20), 100]
+		color = [c < 0 ? 100 : 200, a < 0 ? 40 : 90 , 100]
 		set(x+@w, z+@h, color(*color))
 	end
 
 	def set_diag_color(x,y,z,matrix)
 		a = matrix.to_a.flatten.first
-		set(x+@w, z+@h, color(0,0,100) )
+		set(x+@w, z+@h, color(z+80,100,100) )
 	end
 
 	def draw
 		clear
-		sin, cos = sin_cos(@i += 0.007)
+		sin, cos = sin_cos(@i += 0.008)
 		rotation_x = Matrix.rows([[1,0,0],[0,cos,sin],[0,sin,cos]])
-		rotation = rotation_x * ROTATION_Z
+		rotation = rotation_x #* ROTATION_Z
 
 		# @all_coords.each do |mtrx|
 		# 	x_y_z = (rotation * SCALE * mtrx).to_a.flatten
