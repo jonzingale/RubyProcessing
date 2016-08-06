@@ -1,7 +1,7 @@
 module Torus
 	include Math
 	Tau = 2 * PI
-	RAD = 2 # 0, 1, 2
+	RAD = 0.5 # 0, 1, 2
 	SCALE = 450 / (1 + RAD) # incorporate rotations
 
 	def sin_cos(var)
@@ -25,7 +25,7 @@ class Euler
 
 	attr_reader :pts, :qts
 	def initialize num
-		@del_t = 0.03
+		@del_t = 0.007
 		@pts = points num
 		euler
 	end
@@ -43,7 +43,25 @@ class Euler
 	end
 
 	def diff(x,y)
-		[-y, x]
+		# nonlinear oscillator
+		# b = 1 ; [	y, -b*y - Math.sin(x), z]
+
+		# b= 3 ; k=Math.cos(x*y) # x, y, z all good!
+		# [y, -x*k -b*y + PI*Math.sin(y), 1]
+
+		# pendulum
+		# b = 0 ; [y, -Math.sin(x),1]
+
+		# huygens clocks 
+		# b = 2 ; k = 1 # x, y, z all good!
+		# [y, -x*k -b*y + 6*Math.cos(z), 1]
+
+		# split up
+		# b = 1 ; k = 1.2*cos(x) # x, y, z all good!
+		# [y, - x*k - b*y + PI*sin(y)]
+		[1,1]
+
+		# [-y, x]
 	end
 
 	def euler
