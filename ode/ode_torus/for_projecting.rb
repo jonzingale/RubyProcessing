@@ -3,8 +3,8 @@
 module Torus
 	include Math
 	Tau = 2 * PI
-	RAD = 0.5 # 0, 1, 2
-	SCALE = 450 / (1 + RAD)
+	RAD = 2 # 0, 1, 2
+	SCALE = 450 / (1 + RAD) # incorporate rotations
 
 	def sin_cos(var)
 		[:sin, :cos].map {|s| send(s, Tau * var) }
@@ -27,7 +27,7 @@ class Euler
 
 	attr_reader :pts, :qts
 	def initialize num
-		@del_t = 0.007
+		@del_t = 0.001
 		@pts = points num
 		euler
 	end
@@ -46,30 +46,24 @@ class Euler
 
 	def diff(x,y)
 		# nonlinear oscillator
-		# b = 2 ; [	y, -b*y - Math.sin(x)]
+		# b = 1 ; [	y, -b*y - Math.sin(x)]
 
-		# serpentine
-		b= 0.1 ; k=cos(x*y) # x, y, z all good!
-		[y, -x*k -b*y + PI*sin(y)]
+		b= 0.5 ; k=Math.cos(x*y) # x, y, z all good!
+		[y, -x*k -b*y + PI*Math.sin(y)]
 
 		# pendulum
 		# b = 1 ; [y,-b*y +sin(x)]
 
-		# huygens clocks, ie holy fucking hell 
-		# b = 1 ; k = 1 # x, y, z all good!
+		# huygens clocks 
+		# b = 2 ; k = 1 # x, y, z all good!
 		# [y, -x*k -b*y + 6]
 
 		# split up
-		# b = 2 ; k = 1.2*cos(x)
+		# b = 1 ; k = 1.2*cos(x) # x, y, z all good!
 		# [y, - x*k - b*y + PI*sin(y)]
 
-		# sun spots penumbra
-		# [cos(y*x),x/y]
-
-		# contracts and explands
-		# [y, -x/100]
-
-		# [y-x, x-y]
+		# [1,1]
+		# [-y, x]
 	end
 
 	def euler
@@ -103,8 +97,17 @@ def setup
 	background 0
 	frame_rate 10
 
+	@all_coords = body_points BODY_RESOLUTION
+
+	@all_coords.each do |mtrx|
+		mtrx = Matrix.columns([mtrx])
+		x_y_z = (ROTATION_Z * mtrx).to_a.flatten
+		# set_color(*x_y_z,mtrx)
+	end
+
 	stroke_width 1
-	@it = Euler.new 5000
+	stroke(200,100,100,60)
+	@it = Euler.new 7000
 end
 
 def set_color(x,y,z,matrix)
