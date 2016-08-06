@@ -22,7 +22,6 @@ module Torus
 		y = (RAD + cos_p) * sin_t
 		z = sin_p
 
-		it = [x,y,z]
 		it = @key == '1' ? [x,y,z] : @key == '2' ? [y,z,x] : [x,z,y]
 		it.map{|t| t*SCALE}
 	end
@@ -33,7 +32,7 @@ class Euler
 
 	attr_reader :pts, :qts
 	def initialize num
-		@del_t = 0.001
+		@del_t = 0.002
 		@pts = points num
 		euler
 	end
@@ -59,15 +58,15 @@ class Euler
 		# [y, -x*k -b*y + PI*sin(y)]
 
 		# pendulum
-		# b = 4 ; [y,-b*y +sin(x)]
+		# b = 1 ; [y,-b*y +sin(x)]
 
 		# huygens clocks, ie holy fucking hell 
-		b = 1 ; k = 1 # x, y, z all good!
-		[y, -x*k -b*y + 6]
+		# b = 1 ; k = 1 # x, y, z all good!
+		# [y, -x*k -b*y + 6]
 
 		# split up
-		# b = 2 ; k = 1.2*cos(x)
-		# [y, - x*k - b*y + PI*sin(y)]
+		b = 2 ; k = 1.2*cos(x)
+		[y, - x*k - b*y + PI*sin(y)]
 
 		# sun spots penumbra
 		# [cos(y*x),x/y]
@@ -116,8 +115,8 @@ def setup
 	# 	set_color(*x_y_z,mtrx)
 	# end
 
-	stroke_width 2
-	@it = Euler.new 4000
+	stroke_width 3
+	@it = Euler.new 5000
 end
 
 def set_color(x,y,z,matrix)
@@ -145,7 +144,7 @@ def draw
 	pts.zip(qts).each do |(x,y),(s,t)|
 		x, y, z = to_torus(x,y)
 		s, t, r = to_torus(s,t)
-		stroke (x/4)%360, 80, 100, 100
+		stroke (x/4)%360, 100, 100, 100
 		line(x+@w, y+@h, s+@w, t+@h)
 	end
 
