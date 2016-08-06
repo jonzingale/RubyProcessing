@@ -3,28 +3,22 @@
 module Torus
 	include Math
 	Tau = 2 * PI
-	RAD = 2 # 0, 1, 2
+	RAD = 0 # 0, 1, 2
 	SCALE = 450 / (1 + RAD)
 
 	def sin_cos(var)
 		[:sin, :cos].map {|s| send(s, Tau * var) }
 	end
 
-	def set_key
-		@key = key unless key == '0'
-	end
-
 	def to_torus(x,y)
 		sin_p, cos_p = sin_cos x
 		sin_t, cos_t = sin_cos y
 
-		x = (RAD + cos_p) * cos_t
+		z = (RAD + cos_p) * cos_t
 		y = (RAD + cos_p) * sin_t
-		z = sin_p
+		x = sin_p
 
-		it = [x,y,z]
-		it = @key == '1' ? [x,y,z] : @key == '2' ? [y,z,x] : [x,z,y]
-		it.map{|t| t*SCALE}
+		[x,y,z].map{|t| t*SCALE}
 	end
 end
 
@@ -33,7 +27,7 @@ class Euler
 
 	attr_reader :pts, :qts
 	def initialize num
-		@del_t = 0.001
+		@del_t = 0.002
 		@pts = points num
 		euler
 	end
@@ -59,18 +53,18 @@ class Euler
 		# [y, -x*k -b*y + PI*sin(y)]
 
 		# pendulum
-		# b = 4 ; [y,-b*y +sin(x)]
+		# b = 1 ; [y,-b*y +sin(x)]
 
 		# huygens clocks, ie holy fucking hell 
-		b = 1 ; k = 1 # x, y, z all good!
-		[y, -x*k -b*y + 6]
+		# b = 1 ; k = 1 # x, y, z all good!
+		# [y, -x*k -b*y + 6]
 
 		# split up
 		# b = 2 ; k = 1.2*cos(x)
 		# [y, - x*k - b*y + PI*sin(y)]
 
 		# sun spots penumbra
-		# [cos(y*x),x/y]
+		[cos(y*x),x/y]
 
 		# contracts and explands
 		# [y, -x/100]
@@ -107,7 +101,7 @@ def setup
 	@w, @h = width/2.0, height/2.0
 	colorMode(HSB,360,100,100)
 	background 0
-	frame_rate 10
+	frame_rate 15
 
 	# @all_coords = body_points BODY_RESOLUTION
 	# @all_coords.each do |mtrx|
@@ -116,8 +110,8 @@ def setup
 	# 	set_color(*x_y_z,mtrx)
 	# end
 
-	stroke_width 2
-	@it = Euler.new 4000
+	stroke_width 3
+	@it = Euler.new 5000
 end
 
 def set_color(x,y,z,matrix)
@@ -136,8 +130,6 @@ end
 
 def draw
 	clear
-	set_key
-
 	@it.euler
 	pts = @it.pts
 	qts = @it.qts
@@ -145,7 +137,7 @@ def draw
 	pts.zip(qts).each do |(x,y),(s,t)|
 		x, y, z = to_torus(x,y)
 		s, t, r = to_torus(s,t)
-		stroke (x/4)%360, 80, 100, 100
+		stroke (x/4)%360, 100, 100, 100
 		line(x+@w, y+@h, s+@w, t+@h)
 	end
 
