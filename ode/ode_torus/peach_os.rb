@@ -3,7 +3,7 @@
 module Torus
 	include Math
 	Tau = 2 * PI
-	RAD = 0.5 # 0, 1, 2
+	RAD = 2 # 0, 1, 2
 	SCALE = 450 / (1 + RAD)
 
 	def sin_cos(var)
@@ -46,11 +46,11 @@ class Euler
 
 	def diff(x,y)
 		# nonlinear oscillator
-		# b = 2 ; [	y, -b*y - Math.sin(x)]
+		# b = 1 ; [	y, -b*y - Math.sin(x)]
 
 		# serpentine
-		b= 0.1 ; k=cos(x*y) # x, y, z all good!
-		[y, -x*k -b*y + PI*sin(y)]
+		# b= 0.1 ; k=Math.cos(x*y) # x, y, z all good!
+		# [y, -x*k -b*y + PI*Math.sin(y)]
 
 		# pendulum
 		# b = 1 ; [y,-b*y +sin(x)]
@@ -60,16 +60,14 @@ class Euler
 		# [y, -x*k -b*y + 6]
 
 		# split up
-		# b = 2 ; k = 1.2*cos(x)
+		# b = 2 ; k = 1.2*cos(x) # x, y, z all good!
 		# [y, - x*k - b*y + PI*sin(y)]
 
 		# sun spots penumbra
-		# [cos(y*x),x/y]
+		[cos(y*x),x/y]
 
 		# contracts and explands
 		# [y, -x/100]
-
-		# [y-x, x-y]
 	end
 
 	def euler
@@ -101,10 +99,10 @@ def setup
 	@w, @h = width/2.0, height/2.0
 	colorMode(HSB,360,100,100)
 	background 0
-	frame_rate 10
+	frame_rate 5
 
-	stroke_width 1
-	@it = Euler.new 5000
+	stroke_width 100
+	@it = Euler.new 3000
 end
 
 def set_color(x,y,z,matrix)
