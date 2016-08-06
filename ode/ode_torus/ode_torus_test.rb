@@ -1,10 +1,94 @@
 # Flows on a Torus
-require 'ode_torus/euler.rb'
+# require 'ode_torus/euler.rb'
+module Torus
+	include Math
+	Tau = 2 * PI
+	RAD = 2 # 0, 1, 2
+	SCALE = 450 / (1 + RAD) # incorporate rotations
+
+	def sin_cos(var)
+		[:sin, :cos].map {|s| send(s, Tau * var) }
+	end
+
+	def to_torus(x,y)
+		sin_p, cos_p = sin_cos x
+		sin_t, cos_t = sin_cos y
+
+		x = (RAD + cos_p) * cos_t
+		y = (RAD + cos_p) * sin_t
+		z = sin_p
+
+		[x,y,z].map{|t| t*SCALE}
+	end
+end
+
+class Euler
+	include Math
+
+	attr_reader :pts, :qts
+	def initialize num
+		@del_t = 0.007
+		@pts = points num
+		euler
+	end
+
+	def cent_rand
+		rand - 1 * rand
+	end
+
+	def update_points(pts)
+		@pts = pts
+	end
+
+	def points num
+		(1..num).map { [cent_rand, cent_rand]}
+	end
+
+	def diff(x,y)
+		# nonlinear oscillator
+		# b = 1 ; [	y, -b*y - Math.sin(x), z]
+
+		# b= 3 ; k=Math.cos(x*y) # x, y, z all good!
+		# [y, -x*k -b*y + PI*Math.sin(y), 1]
+
+		# pendulum
+		b = 0 ; [y, -Math.sin(x)]
+
+		# huygens clocks 
+		# b = 2 ; k = 1 # x, y, z all good!
+		# [y, -x*k -b*y + 6]
+
+		# split up
+		# b = 1 ; k = 1.2*cos(x) # x, y, z all good!
+		# [y, - x*k - b*y + PI*sin(y)]
+
+		# [1,1]
+		# [-y, x]
+	end
+
+	def euler
+		@qts = @pts.map do |x, y|
+			s, t = diff x, y
+			dx = x + s * @del_t
+			dy = y + t * @del_t
+
+			s, t = diff dx, dy
+			ddx = dx + s * @del_t
+			ddy = dy + t * @del_t
+
+			[(dx + ddx) /2.0, (dy + ddy) /2.0]
+		end
+	end
+end
+
+###############
 include Math
 include Torus
-
-BODY_RESOLUTION = 2000.freeze
-
+require 'matrix'
+BODY_RESOLUTION = 4000.freeze
+ROTATION_Z = Matrix.rows([[0,sin(0.5*PI),cos(0.5*PI)],
+											    [0,cos(0.5*PI),sin(0.5*PI)],
+											    [1,0,0]]).freeze
 def setup
 	size displayWidth, displayHeight
 	@w, @h = width/2.0, height/2.0
@@ -15,14 +99,14 @@ def setup
 	@all_coords = body_points BODY_RESOLUTION
 
 	@all_coords.each do |mtrx|
-		# x_y_z = (rotation * SCALE * mtrx).to_a.flatten
-		x_y_z = mtrx.to_a.flatten
+		mtrx = Matrix.columns([mtrx])
+		x_y_z = (ROTATION_Z * mtrx).to_a.flatten
 		set_color(*x_y_z,mtrx)
 	end
 
-	stroke_width 1
-	stroke(200,100,100,100)
-	@it = Euler.new 100
+	stroke_width 10
+	stroke(200,100,100,60)
+	@it = Euler.new 1
 end
 
 def set_color(x,y,z,matrix)
@@ -32,7 +116,7 @@ def set_color(x,y,z,matrix)
 end
 
 def body_points(integer)
-	(0...integer).map do |x,y|
+	(0...integer).map do |x,y,z|
 		x = x/(integer.to_f) * PI
 		y = rand * PI
 		to_torus x, y
@@ -48,7 +132,7 @@ def draw
 	pts.zip(qts).each do |(x,y),(s,t)|
 		x, y, z = to_torus(x,y)
 		s, t, r = to_torus(s,t)
-		stroke z, 100, 100, 80
+		stroke x%360, 100, 100, 80
 		line x+@w, y+@h, s+@w, t+@h
 	end
 
