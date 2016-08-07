@@ -55,14 +55,14 @@ class Euler
 		# b = 2 ; [	y, -b*y - Math.sin(x)]
 
 		# serpentine
-		# b= 0.1 ; k=cos(x*y) # x, y, z all good!
-		# [y, -x*k -b*y + PI*sin(y)]
+		b= 0.1 ; k=cos(x*y)
+		[y, -x*k -b*y + PI*sin(y)]
 
 		# pendulum
 		# b = 4 ; [y,-b*y +sin(x)]
 
-		# huygens clocks, ie holy fucking hell 
-		# b = 1 ; k = 1 # x, y, z all good!
+		# huygens clocks
+		# b = 1 ; k = 1
 		# [y, -x*k -b*y + 6]
 
 		# split up
@@ -70,7 +70,7 @@ class Euler
 		# [y, - x*k - b*y + PI*sin(y)]
 
 		# sun spots penumbra
-		[cos(y*x),x/(y<0.007 ? y : y)]
+		# [cos(y*x),x/(y<0.007 ? y : y)]
 
 		# contracts and explands
 		# [10*y, -x/100]
