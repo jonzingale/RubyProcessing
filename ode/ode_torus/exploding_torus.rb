@@ -23,7 +23,7 @@ module Torus
 		z = sin_p
 
 		it = [x,y,z]
-		it = @key == '2' ? [y,z,x] : @key == '3' ? [x,z,y] : [x,y,z]
+		it = @key == '1' ? [x,y,z] : @key == '2' ? [y,z,x] : [x,z,y]
 		it.map{|t| t*SCALE}
 	end
 end
@@ -70,16 +70,14 @@ class Euler
 		# [y, - x*k - b*y + PI*sin(y)]
 
 		# sun spots penumbra
-		[cos(y*x),x/(y<0.007 ? y : y)]
+		# [cos(y*x),x/y]
 
 		# contracts and explands
-		# [10*y, -x/100]
+		# [y, -x/100]
 
-		# figure 8
-		# [5*(y-x),5* (x-y)]
+		# [y-x, x-y]
 
-		# exploding sphere
-		# [10*exp(y)/(1*x), y]
+		[20*exp(y)/(1*x), y]
 	end
 
 	def euler
