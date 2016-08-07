@@ -3,7 +3,7 @@
 module Torus
 	include Math
 	Tau = 2 * PI
-	RAD = 0.5 # 0, 1, 2
+	RAD = 0 # 0, 1, 2
 	SCALE = 450 / (1 + RAD)
 
 	def sin_cos(var)
