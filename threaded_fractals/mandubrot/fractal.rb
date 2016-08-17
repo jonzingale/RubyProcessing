@@ -4,13 +4,14 @@ class Fractal
     @max_iterations = options[:max_iterations] || 100
     @limit = options[:limit] || 1_000_000
     @power = options[:power] || 2
-    @iterate = block
+
+    self.class.send(:define_method, :iterate, &block)
   end
 
   def escape_iterations(c)
     n = Complex(0, 0)
     max_iterations.times do |i|
-      n = @iterate.call(n, c)
+      n = iterate(n, c)
       return i if escaped?(n)
     end
     return nil
