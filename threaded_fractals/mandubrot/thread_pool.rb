@@ -15,6 +15,12 @@ class ThreadPool
     end
   end
 
+  def done?
+    @threads.all? do |thr|
+      thr.status == 'sleep'
+    end
+  end
+
   def set_work(w)
     @work = w
   end
