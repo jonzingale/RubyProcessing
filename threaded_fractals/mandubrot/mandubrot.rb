@@ -2,35 +2,42 @@ require 'mandubrot/complex_screen.rb'
 require 'mandubrot/fractal.rb'
 require 'mandubrot/thread_pool.rb'
 
+PHI = (1+5**0.5)/2.0
+PHA = (1-5**0.5)/2.0
+
 def setup
-  # size 1024, 768
+  @save_folder = File.expand_path(File.dirname(__FILE__))
+
+  @start_time = Time.now()
+  size 1920/2, 1080/2
   # size 10, 10
-  size displayWidth, displayHeight
+  # size displayWidth, displayHeight
+
+  smooth(8)
 
   @font = create_font "Arial", 16, true
   text_font @font
 
-  frame_rate = 30
+  frame_rate = 10
 
   @draw_time = nil
-  @mandelbrot = Fractal.new do |n, c|
-    (n ** 2) + c
+  @fractal = Fractal.new do |n, c|
+    (n ** 2) + c # mandelbrot
+    # c + 0.44721359549996 * (PHI**n - PHA**n) #fib?
   end
-  # @mandelbrot = Fib.new
-  @complex_screen = ComplexScreen.new(width: width, height: height, aa: 2)
+  @complex_screen = ComplexScreen.new(width: width, height: height)
+
+  @color_map = []
 
   @thread_pool = ThreadPool.new(8) do |y|
-    h2 = height / 2
-    (0...width).to_a.each do |x|
+    h2 = @complex_screen.height / 2
+    (0...@complex_screen.width).to_a.each do |x|
       render_pixel(x, h2 - y)
       render_pixel(x, y + h2)
     end
   end
 
-  @thread_pool.set_work((0...(height/2)).to_a)
-
   colorMode(RGB, 100);
-  @color_map = []
   background(color_safe(0,0,0))
   no_stroke
 
@@ -40,23 +47,49 @@ def setup
 end
 
 def draw
+  @end_time = Time.now() unless @thread_pool.done?
   if @complex_screen.changed?
     @complex_screen.update_image
+    fill(255,255,255)
     display_status
   end
 end
 
 def render
+  @start_time = Time.now()
+  @thread_pool.set_work((0...(@complex_screen.height/2)).to_a)
   @thread_pool.start_work
 end
 
-def render_pixel (x, y)
+def colorize_pizel(x, y)
   cx = @complex_screen.screen_to_complex(x, y)
-  m = @mandelbrot.escape_iterations(cx)
-  @complex_screen.set_value_at(x, y, colorize(m))
+  m = @fractal.escape_iterations(cx).to_i
+  colorize(m)
+end
+
+def blend_color_array(arr)
+  retval = [0, 0, 0]
+  arr.map do |elems|
+    3.times { |i| retval[i] += elems[i] }
+  end
+  retval.map { |r| r / arr.length.to_f }
+end
+
+def render_pixel (x, y, aa=1)
+  step = 1 / aa.to_f
+  colors = []
+  aa.times do |yy|
+    aa.times do |xx|
+      colors << colorize_pizel(x + xx * step, y + yy * step)
+    end
+  end
+  @complex_screen.set_value_at(x, y, color_safe(*blend_color_array(colors)))
 end
 
 def color_safe (r, g, b)
+  r = r.to_i
+  g = g.to_i
+  b = b.to_i
   i = r * 65536 + g * 256 + b
   unless @color_map[i]
     @thread_pool.synchronize do
@@ -67,43 +100,33 @@ def color_safe (r, g, b)
 end
 
 def colorize (k)
-  if k
+  if k.to_i > 0
     n = k
     r = n % 512
     r = 512 - r if r > 255
-    g = (n * 8) % 512
+    g = (n * 16) % 512
     g = 512 - g if g > 255
     b = 256 - (r + g)
-    b = 255 - r
-    color_safe(r, g, b)
+    [r, g, b]
   else
-    color_safe(0, 0, 0)
+    [0, 0, 0]
   end
 end
 
-# not sure what I'm going to do with this, but it seems useful.
-def every_x_seconds(n)
-  now = Time.now()
-  @counter ||= []
-  @counter[n] ||= now
-  if (now - @counter[n] >= n)
-    @counter[n] = now
-    yield
-  end
-end
 
 def display_status
   if @show_status
-    fill(255,255,255)
     status = {
       queue: @thread_pool.queue_size,
       all_threads: ThreadGroup::Default.list.length,
       dimensions: [@complex_screen.width, @complex_screen.height].inspect,
       center: @complex_screen.center,
       scale: @complex_screen.scale,
-      max_iterations: @mandelbrot.max_iterations,
-      limit: @mandelbrot.limit,
-      power: @mandelbrot.power
+      max_iterations: @fractal.max_iterations,
+      limit: @fractal.limit,
+      power: @fractal.power,
+      done: @thread_pool.done?,
+      time: @end_time - @start_time
     }.map { |k, v| "#{k}: #{v}\n" }.join
     text(status, 10, 20)
   end
@@ -119,17 +142,17 @@ def key_pressed
   w2, h2 = @complex_screen.width/2, @complex_screen.height/2
   case key
   when '0'
-    @mandelbrot.power = @mandelbrot.power + 0.1
+    @fractal.power = @fractal.power + 0.1
   when '9'
-    @mandelbrot.power = @mandelbrot.power - 0.1
+    @fractal.power = @fractal.power - 0.1
   when ']'
-    @mandelbrot.max_iterations = [@mandelbrot.max_iterations + 1, 1].max
+    @fractal.max_iterations = [@fractal.max_iterations + 1, 1].max
   when '['
-    @mandelbrot.max_iterations = [@mandelbrot.max_iterations - 1, 1].max
+    @fractal.max_iterations = [@fractal.max_iterations - 1, 1].max
   when '}'
-    @mandelbrot.max_iterations = [@mandelbrot.max_iterations + 100, 1].max
+    @fractal.max_iterations = [@fractal.max_iterations + 100, 1].max
   when '{'
-    @mandelbrot.max_iterations = [@mandelbrot.max_iterations - 100, 1].max
+    @fractal.max_iterations = [@fractal.max_iterations - 100, 1].max
   when '+', '='
     @complex_screen.zoom(0.5)
   when '-'
@@ -144,6 +167,17 @@ def key_pressed
     @complex_screen.recenter(w2, h2 + 100)
   when 'z'
     @show_status = !@show_status
+  when 'h'
+    @complex_screen.resize_by(2)
+  when 'l'
+    @complex_screen.resize_by(0.5)
+  when 'p'
+    ts = Time.now().strftime('%Y%m%d_%H%M%S')
+    filename = "#{@save_folder}/mandubrot_#{ts}.png"
+    puts "Saved: #{filename}"
+    @complex_screen.save(filename)
+    do_render = false
+  when 'r'
   else
     do_render = false
   end
