@@ -1,6 +1,5 @@
 class ComplexScreen
-  attr_reader :width, :height, :center, :scale, :aspect,
-              :all_coords, :shuffled_coords
+  attr_reader :width, :height, :center, :scale, :aspect
   attr_accessor :img
 
   def initialize(options)
@@ -13,10 +12,12 @@ class ComplexScreen
     @aspect = width.to_f / height
     @changed = false
     @queue = Queue.new
-    @all_coords = (0...width).to_a.product((0...height).to_a)
-    @shuffled_coords = @all_coords.shuffle
 
     start_coloring
+  end
+
+  def ui_scale
+    width / $app.width.to_f
   end
 
   def start_coloring
@@ -31,33 +32,36 @@ class ComplexScreen
 
   def end_coloring
     @thread.exit
-    @queue.clear
     @thread.join
+    @queue.clear
   end
 
   def changed?
     @changed
   end
 
+  def resize_by (r)
+    new_width = (width * r).to_i
+    if (new_width > 200 && new_width < 10000)
+      resize(new_width, (height * r).to_i)
+    end
+  end
+
+  def resize (w, h)
+    update_and_remap( width: w, height: h)
+  end
+
   def recenter (x, y)
-    update_and_remap(center: screen_to_complex(x, y))
+    update_and_remap(center: screen_to_complex(x*ui_scale, y*ui_scale))
   end
 
   def zoom (z, x=nil, y=nil)
-    c = (x && y) ? screen_to_complex(x, y) : center
+    c = (x && y) ? screen_to_complex(x*ui_scale, y*ui_scale) : center
     update_and_remap({ center: c, scale: scale * z })
-  end
-
-  def get_value_at (x, y)
-    @img.pixels[coords_to_index(x, y)]
   end
 
   def set_value_at (x, y, val)
     @queue << [x, y, val]
-  end
-
-  def get_value_at_complex (c)
-    get_value_at(*complex_to_screen(c))
   end
 
   def set_value_at_complex (c, val)
@@ -65,7 +69,7 @@ class ComplexScreen
   end
 
   def coords_to_index (x, y)
-    x + (y * width)
+    [x + (y * width), (width * height) - 1].min
   end
 
   def index_to_coords (i)
@@ -86,11 +90,15 @@ class ComplexScreen
   end
 
   def update_and_remap(options)
+    end_coloring
+
     dc1 = screen_to_complex(0, 0)
     dc2 = screen_to_complex(width, height)
 
     old_img = $app.create_image(width, height, Processing::App::RGB)
     old_img.copy(img, 0, 0, width, height, 0, 0, width, height)
+    old_width = width
+    old_height = height
 
     @width = options[:width] if options[:width]
     @height = options[:height] if options[:height]
@@ -101,14 +109,21 @@ class ComplexScreen
     dx2, dy2 = *complex_to_screen(dc2)
     dw, dh = dx2 - dx1, dy2 - dy1
     tmp_img = $app.create_image(width, height, Processing::App::RGB)
-    tmp_img.copy(old_img, 0, 0, width, width, dx1, dy1, dw, dh)
+    tmp_img.copy(old_img, 0, 0, old_width, old_height, dx1, dy1, dw, dh)
     @img = tmp_img
+    @img.loadPixels();
     @changed = true
+
+    start_coloring
   end
 
   def update_image
     @img.update_pixels
-    $app.image(@img,0,0)
+    $app.image(@img, 0, 0, $app.width, $app.height)
     @changed = false
+  end
+
+  def save(filename)
+    @img.save(filename)
   end
 end
