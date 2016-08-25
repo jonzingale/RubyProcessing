@@ -13,7 +13,7 @@ def setup
   # size 10, 10
   # size displayWidth, displayHeight
 
-  smooth(8)
+  smooth(0)
 
   @font = create_font "Arial", 16, true
   text_font @font
@@ -124,7 +124,6 @@ def display_status
       scale: @complex_screen.scale,
       max_iterations: @fractal.max_iterations,
       limit: @fractal.limit,
-      power: @fractal.power,
       done: @thread_pool.done?,
       time: @end_time - @start_time
     }.map { |k, v| "#{k}: #{v}\n" }.join
@@ -139,12 +138,8 @@ end
 
 def key_pressed
   do_render = true
-  w2, h2 = @complex_screen.width/2, @complex_screen.height/2
+  w2, h2 = (@complex_screen.width/2).to_i, (@complex_screen.height/2).to_i
   case key
-  when '0'
-    @fractal.power = @fractal.power + 0.1
-  when '9'
-    @fractal.power = @fractal.power - 0.1
   when ']'
     @fractal.max_iterations = [@fractal.max_iterations + 1, 1].max
   when '['

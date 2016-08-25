@@ -1,9 +1,8 @@
 class Fractal
-  attr_accessor :max_iterations, :power, :limit
+  attr_accessor :max_iterations, :limit
   def initialize (options={}, &block)
     @max_iterations = options[:max_iterations] || 100
     @limit = options[:limit] || 1_000_000
-    @power = options[:power] || 2
 
     self.class.send(:define_method, :iterate, &block)
   end

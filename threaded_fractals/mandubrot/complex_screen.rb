@@ -8,7 +8,7 @@ class ComplexScreen
     @center = options[:center] || Complex(-0.25,0)
     @scale = options[:scale] || 1
     @img = options[:img] || $app.create_image(width, height, Processing::App::RGB)
-    @img.loadPixels();
+    @img_sm = $app.create_image($app.width, $app.height, Processing::App::RGB)
     @aspect = width.to_f / height
     @changed = false
     @queue = Queue.new
@@ -24,7 +24,10 @@ class ComplexScreen
     @thread = Thread.new do
       while true
         x, y, val = @queue.pop
-        @img.pixels[coords_to_index(x, y)] = val
+        @img.set(x, y, val);
+        sm_x = [(x/ui_scale).to_i, @img_sm.width].min
+        sm_y = [(y/ui_scale).to_i, @img_sm.height].min
+        @img_sm.set(sm_x, sm_y, val)
         @changed = true
       end
     end
@@ -42,17 +45,17 @@ class ComplexScreen
 
   def resize_by (r)
     new_width = (width * r).to_i
-    if (new_width > 200 && new_width < 10000)
+    if (new_width > 200 && new_width <= 30_720)
       resize(new_width, (height * r).to_i)
     end
   end
 
   def resize (w, h)
-    update_and_remap( width: w, height: h)
+    update_and_remap(width: w, height: h)
   end
 
   def recenter (x, y)
-    update_and_remap(center: screen_to_complex(x*ui_scale, y*ui_scale))
+    zoom(1, x, y)
   end
 
   def zoom (z, x=nil, y=nil)
@@ -89,37 +92,41 @@ class ComplexScreen
     [x, y]
   end
 
+  def complex_to_preview(c)
+    delta = c - center
+    x = (((delta.real / aspect / scale) + 1) * $app.width / 2).round
+    y = (((delta.imag / scale) + 1) * $app.height / 2).round
+    [x, y]
+  end
+
   def update_and_remap(options)
     end_coloring
 
     dc1 = screen_to_complex(0, 0)
     dc2 = screen_to_complex(width, height)
 
-    old_img = $app.create_image(width, height, Processing::App::RGB)
-    old_img.copy(img, 0, 0, width, height, 0, 0, width, height)
-    old_width = width
-    old_height = height
+    new_img = $app.create_image(@img_sm.width, @img_sm.height, Processing::App::RGB)
 
     @width = options[:width] if options[:width]
     @height = options[:height] if options[:height]
     @center = options[:center] if options[:center]
     @scale = options[:scale] if options[:scale]
 
-    dx1, dy1 = *complex_to_screen(dc1)
-    dx2, dy2 = *complex_to_screen(dc2)
+    dx1, dy1 = *complex_to_preview(dc1)
+    dx2, dy2 = *complex_to_preview(dc2)
     dw, dh = dx2 - dx1, dy2 - dy1
-    tmp_img = $app.create_image(width, height, Processing::App::RGB)
-    tmp_img.copy(old_img, 0, 0, old_width, old_height, dx1, dy1, dw, dh)
-    @img = tmp_img
-    @img.loadPixels();
+
+    new_img.copy(@img_sm, 0, 0, @img_sm.width, @img_sm.height, dx1, dy1, dw, dh)
+    @img_sm = new_img
+    @img = $app.create_image(width, height, Processing::App::RGB)
+
     @changed = true
 
     start_coloring
   end
 
   def update_image
-    @img.update_pixels
-    $app.image(@img, 0, 0, $app.width, $app.height)
+    $app.image(@img_sm, 0, 0, $app.width, $app.height)
     @changed = false
   end
 
