@@ -27,7 +27,7 @@ class Blinky
     NEARS.map do |j, i|
       rr = (row + j) % @height
       cc = (col + i) % @width
-      @board[rr * @width +  cc]
+      @board[rr * @width + cc]
     end
   end
 
