@@ -10,9 +10,8 @@ class Blinky
     @i = 0
   end
 
+  # def to_coords(t) ; t.divmod @width ; end
   # def to_index(row, col) ; row * @width + col ; end
-  def to_coords(t) ; t.divmod @width ; end
-
   def rand_board ; (0...@ary_size).map{ rand 2 } ; end
 
   def split ary, cry=[]
@@ -26,8 +25,8 @@ class Blinky
     end
   end
 
-  def neighborhood(val)
-    row, col = to_coords val
+  def neighborhood val
+    row, col = val.divmod @width 
 
     NEARS.map do |j, i|
       rr = (row + j) % @height
