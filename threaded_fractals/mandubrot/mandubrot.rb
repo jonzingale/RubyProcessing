@@ -2,6 +2,7 @@ require 'mandubrot/complex_screen.rb'
 require 'mandubrot/fractal.rb'
 require 'mandubrot/thread_pool.rb'
 
+ROOT5 = 0.44721359549996
 PHI = (1+5**0.5)/2.0
 PHA = (1-5**0.5)/2.0
 
@@ -10,9 +11,7 @@ def setup
 
   @start_time = Time.now()
   size 1920/2, 1080/2
-  # size 10, 10
   # size displayWidth, displayHeight
-
   smooth(8)
 
   @font = create_font "Arial", 16, true
@@ -22,8 +21,8 @@ def setup
 
   @draw_time = nil
   @fractal = Fractal.new do |n, c|
-    (n ** 2) + c # mandelbrot
-    # c + 0.44721359549996 * (PHI**n - PHA**n) #fib?
+    # (n ** 2) + c # mandelbrot
+    c + ROOT5 * (PHI**n - PHA**n) #fib
   end
   @complex_screen = ComplexScreen.new(width: width, height: height)
 
