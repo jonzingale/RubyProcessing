@@ -14,14 +14,11 @@ class Blinky
   # def to_index(row, col) ; row * @width + col ; end
   def rand_board ; (0...@ary_size).map{ rand 2 } ; end
 
-  def split ary, cry=[]
-    cry << ary.shift(@width) until ary.empty? ; cry
-  end
-
   def pretty_print
-    board = split @board.dup
-    board.each do |row|
-      puts row.join('').gsub(/[01]/, '0' => '   ', '1' => ' * ')
+    ary = @board.dup
+    until ary.empty? 
+      line = ary.shift(@width).join('')
+      puts line.gsub(/[01]/, '0' => '   ', '1' => ' * ')
     end
   end
 
