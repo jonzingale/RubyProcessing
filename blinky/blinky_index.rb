@@ -13,6 +13,7 @@ class Blinky
   def rand_board ; (0...@ary_size).map{ rand 2 } ; end
 
   def pretty_print
+    system("clear")
     ary = @board.dup
 
     until ary.empty? 
@@ -51,7 +52,6 @@ class Blinky
     while @i<10**3
       @i += 1
       # sleep(0.3)
-      system("clear")
       pretty_print
       update
     end
