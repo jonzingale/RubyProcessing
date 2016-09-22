@@ -14,10 +14,9 @@ class Blinky
 
   def pretty_print
     system("clear")
-    ary = @board.dup
 
-    until ary.empty? 
-      line = ary.shift(@width).join('')
+    until @next_board.empty? 
+      line = @next_board.shift(@width).join('')
       puts line.gsub(/[01]/, '0' => '   ', '1' => ' * ')
     end
   end
