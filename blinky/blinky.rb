@@ -20,6 +20,7 @@ class Blinky
 	end
 
 	def pretty_print
+		system("clear")
 		@board.each do |row|
 			puts row.join('').gsub(/[01]/, '0' => '   ', '1' => ' * ')
 		end
@@ -60,7 +61,6 @@ class Blinky
 		while @i<10**3
 			@i += 1
 			# sleep(0.3)
-			system("clear")
 			pretty_print
 			go_team
 		end
