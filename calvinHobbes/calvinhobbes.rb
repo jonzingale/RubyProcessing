@@ -17,7 +17,8 @@ NAME_REGEX = /\/(\w+_?)+(.jpg)?$/.freeze
 def setup
 	size(displayWidth, displayHeight)
 
-	rand(3) == 0 ? get_nasa_pic : get_hubble_pic
+	# rand(3) == 0 ? get_nasa_pic : get_hubble_pic
+	get_nasa_pic
 
 	@star_image = loadImage(StarPath)
 	image(@star_image, 0, 0, *rescalar)
