@@ -1,3 +1,5 @@
+# ironically slower than blinky_index.rb
+# which duplicates objects.
 class Blinky
   NEARS = [-1,0,1].product([-1,0,1]).reject{|t| t==[0,0]}
 
