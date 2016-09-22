@@ -10,12 +10,11 @@ class Blinky
     @i = 0
   end
 
-  # def to_coords(t) ; t.divmod @width ; end
-  # def to_index(row, col) ; row * @width + col ; end
   def rand_board ; (0...@ary_size).map{ rand 2 } ; end
 
   def pretty_print
     ary = @board.dup
+
     until ary.empty? 
       line = ary.shift(@width).join('')
       puts line.gsub(/[01]/, '0' => '   ', '1' => ' * ')
