@@ -10,6 +10,18 @@ def pretty_print(board)
 	end
 end
 
+# this needs a notion of size.
+def pretty_print_new(board)
+	e_size = 5
+	board.each_with_index do |row, c_dex|
+		row.each_with_index do |c, r_dex|
+			params = [r_dex,c_dex].map{|i|i*e_size+20} + [e_size]*2
+			rgb = (1..3).map{|i| c*(rand 255)}
+			fill(*rgb,10) ; ellipse(*params)
+		end
+	end
+end
+
 def logistic_print(board) # get or pixel?
 	e_size = 2 # must be the same as the grabber somehow.
 	board.each_with_index do |row,c_dex|

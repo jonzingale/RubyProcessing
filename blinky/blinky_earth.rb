@@ -84,7 +84,6 @@ DataPt = 5.freeze
 		end
 	end
 
-
 class Board
 	attr_accessor :image_board, :rand_board
 	def initialize(width=20,height=20)
@@ -103,9 +102,6 @@ class Board
 			(0...@height).map do |j|
 				# ([1]*3+[0]*7)[rand 10]
 				rand 2
-
-
-				# rand 2
 			end
 		end
 	end
