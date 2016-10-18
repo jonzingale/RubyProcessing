@@ -2,8 +2,9 @@
 SIMPLICES = (0..6).map{|s| eval("SIMPLEX_#{s} = (0..#{s}).to_a")}.freeze
 
 def setup
+	size(displayWidth/2, displayHeight/2)
 	text_font create_font("SanSerif",40)
-  background(20) ; frame_rate 0.5 ; size(1400,1000) #HOME
+  background(20) ; frame_rate 0.5
 	@w,@h = [width,height].map{|i|i/5.0}
 	stroke_width(3)
 end
@@ -30,8 +31,8 @@ end
 def split_triangle_2(e1,e2)
 	if (sig = e1|e2).count == 3
 		hs = Hash.new ; keys = %w(a b c d e)
-		keys.zip(sig+['p','q']).each{|i,e| hs[i]=e}
-		%w(adc dec dbe).map{|a| a.split('').map{|i| hs[i]}}
+		keys.zip(sig+['p','q']).each { |i,e| hs[i]=e }
+		%w(adc dec dbe).map { |a| a.split('').map { |i| hs[i] } }
 	end
 end
 
