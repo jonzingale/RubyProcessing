@@ -62,7 +62,7 @@ require 'mechanize'
 	end
 
 	def trigs(theta)#:: Theta -> R2
-	  %w(cos sin).map{|s| eval("Math.#{s} #{theta}")}
+	  %w(cos sin).map{|s| Math.send(s, theta)}
 	end
 
 	def rootsUnity(numbre)#::Int -> [trivalStar]
