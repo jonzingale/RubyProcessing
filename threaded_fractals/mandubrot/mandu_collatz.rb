@@ -18,7 +18,15 @@ def setup
   @mandelbrot = Fractal.new do |n, c|
 
     # fibs
-    PHI**n - PHA**n + c
+    # PHI**n - PHA**n + c
+
+    # fluid like
+    # trig = n.rect.map{|t| Math.cos(PI*t)}
+    # 0.25*(2+7*n-(2+5*n)*Complex(*trig)) + c
+
+    # canyon like
+    trig = n.rect.map{|t| Math.cos(PI*t)}
+    0.25*(1+4*n-(1+2*n)*Complex(*trig)) * c
 
     # collatz
     # x, y = n.rect.map{|t|t *PI}
@@ -43,7 +51,7 @@ def setup
 
   @thread_pool.set_work((0...(height/2)).to_a)
 
-  colorMode(RGB, 100);
+  colorMode(HSB, 100);
   @color_map = []
   background(color_safe(0,0,0))
   no_stroke
