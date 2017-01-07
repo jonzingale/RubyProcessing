@@ -4,7 +4,7 @@
   class SandPiper
     def initialize(width, height)
       @w, @h = width, height
-      @r_ary = (0..3).map{|t| t/3.0}
+      @r_ary = (0..2).map{|t| t/2.0}
       render_body
     end
 
@@ -18,7 +18,7 @@
 
     def render_body
       r_sel = rotate(@r_ary).first
-      rando = PI/1.5 - PI * r_sel / 3
+      rando = PI/2 - PI * r_sel / 7 # 1.5, 3
       cos, sin = trigs(rando).map{|t| t*120}
 
       stroke_width(6) ; stroke(120)
@@ -48,6 +48,6 @@
 
   def draw
     image(@img, 0, 0)
-    fill 80 ; text('My Winter Vacation',60,170)
+    fill 80 ; text('My Beach Vacation',60,170)
     @piper.render_body
   end
