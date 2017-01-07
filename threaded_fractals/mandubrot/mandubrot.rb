@@ -36,7 +36,7 @@ def setup
     end
   end
 
-  colorMode(RGB, 100);
+  colorMode(HSB, 100);
   background(color_safe(0,0,0))
   no_stroke
 
