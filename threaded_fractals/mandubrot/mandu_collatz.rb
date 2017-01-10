@@ -18,15 +18,15 @@ def setup
   @mandelbrot = Fractal.new do |n, c|
 
     # fibs
-    # PHI**n - PHA**n + c
+    PHI**n - PHA**n + c
 
     # fluid like
     # trig = n.rect.map{|t| Math.cos(PI*t)}
     # 0.25*(2+7*n-(2+5*n)*Complex(*trig)) + c
 
     # canyon like
-    trig = n.rect.map{|t| Math.cos(PI*t)}
-    0.25*(1+4*n-(1+2*n)*Complex(*trig)) * c
+    # trig = n.rect.map{|t| Math.cos(PI*t)}
+    # 0.25*(1+4*n-(1+2*n)*Complex(*trig)) * c
 
     # collatz
     # x, y = n.rect.map{|t|t *PI}
