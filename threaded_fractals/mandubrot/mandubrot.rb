@@ -1,6 +1,7 @@
 require 'mandubrot/complex_screen.rb'
 require 'mandubrot/fractal.rb'
 require 'mandubrot/thread_pool.rb'
+require 'cmath'
 
 ROOT5 = 0.44721359549996
 PHI = (1+5**0.5)/2.0
@@ -23,6 +24,14 @@ def setup
   @fractal = Fractal.new do |n, c|
     # (n ** 2) + c # mandelbrot
     c + ROOT5 * (PHI**n - PHA**n) #fib
+
+    # canyon like
+    # trig = n.rect.map{|t| Math.cos(PI*t)}
+    # 0.25*(1+4*n-(1+2*n)*Complex(*trig)) * c
+
+    # fluid like
+    # trig = n.rect.map{|t| Math.cos(PI*t)}
+    # 0.25*(2+7*n-(2+5*n)*Complex(*trig)) + c
   end
   @complex_screen = ComplexScreen.new(width: width, height: height)
 
