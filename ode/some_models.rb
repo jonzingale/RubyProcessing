@@ -23,8 +23,11 @@
 	def abs(n) ; (n**2)**0.5 ; end
 
 	def diff(x,y,z)
+		# limit cycle
+		[y, -x, z+x+20]
+
 		# a hamiltonian situation
-		[y, -x**3 + x, 1]
+		# [y, -x**3 + x, 1]
 
 		# coupled oscillators
 		# k, l = -0.5, 0.2
@@ -81,7 +84,7 @@
 		# clear
 		improved_euler
 		@pts.zip(@next_pts).each do |(x,y,z),(s,t,r)|
-			stroke z, 100, 100, 10
+			stroke z, 100, 100, 20
 			line ((x+@w)*MU-@w*MU+@w), ((y+@h)*MU-@h*MU/1.01),
 					 ((s+@w)*MU-@w*MU+@w), ((t+@h)*MU-@h*MU/1.01)
 		end
