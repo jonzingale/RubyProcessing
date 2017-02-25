@@ -1,5 +1,7 @@
 include Math
 
+# Extend Functionality to print `Long` images to a file.
+
 FILES_PATH = File.expand_path('./../', __FILE__).freeze
 EDGES_REGEX = /\((\d+),(\d+)\)/
 Tau = 3.1415927 * 2
