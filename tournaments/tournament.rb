@@ -1,10 +1,11 @@
 include Math
 
 FILES_PATH = File.expand_path('./../', __FILE__).freeze
-PI = 3.1415927
+EDGES_REGEX = /\((\d+),(\d+)\)/
+Tau = 3.1415927 * 2
 SCALE = 120
 
-def get_lists # use files to pass haskell to ruby.
+def get_lists # Haskell to pass files to ruby.
   @lists, file = [], "#{FILES_PATH}/lists.txt"
   File.open(file, 'r').each { |line| @lists << line }
 end
@@ -34,7 +35,6 @@ def print_each_graph
 end
 
 def vertices n, i
-  # div = @lists.count
   w, h = width/5, height/3.5
   k, j = i.divmod 5
   # how can i space out the n many in the list on the 'page'?
@@ -52,9 +52,9 @@ def edges list
 end
 
 def list2edges str
-  str.scan(/\((\d+),(\d+)\)/).map{|uv| uv.map(&:to_i)}
+  str.scan(EDGES_REGEX).map{|uv| uv.map(&:to_i)}
 end
 
-def rootsUnity(n) # ::Int -> [Star]
-  (0...n).map{|i| %w(sin cos).map{|s| Math.send(s, 2*PI*i/n)}}
+def rootsUnity n
+  (0...n).map{|i| [sin(Tau*i/n), cos(Tau*i/n)] }
 end
