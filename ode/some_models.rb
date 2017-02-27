@@ -2,12 +2,12 @@
 		size(displayWidth, displayHeight)
 		colorMode(HSB,360,100,100,100)
 		@w, @h = [width/2, height/2]
-    frame_rate 10
+    frame_rate 30
 
 		background(0)
 		stroke(210,100,100,30)
-		stroke_width 1
-		@pts = points 9000
+		stroke_width 10
+		@pts = points 10
 		@del_t = 0.007
 	end
 
@@ -24,7 +24,7 @@
 
 	def diff(x,y,z)
 		# limit cycle
-		[y, -x, z+x+20]
+		# [y, -x, z+x+20]
 
 		# a hamiltonian situation
 		# [y, -x**3 + x, 1]
@@ -48,6 +48,10 @@
 		#  b*x*y-v*y,
 		#  v*y]
 		# [ y**2 - x**3 * Math.sin(x), -x , 1]
+
+		# Rossler
+		a, b, c = 0.1, 0.1, 14
+		[-y-z, x + a*y, b+z*(x-c)]
 	end
 
 	def euler
