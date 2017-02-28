@@ -55,7 +55,7 @@ require (File.expand_path('./lorenz', File.dirname(__FILE__)))
     x = bt + @w
     btt = delay bt
     y = btt + @h
-    ellipse x + @w/4, y - @h/3.3, 1, 1
+    ellipse x + @w/4, y - @h/4, 1, 1
   end
 
   def plot_lorenz attractor
