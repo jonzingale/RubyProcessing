@@ -5,9 +5,8 @@ require (File.expand_path('./lorenz', File.dirname(__FILE__)))
 		text_font create_font("SanSerif",50)
 		colorMode(HSB,360,100,100,60)
 		@w, @h = [width/2.0, height/2.0]
-		@i = 0 ; @t = 0
-		background(0)
     frame_rate 100
+		background 0
 		no_stroke
 
 		@trajectories = get_trajectories(3)
