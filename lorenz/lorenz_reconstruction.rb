@@ -1,8 +1,8 @@
 require (File.expand_path('./lorenz', File.dirname(__FILE__)))
   # lorenz_reconstruction is a visualization of Takens' Theorem,
-  # a delay delay embedding theorem. Here I reconstruct the phase
-  # space of the Lorenz attractor from a single variable
-  # time series Lorenz equations.
+  # a delay embedding theorem. Here I reconstruct in phase
+  # space the Lorenz attractor from a single variable
+  # time series of the Lorenz equations.
 
   def setup
     size(displayWidth, displayHeight)
