@@ -16,7 +16,7 @@ require (File.expand_path('./lorenz', File.dirname(__FILE__)))
 
     fill(100,100,100,100)
     @trajectories = get_trajectories 1
-    @delay = [0] * 30 # heuristically found.
+    @delay = [0] * 100 # heuristically found.
   end
 
   def plot_text
@@ -46,8 +46,8 @@ require (File.expand_path('./lorenz', File.dirname(__FILE__)))
     y = attractor.x * 10 + @h/2.6
     # clear a path before the time series
     stroke 0
-    line(x_plot, 0, x_plot + 4, @h/1.3)
-    no_stroke ; ellipse(x_plot, y, 1, 1) ; y
+    line(x_plot, 0, x_plot + 7, @h/1.3)
+    no_stroke ; ellipse(x_plot, y, 2, 2) ; y
   end
 
   def reconstruct attractor
