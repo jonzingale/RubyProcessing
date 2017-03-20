@@ -2,8 +2,8 @@
     size displayWidth, displayHeight
     colorMode HSB, 360, 100, 100, 100
     stroke 12, 60, 100, 100
-    stroke_width 1
     fill 0, 0, 0, 7 # see rect
+    stroke_width 1
     frame_rate 20
     background 0
 
