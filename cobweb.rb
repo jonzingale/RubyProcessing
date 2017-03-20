@@ -30,6 +30,6 @@
   end
 
   def draw
-    rect(0, 0, width, height)
+    rect(-10, -10, width + 10, height)
     @it.iterate
   end
