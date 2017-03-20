@@ -3,7 +3,7 @@
     colorMode HSB, 360, 100, 100, 100
     stroke 12, 60, 100, 100
     stroke_width 1
-    fill 0, 0, 0, 6 # see black_out
+    fill 0, 0, 0, 7 # see rect
     frame_rate 20
     background 0
 
@@ -29,11 +29,7 @@
     end
   end
 
-  def black_out
-    rect(0, 0, width, height)
-  end
-
   def draw
-    black_out
+    rect(0, 0, width, height)
     @it.iterate
   end
