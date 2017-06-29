@@ -3,7 +3,7 @@
 require (File.expand_path('blinky', File.dirname(__FILE__)))
 require (File.expand_path('pretty_blinks', File.dirname(__FILE__)))
 
-IMAGES_PATH = File.expand_path('blinky_images', File.dirname(__FILE__)).freeze
+IMAGES_PATH = File.expand_path('images', File.dirname(__FILE__)).freeze
 
 IMAGE_TO_PROCESS = "#{IMAGES_PATH}/symmetric4.jpg".freeze
 IMAGE_TO_PROCESS_TMP = "#{IMAGES_PATH}/symmetric4_tmp.jpg".freeze
@@ -11,12 +11,12 @@ IMAGE_TO_PROCESS_TMP = "#{IMAGES_PATH}/symmetric4_tmp.jpg".freeze
 	attr_reader :loaded
 	def setup
 		text_font create_font("SanSerif", 20)
-		size = 675, 900 ; size(*size)
+		size = 705, 900 ; size(*size)
 		@w, @h = @width/2.0, @height/2.0
 		background 0 ; @i, @t = 0, 1
 
 		no_stroke ; frame_rate 0.2 # really fast for small boards.
-		bs = [670] * 2
+		bs = [705] * 2
 		# bs = [335] * 2 # for pixels of size 2
 		
 		# bs = [@height/2.0, @height/2.0]
