@@ -11,7 +11,7 @@ IMAGE_TO_PROCESS_TMP = "#{IMAGES_PATH}/symmetric4_tmp.jpg".freeze
 	attr_reader :loaded
 	def setup
 		text_font create_font("SanSerif", 20)
-		size = 705, 900 ; size(*size)
+		size = 705, 600 ; size(*size)
 		@w, @h = @width/2.0, @height/2.0
 		background 0 ; @i, @t = 0, 1
 
