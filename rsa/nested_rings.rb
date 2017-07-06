@@ -4,16 +4,16 @@
 class Table
   attr_reader :table
   def initialize(prime, power)
-    @elem_count = prime**power
+    @elem_count = prime ** power
     @unit_row = [*0...@elem_count]
-    @colors = @unit_row.map { |n| 360*n / @elem_count }
+    @colors = @unit_row.map { |n| 360 * n / @elem_count }
     @table = [] ; color_it
   end
 
   def color_it
     @elem_count.times do |i|
       colored_row = @unit_row.map do |j|
-        p_val = (i * j) % @elem_count
+        p_val = i * j % @elem_count
         @colors[p_val]
       end
 
@@ -29,7 +29,7 @@ def setup
   background 0 ; no_stroke
   frame_rate = 1
 
-  @pgroup = Table.new(5, 3)
+  @pgroup = Table.new(7, 2)
 end
 
 def pretty_print(board)
@@ -45,5 +45,5 @@ def pretty_print(board)
 end
 
 def draw
-  pretty_print(@pgroup.table)
+  pretty_print @pgroup.table
 end
