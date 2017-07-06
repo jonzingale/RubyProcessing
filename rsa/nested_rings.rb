@@ -39,15 +39,16 @@ def pretty_print(board)
   scale = width / board[0].length * 0.8
   board.each_with_index do |row, c_dex|
     row.each_with_index do |c, r_dex|
-      xy = [r_dex, c_dex].map { |i| i*scale + 50 }
-      c == 0 ? fill(240,100,100) : fill(c, 70, 100)
+      x, y = [r_dex, c_dex].map { |i| i*scale + 50 }
+      c == 0 ? fill(220,100,40) : fill(c, 70, 100)
 
-      ellipse(*xy, scale, scale)
+      rect(x, y, scale, scale)
+      # ellipse(x, y, scale, scale)
     end
   end
 end
 
-def get_quotient # 38 40
+def get_quotient
   if key_pressed?
     clear
     case key_code
