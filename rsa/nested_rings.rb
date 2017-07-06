@@ -8,6 +8,7 @@ class Table
     @unit_row = [*0...@elem_count]
     @colors = @unit_row.map { |n| 360 * n / @elem_count }
     @table = [] ; color_it
+    # @fibers = compute cosets for some large power
   end
 
   def color_it
@@ -29,7 +30,9 @@ def setup
   background 0 ; no_stroke
   frame_rate = 1
 
-  @pgroup = Table.new(7, 2)
+  @MAX_SIZE = 6
+  @group_index = 0
+  @pgroups = (0...@MAX_SIZE).map{ |i| Table.new(3, i) }
 end
 
 def pretty_print(board)
@@ -44,6 +47,23 @@ def pretty_print(board)
   end
 end
 
+def get_quotient # 38 40
+  if key_pressed?
+    clear
+    case key_code
+    when 38
+      @group_index = (@group_index + 1) % @MAX_SIZE
+    when 40
+      @group_index = (@group_index - 1) % @MAX_SIZE
+    else
+      nil
+    end
+    sleep 0.1
+    @group_index
+  end
+end
+
 def draw
-  pretty_print @pgroup.table
+  get_quotient
+  pretty_print @pgroups[@group_index].table
 end
