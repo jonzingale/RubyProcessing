@@ -1,8 +1,23 @@
-# This ruby-processing file generates the group
+# This ruby-processing file generates the ring
 # multiplication table for p^k rings.
+# UP and Down Arrows effect ring homomorphisms,
+# with color blending determined by the ideals.
+
+# WARNING: keep MAX_SIZE in Chain class low.
+MAX_SIZE = 6
+
+def setup
+  text_font create_font("SanSerif",10)
+  size(displayHeight, displayHeight)
+  colorMode HSB, 360, 100, 100
+  background 0 ; no_stroke
+
+  @p_rings = Chain.new 3
+end
 
 class Blender
   include Math
+
   CONV = PI / 180
   VNOC = 180 / PI
   TAU = 2 * PI
@@ -53,12 +68,10 @@ class Ring
 end
 
 class Chain
-  
-  MAX_SIZE = 6
 
   def initialize(prime)
     @prime = prime
-    @p_rings = generate_subrings(prime ** 5) # 243
+    @p_rings = generate_subrings(prime ** (MAX_SIZE - 1))
     @ring_index = 0
   end
 
@@ -69,21 +82,25 @@ class Chain
   end
 
   def balanced_colors(elem_count)
-    colors = (0...elem_count).map { |n| [rand(360), 100] }
-    # colors = (0...elem_count).map { |n| [360 * n / elem_count, 100] }
-    # (0...@prime)
+    # colors = (0...elem_count).map { |n| [rand(360), 100] }
+    colors = (0...elem_count).map { |n| [360 * n / elem_count, 100] }
+    order = []
+    
+    @prime.times do |i|
+      (elem_count/@prime).times do |j| 
+        order << @prime * j + i
+      end
+    end
+
+    order.zip(colors).sort.map(&:last)
   end
 
   def generate_subrings(elem_count)
     colors = balanced_colors(elem_count)
-
-    # better colors how?
-    # colors = (0...elem_count).map { |n| [rand(360), 100] }
-
     val = 0 ; rings = []
 
-    while val < 6
-      ring = Ring.new(@prime, 5 - val , colors)
+    while val < MAX_SIZE
+      ring = Ring.new(@prime, MAX_SIZE - (1 + val) , colors)
       rings << ring
       colors = blender(colors, ring.ideal)
       val += 1
@@ -109,25 +126,12 @@ class Chain
   end
 end
 
-def setup
-  text_font create_font("SanSerif",10)
-  side = displayHeight
-  size(side, side)
-  colorMode HSB, 360, 100, 100
-  background 0 ; no_stroke
-  frame_rate = 1
-
-  @p_rings = Chain.new(3)
-end
-
 def pretty_print(table)
-  scale = width / table[0].length * 0.85
+  scale = width / table[0].length * 0.90
   table.each_with_index do |row, c_dex|
     row.each_with_index do |(hue, sat), r_dex|
-      x, y = [r_dex, c_dex].map { |i| i*scale + 50 }
-
-      fill(hue, sat, 100)
-      rect(x, y, scale, scale)
+      x, y = [r_dex, c_dex].map { |i| i * scale + 20 }
+      fill(hue, sat, 100) ; rect(x, y, scale, scale)
     end
   end
 end
@@ -150,5 +154,5 @@ end
 def draw
   select_subring
   pretty_print @p_rings.selected_subring
-  text("Ideal: #{@p_rings.selected_ideal.to_s}",60,30)
+  # text("Ideal: #{@p_rings.selected_ideal.to_s}",60,30)
 end
