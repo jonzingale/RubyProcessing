@@ -1,10 +1,10 @@
 def setup
   text_font create_font("SanSerif",30)
-  size(displayWidth/2, displayHeight/2)
-  colorMode HSB, 360, 100, 100
+  size(displayWidth/2, displayHeight/1.2)
+  colorMode HSB, 360, 100, 100, 100
   background 0 ; no_stroke
   frame_rate = 1
-  @ell_size = [@width/1.9] * 2
+  @ell_size = [@width/3] * 2
 
   render_image
   images
@@ -14,8 +14,23 @@ def draw
 end
 
 def render_image
-  fill(0, 80, 100, 90) ; ellipse(@width/3, @height/2, *@ell_size)
-  fill(130, 100, 100, 90) ; ellipse(@width - @width/3, @height/2, *@ell_size)
+
+
+  ha, hb = (0..1).map{rand(360)}
+
+  fill(ha, 100, 100, 50)
+  ellipse(@width/3, @height/4, *@ell_size)
+  
+  fill(hb, 100, 100, 50)
+  ellipse(@width - @width/2, @height/4, *@ell_size)
+
+  color1 = get(@width/3, @height/4)
+  color2 =get(@width - @width/2, @height/4)
+
+
+  colors = [color1, color2]
+  hue, sat = blend(colors)
+  fill(hue, sat, 63) ; rect(0, @height - @height/2, @width, @height)
 end
 
 def mouseMoved
@@ -52,9 +67,9 @@ end
 
 def blend(colors)
   cs = colors.map{|color| color_to_complex color}
-  avg = cs.inject(0, :+) / jt.length.to_f
+  avg = cs.inject(0, :+) / cs.length.to_f
 
   hue = (avg.arg % TAU) * VNOC
   sat = avg.abs * 100
-  [hue, sat].map(&:floor)
+  [hue, sat]
 end
