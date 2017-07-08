@@ -12,7 +12,7 @@ def setup
   colorMode HSB, 360, 100, 100
   background 0 ; no_stroke
 
-  @p_rings = Chain.new 3
+  @p_rings = Chain.new 3 # <-- SET Z_p HERE.
 end
 
 class Blender
