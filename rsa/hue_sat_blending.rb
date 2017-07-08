@@ -9,10 +9,6 @@ CONV = PI / 180
 VNOC = 180 / PI
 TAU = 2 * PI
 
-# GENERALIZE THIS BLENDING TO K INPUTS
-# EITHER BY INDUCTION OR SOMETHING MORE
-# ELEGANT.
-
 def color_to_complex(color)
   hh = hue(color) * CONV
   ss = saturation(color) / 100.0
