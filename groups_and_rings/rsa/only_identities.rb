@@ -19,7 +19,7 @@
 		board.each_with_index do |row,c_dex|
 			row.each_with_index do |c,r_dex|
 				x,y = [r_dex,c_dex].map{|i|i*scale+50}
-				c==0 ? fill(200,80,100)  : fill(10,100,30) #c
+				c==0 ? fill(200,80,100)  : fill(10,100,0) #c
 
 				# fill(c,100,100) ; 
 				ellipse(x,y,scale,scale)
