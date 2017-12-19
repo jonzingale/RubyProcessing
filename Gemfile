@@ -15,4 +15,4 @@ gem 'rspec', :require => 'spec'
 # gem "rails"
 
 gem 'java'
-gem 'ruby-processing'
+gem 'ruby-processing', '~>2.6.7'

@@ -1,14 +1,17 @@
-require 'mandubrot/complex_screen.rb'
-require 'mandubrot/fractal.rb'
-require 'mandubrot/thread_pool.rb'
+require (File.expand_path('complex_screen.rb', File.dirname(__FILE__)))
+require (File.expand_path('fractal.rb', File.dirname(__FILE__)))
+require (File.expand_path('thread_pool.rb', File.dirname(__FILE__)))
 require 'cmath'
 
   PHI = (1+5**0.5)/2.0
   PHA = (1-5**0.5)/2.0
 
-def setup
+def settings
   size displayWidth, displayHeight
+  # size 900, 900
+end
 
+def setup
   @font = create_font "Arial", 16, true
   text_font @font
 
@@ -18,11 +21,11 @@ def setup
   @mandelbrot = Fractal.new do |n, c|
 
     # fibs
-    PHI**n - PHA**n + c
+    # PHI**n - PHA**n + c
 
     # fluid like
-    # trig = n.rect.map{|t| Math.cos(PI*t)}
-    # 0.25*(2+7*n-(2+5*n)*Complex(*trig)) + c
+    trig = n.rect.map{|t| Math.cos(PI*t)}
+    0.25*(2+7*n-(2+5*n)*Complex(*trig)) + c
 
     # canyon like
     # trig = n.rect.map{|t| Math.cos(PI*t)}

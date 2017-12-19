@@ -1,5 +1,4 @@
   def setup
-    size displayWidth, displayHeight
     colorMode HSB, 360, 100, 100, 100
     stroke 12, 60, 100, 100
     fill 0, 0, 0, 7 # see rect
@@ -8,6 +7,10 @@
     background 0
 
     @it = Cobweb.new rand
+  end
+
+  def settings
+    size(displayWidth, displayHeight)
   end
 
   class Cobweb
