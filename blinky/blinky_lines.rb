@@ -1,7 +1,12 @@
 		NEARS = [-1,0,1].product([-1,0,1]).select{|i| i!=[0,0]}
+
+		def settings
+			size(2000,2000) # TEST
+		end
+
 		def setup
 			background(0)
-			size(2000,2000) # TEST
+
 			@wide,@high = [45,45] # cant seem to handle non-squares
 
 			@board = line_board

@@ -7,7 +7,8 @@ class ComplexScreen
     @height = options[:height] || 600
     @center = options[:center] || Complex(-0.25,0)
     @scale = options[:scale] || 1
-    @img = options[:img] || $app.create_image(width, height, Processing::App::RGB)
+    @img = options[:img] || Processing.app.create_image(width, height, Processing::App::RGB)
+
     @img.loadPixels();
     @aspect = width.to_f / height
     @changed = false
@@ -17,7 +18,7 @@ class ComplexScreen
   end
 
   def ui_scale
-    width / $app.width.to_f
+    width / Processing.app.width.to_f
   end
 
   def start_coloring
@@ -95,7 +96,7 @@ class ComplexScreen
     dc1 = screen_to_complex(0, 0)
     dc2 = screen_to_complex(width, height)
 
-    old_img = $app.create_image(width, height, Processing::App::RGB)
+    old_img = Processing.app.create_image(width, height, Processing::App::RGB)
     old_img.copy(img, 0, 0, width, height, 0, 0, width, height)
     old_width = width
     old_height = height
@@ -108,7 +109,7 @@ class ComplexScreen
     dx1, dy1 = *complex_to_screen(dc1)
     dx2, dy2 = *complex_to_screen(dc2)
     dw, dh = dx2 - dx1, dy2 - dy1
-    tmp_img = $app.create_image(width, height, Processing::App::RGB)
+    tmp_img = Processing.app.create_image(width, height, Processing::App::RGB)
     tmp_img.copy(old_img, 0, 0, old_width, old_height, dx1, dy1, dw, dh)
     @img = tmp_img
     @img.loadPixels();
@@ -119,7 +120,7 @@ class ComplexScreen
 
   def update_image
     @img.update_pixels
-    $app.image(@img, 0, 0, $app.width, $app.height)
+    Processing.app.image(@img, 0, 0, Processing.app.width, Processing.app.height)
     @changed = false
   end
 

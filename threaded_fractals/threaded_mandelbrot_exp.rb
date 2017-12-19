@@ -41,8 +41,11 @@ end
 
 CORES = 8.freeze
 
-def setup
+def settings
 	size(displayWidth/2, displayHeight/2)
+end
+
+def setup
 	colorMode(HSB,360,100,100)
 	frame_rate 10
 	background 0

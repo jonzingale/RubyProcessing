@@ -8,9 +8,13 @@ LOGMAP = "#{IMAGES_PATH}/LogisticMap.jpg".freeze # 1911.52, 1352.0
 LOGMAP_TEMP = "#{IMAGES_PATH}/LogisticMap_tmp.jpg".freeze
 
 	attr_reader :loaded
+
+	def settings
+		size = 1911, 1352 ; size(*size)
+	end
+
 	def setup
 		text_font create_font("SanSerif",90)
-		size = 1911, 1352 ; size(*size)
 
 		background 0 ; fill 0
 		colorMode(HSB,360,100,100)

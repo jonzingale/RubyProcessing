@@ -1,19 +1,24 @@
-require 'mandubrot/complex_screen.rb'
-require 'mandubrot/fractal.rb'
-require 'mandubrot/thread_pool.rb'
+require (File.expand_path('complex_screen.rb', File.dirname(__FILE__)))
+require (File.expand_path('fractal.rb', File.dirname(__FILE__)))
+require (File.expand_path('thread_pool.rb', File.dirname(__FILE__)))
 require 'cmath'
 
 ROOT5 = 0.44721359549996
 PHI = (1+5**0.5)/2.0
 PHA = (1-5**0.5)/2.0
 
+def settings
+  # size displayWidth, displayHeight
+  size 1920/2, 1080/2
+  # size 900, 900
+  smooth(8)
+
+end
+
 def setup
   @save_folder = File.expand_path(File.dirname(__FILE__))
 
   @start_time = Time.now()
-  size 1920/2, 1080/2
-  # size displayWidth, displayHeight
-  smooth(8)
 
   @font = create_font "Arial", 16, true
   text_font @font
